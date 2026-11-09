@@ -1,0 +1,59 @@
+# Official-repository packages only (pacman). One per line; text after '#'
+# is a comment. NO AUR packages are required, so nothing here is ever built
+# from user-submitted PKGBUILDs.
+#
+# Name verification status:
+#   Confirmed on archlinux.org by search: quickshell, hyprland, hyprlock,
+#   hyprpolkitagent, cliphist, wl-clipboard, tree-sitter-cli.
+#   The rest are standard Arch names but were NOT individually confirmed.
+#   install.sh runs `pacman -Si` on every name first and reports unknown ones
+#   instead of failing halfway through an install.
+
+# --- Desktop core ---
+hyprland            # compositor / window manager
+hypridle            # idle daemon
+hyprlock            # screen locker
+hyprpolkitagent     # polkit authentication agent (privileged actions)
+quickshell          # desktop shell (also provides the `qs` command)
+polkit
+xdg-desktop-portal-hyprland
+xdg-desktop-portal-gtk
+qt6-wayland
+
+# --- Terminal and shell ---
+kitty
+zsh
+zsh-autosuggestions
+zsh-syntax-highlighting
+ttf-jetbrains-mono-nerd
+
+# --- Utilities used by keybindings and Quickshell ---
+wl-clipboard        # wl-copy / wl-paste
+cliphist            # clipboard history
+grim                # screenshots
+slurp               # region selection
+brightnessctl
+playerctl
+libnotify           # notify-send
+
+# --- Services Quickshell talks to over D-Bus ---
+pipewire
+wireplumber         # provides wpctl
+networkmanager      # provides nmcli
+bluez
+bluez-utils         # provides bluetoothctl
+upower
+
+# --- Development (Neovim + systems programming) ---
+neovim
+git
+base-devel
+clang               # clangd, clang-format
+lldb                # provides lldb-dap
+gdb
+cmake
+ninja
+bear                # compile_commands.json for Makefile projects
+tree-sitter-cli
+ripgrep
+fd

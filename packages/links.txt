@@ -1,0 +1,9 @@
+# Symlink table used by install.sh and uninstall.sh.
+# Format: <path inside this repo>  <target path>   ('~' means your home directory)
+# Only paths under your home directory are ever touched.
+hypr            ~/.config/hypr
+quickshell      ~/.config/quickshell
+nvim            ~/.config/nvim
+kitty           ~/.config/kitty
+zsh/.zshrc      ~/.zshrc
+scripts         ~/.local/share/dotfiles/scripts

@@ -1,0 +1,10 @@
+# Per-machine overrides and secrets never go into the repo.
+hypr/local.lua
+*.local
+.env
+*.key
+*.pem
+# Neovim plugin lockfile is kept; local state is not.
+nvim/.luarc.json.local
+# Installer backups
+.install-backups/
