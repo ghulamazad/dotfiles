@@ -1,7 +1,7 @@
 pragma Singleton
 // Colors and the dark/light switch. The choice is persisted in
 // ~/.local/state/dotfiles/theme so it survives restarts and works offline.
-// Palette matches kitty/kitty.conf (Tokyo Night style).
+// Palette matches ghostty/config (Tokyo Night style).
 import QtQuick
 import Quickshell
 import Quickshell.Io

@@ -13,6 +13,10 @@ hl.on("hyprland.start", function()
     -- Idle management: lock after inactivity, lock before suspend.
     hl.exec_cmd("hypridle")
 
+    -- Dark preference for GTK/portal apps. Needs the session D-Bus, so it is
+    -- (re)applied here as well as by install.sh (which may run on a TTY).
+    hl.exec_cmd(os.getenv("HOME") .. "/.local/share/dotfiles/scripts/dark-theme.sh")
+
     -- Clipboard history database (read by the Quickshell launcher).
     hl.exec_cmd("wl-paste --type text --watch cliphist store")
     hl.exec_cmd("wl-paste --type image --watch cliphist store")

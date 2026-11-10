@@ -37,6 +37,9 @@ Singleton {
     readonly property string search: ""
     readonly property string trash: ""
     readonly property string close: ""
+    readonly property string desktop: ""
+    readonly property string lockClosed: ""
+    readonly property string check: ""
     readonly property string camera: ""
 
     function battery(fraction) {

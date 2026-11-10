@@ -158,6 +158,11 @@ link_all
 # Executable bits on repo scripts (git preserves them, archives may not).
 run chmod +x "$REPO_DIR"/scripts/*.sh "$REPO_DIR/install.sh" "$REPO_DIR/uninstall.sh"
 
+# Lock screen needs a file to include (see hypr/hyprlock.conf); dark theme
+# for GTK apps is a per-user setting. Both are harmless to repeat.
+run "$REPO_DIR/scripts/wallpaper.sh" init-lock
+run "$REPO_DIR/scripts/dark-theme.sh"
+
 # Remember where the backup is so uninstall.sh can restore it.
 if (( BACKUP_MADE && ! DRY_RUN )); then
     mkdir -p "$STATE_DIR"
@@ -198,7 +203,7 @@ validate() {
     fi
 
     # Every command the keybindings and scripts rely on.
-    local -a need=(Hyprland qs kitty nvim zsh grim slurp wl-copy wl-paste cliphist hypridle hyprlock brightnessctl wpctl playerctl nmcli bluetoothctl)
+    local -a need=(Hyprland qs ghostty nautilus btop jq nvim zsh grim slurp wl-copy wl-paste cliphist hypridle hyprlock brightnessctl wpctl playerctl nmcli bluetoothctl)
     local -a absent=()
     for c in "${need[@]}"; do command -v "$c" >/dev/null 2>&1 || absent+=("$c"); done
     if (( ${#absent[@]} )); then warn "Commands not found yet: ${absent[*]}"; else log "All required commands are present."; fi

@@ -17,7 +17,7 @@ echo
 echo "== Versions =="
 row "Hyprland"      "$(ver Hyprland --version)"
 row "Quickshell"    "$(ver quickshell --version)"
-row "Kitty"         "$(ver kitty --version)"
+row "Ghostty"      "$(ver ghostty --version)"
 row "Neovim"        "$(ver nvim --version)"
 row "Zsh"           "$(ver zsh --version)"
 

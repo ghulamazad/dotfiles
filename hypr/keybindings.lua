@@ -5,7 +5,7 @@
 --
 -- Design rule: everything essential to survive a crashed Quickshell works
 -- WITHOUT Quickshell: terminal, close, focus, workspaces, lock, screenshots,
--- restart-shell. Only the launcher/dashboard/panels depend on it.
+-- restart-shell. Only the launcher and the bar panels depend on it.
 --
 -- No two binds share the same key combination. When adding a bind, search
 -- this file for the combo first.
@@ -22,8 +22,8 @@ end
 -------------------------------------------------------------------------------
 -- Core
 -------------------------------------------------------------------------------
-hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd("kitty"))
-hl.bind(mainMod .. " + Q",      hl.dsp.window.close())
+hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd("ghostty"))
+hl.bind(mainMod .. " + W",      hl.dsp.window.close())
 hl.bind(mainMod .. " + F",      hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
 hl.bind(mainMod .. " + V",      hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + P",      hl.dsp.window.pseudo())              -- dwindle only
@@ -46,11 +46,9 @@ end)
 -- Quickshell UI (qs ipc call <target> <function>)
 -------------------------------------------------------------------------------
 hl.bind(mainMod .. " + Space",       qs("launcher", "toggle"))
-hl.bind(mainMod .. " + D",           qs("dashboard", "toggle"))
-hl.bind(mainMod .. " + A",           qs("quicksettings", "toggle"))
 hl.bind(mainMod .. " + N",           qs("notifications", "toggleCenter"))
 hl.bind(mainMod .. " + C",           qs("launcher", "openClipboard"))
-hl.bind(mainMod .. " + W",           qs("launcher", "openWallpapers"))
+hl.bind(mainMod .. " + SHIFT + W", qs("launcher", "openWallpapers"))
 hl.bind(mainMod .. " + Tab",         qs("overview", "toggle"))
 hl.bind(mainMod .. " + SHIFT + E",   qs("power", "toggle"))
 
@@ -81,10 +79,6 @@ hl.bind(mainMod .. " + CTRL + right", hl.dsp.focus({ workspace = "e+1" }))
 hl.bind(mainMod .. " + mouse_down",   hl.dsp.focus({ workspace = "e+1" }))
 hl.bind(mainMod .. " + mouse_up",     hl.dsp.focus({ workspace = "e-1" }))
 
--- Scratchpad: a special workspace that slides over the current one.
-hl.bind(mainMod .. " + S",         hl.dsp.workspace.toggle_special("scratch"))
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:scratch" }))
-
 -------------------------------------------------------------------------------
 -- Mouse: SUPER + drag to move, SUPER + right-drag to resize
 -------------------------------------------------------------------------------
@@ -92,9 +86,11 @@ hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -------------------------------------------------------------------------------
--- Screenshots (scripts/screenshot.sh: grim + slurp + wl-copy)
+-- Screenshots (scripts/screenshot.sh: grim + slurp + jq + wl-copy)
 -------------------------------------------------------------------------------
-hl.bind("Print",         hl.dsp.exec_cmd(scripts .. "/screenshot.sh region"))
+-- Pick a window (click) or an area (drag). Saved to ~/Pictures/Screenshots and copied.
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd(scripts .. "/screenshot.sh select"))
+hl.bind("Print",         hl.dsp.exec_cmd(scripts .. "/screenshot.sh select"))
 hl.bind("SHIFT + Print", hl.dsp.exec_cmd(scripts .. "/screenshot.sh screen"))
 
 -------------------------------------------------------------------------------

@@ -4,16 +4,14 @@
 
 | Keys | Action |
 |---|---|
-| Super+Return | Terminal (kitty) |
+| Super+Return | Terminal (Ghostty) |
 | Super+Space | Launcher (apps, calculator, recents, power actions; just type) |
-| Super+D | Dashboard |
-| Super+A | Quick settings |
-| Super+N | Notification center |
 | Super+C | Clipboard history |
-| Super+W | Wallpaper picker |
+| Super+Shift+W | Wallpaper picker (Enter: desktop, Ctrl+Enter: lock screen) |
+| Super+N | Notification center |
 | Super+Tab | Window overview |
 | Super+Shift+E | Power menu |
-| Super+Q | Close window |
+| Super+W | Close window |
 | Super+F | Fullscreen |
 | Super+V | Toggle floating |
 | Super+P / Super+J | Pseudotile / toggle split (dwindle layout) |
@@ -26,11 +24,18 @@
 | Super+1..9 | Workspace |
 | Super+Shift+1..9 | Move window to workspace |
 | Super+Ctrl+Left/Right, Super+scroll | Previous/next workspace |
-| Super+S / Super+Shift+S | Toggle / send to scratchpad |
 | Super+left-drag / right-drag | Move / resize floating window |
-| Print / Shift+Print | Screenshot region / screen |
-| Media, volume, brightness keys | wpctl, brightnessctl, playerctl |
+| Super+Shift+S or Print | Screenshot: click a window or drag an area |
+| Shift+Print | Screenshot of the whole screen |
+| Volume, mic, brightness, media keys | wpctl, brightnessctl, playerctl |
 
-Kitty uses Ctrl+Shift combos only, so nothing conflicts with Super binds.
-The launcher calculator syntax is in `quickshell/launcher/Launcher.qml`; check it
-there rather than trusting this table if you change it.
+## Inside the launcher
+Up/Down, Ctrl+N / Ctrl+J (next), Ctrl+P / Ctrl+K (previous), Enter (run),
+Esc (close). In the wallpaper picker Ctrl+Enter sets the lock screen image.
+
+## Bar
+Click the date/time for the calendar. Click Bluetooth, network, sound, display or
+battery for the matching panel. Esc or a click outside closes it.
+
+Removed on purpose: Super+D (dashboard, use `btop`), Super+A (quick settings),
+Super+Q (now Super+W), the scratchpad binds.

@@ -11,18 +11,21 @@
 import Quickshell
 import Quickshell.Io
 import qs.launcher
-import qs.dashboard
 import qs.modules
 import qs.notifications
-import qs.quicksettings
+import qs.panels
 import qs.services
 
 ShellRoot {
     Wallpaper {}
     Bar {}
     Launcher {}
-    Dashboard {}
-    QuickSettings {}
+    CalendarPanel {}
+    WifiPanel {}
+    BluetoothPanel {}
+    AudioPanel {}
+    MonitorPanel {}
+    BatteryPanel {}
     NotificationPopups {}
     NotificationCenter {}
     PowerMenu {}
@@ -38,16 +41,6 @@ ShellRoot {
         }
         function openClipboard(): void { UIState.openLauncher("clipboard"); }
         function openWallpapers(): void { UIState.openLauncher("wallpapers"); }
-    }
-
-    IpcHandler {
-        target: "dashboard"
-        function toggle(): void { UIState.toggle("dashboard"); }
-    }
-
-    IpcHandler {
-        target: "quicksettings"
-        function toggle(): void { UIState.toggle("quickSettings"); }
     }
 
     IpcHandler {

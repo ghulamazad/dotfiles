@@ -23,6 +23,12 @@ Singleton {
         recheck.restart();
     }
 
+    // Lock screen image: wallpaper.sh writes a small hyprlock snippet that
+    // hypr/hyprlock.conf includes. Nothing to watch here.
+    function chooseLock(path) {
+        Quickshell.execDetached([Config.scriptsDir + "/wallpaper.sh", "set-lock", path]);
+    }
+
     Timer { id: recheck; interval: 400; onTriggered: store.reload() }
 
     FileView {

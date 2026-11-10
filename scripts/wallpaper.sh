@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# wallpaper.sh <list|set FILE|current|random>
+# wallpaper.sh <list|set FILE|set-lock FILE|init-lock|current|random>
 #
 # The wallpaper itself is drawn by Quickshell (no hyprpaper/swaybg process).
 # This script only records the chosen path in a state file that Quickshell
@@ -9,6 +9,8 @@ set -euo pipefail
 wall_dir="${DOTFILES_WALLPAPER_DIR:-$HOME/Pictures/Wallpapers}"
 state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles"
 state_file="$state_dir/wallpaper"
+# hyprlock includes this file (see hypr/hyprlock.conf `source = ...`).
+lock_file="$state_dir/hyprlock-bg.conf"
 
 is_image() {
     case "${1,,}" in
@@ -33,14 +35,32 @@ set_wallpaper() {
     printf '%s\n' "$(realpath -- "$file")" > "$state_file"
 }
 
+# Lock screen image. hyprlock cannot read our state file, so we write a tiny
+# hyprlock snippet instead. `init-lock` makes a plain-colour one if none
+# exists, so hyprlock's `source` line never points at a missing file.
+write_lock() {
+    mkdir -p "$state_dir"
+    if [[ -n ${1:-} ]]; then
+        printf 'background {\n    monitor =\n    path = %s\n    blur_passes = 2\n}\n' "$1" > "$lock_file"
+    else
+        printf 'background {\n    monitor =\n    color = rgba(14161bff)\n}\n' > "$lock_file"
+    fi
+}
+
 case "${1:-}" in
     list)    list_images ;;
     current) [[ -f "$state_file" ]] && cat "$state_file" || true ;;
     set)     [[ $# -ge 2 ]] || { echo "usage: wallpaper.sh set FILE" >&2; exit 2; }
              set_wallpaper "$2" ;;
+    set-lock)
+             [[ $# -ge 2 ]] || { echo "usage: wallpaper.sh set-lock FILE" >&2; exit 2; }
+             [[ -f "$2" ]] || { echo "wallpaper.sh: not a file: $2" >&2; exit 1; }
+             is_image "$2" || { echo "wallpaper.sh: unsupported image type: $2" >&2; exit 1; }
+             write_lock "$(realpath -- "$2")" ;;
+    init-lock) [[ -f "$lock_file" ]] || write_lock "" ;;
     random)
         pick="$(list_images | shuf -n 1)"
         [[ -n "$pick" ]] || { echo "wallpaper.sh: no images in $wall_dir" >&2; exit 1; }
         set_wallpaper "$pick" ;;
-    *)       echo "usage: wallpaper.sh <list|set FILE|current|random>" >&2; exit 2 ;;
+    *)       echo "usage: wallpaper.sh <list|set FILE|set-lock FILE|init-lock|current|random>" >&2; exit 2 ;;
 esac

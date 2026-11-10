@@ -38,7 +38,7 @@ No AUR, no `makepkg`, no disk operations.
 1. `Hyprland --version` (must support Lua config, 0.55+).
 2. Start the session from a TTY with `start-hyprland` (preferred wrapper on recent
    versions) or `Hyprland`. If neither works, read the version's docs.
-3. In Kitty: `nvim --headless "+Lazy! sync" +qa` to fetch Neovim plugins.
+3. In Ghostty (Super+Return): `nvim --headless "+Lazy! sync" +qa` to fetch Neovim plugins.
 4. Open `docs/keybindings.md`.
 
 ## 5. Per-machine settings

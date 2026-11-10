@@ -1,7 +1,8 @@
 // The single top panel, one per monitor.
-//   left:   app menu, workspaces, active window title
-//   center: clock (opens dashboard / calendar)
-//   right:  tray, CPU/RAM, network/bluetooth/audio/battery, notifications, power
+//   left:   workspaces
+//   center: date and time (click opens the calendar)
+//   right:  tray, then Bluetooth, network, sound, display, battery. Each icon
+//           opens its own panel (see ../panels).
 //
 // Exclusion mode is left at Auto: with three anchors (top, left, right)
 // Quickshell reserves exactly the bar's height, so Hyprland tiles below it.
@@ -49,24 +50,12 @@ Variants {
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 8
 
-                BarButton {
-                    active: UIState.launcher
-                    onClicked: {
-                        if (UIState.launcher) UIState.closeAll();
-                        else UIState.openLauncher("apps");
-                    }
-                    Txt { text: Icons.apps; font.pixelSize: 15 }
-                    Txt { text: "Apps" }
-                }
-
                 Workspaces {}
-
-                ActiveWindow { anchors.verticalCenter: parent.verticalCenter }
             }
 
             Clock {
                 anchors.centerIn: parent
-                active: UIState.dashboard
+                active: UIState.calendar
             }
 
             Row {
@@ -77,25 +66,7 @@ Variants {
 
                 Tray { anchors.verticalCenter: parent.verticalCenter }
 
-                Meters {}
-
-                StatusIcons { active: UIState.quickSettings }
-
-                BarButton {
-                    active: UIState.notificationCenter
-                    onClicked: UIState.toggle("notificationCenter")
-                    Txt {
-                        text: Notifs.dnd ? Icons.bellOff : Icons.bell
-                        font.pixelSize: 15
-                        color: Notifs.dnd ? Theme.yellow : Theme.text
-                    }
-                }
-
-                BarButton {
-                    active: UIState.power
-                    onClicked: UIState.toggle("power")
-                    Txt { text: Icons.power; font.pixelSize: 15; color: Theme.red }
-                }
+                StatusIcons {}
             }
         }
     }

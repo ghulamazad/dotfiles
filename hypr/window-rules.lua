@@ -58,7 +58,7 @@ hl.window_rule({
 -- Blur panels slightly; ignore_alpha keeps fully transparent areas unblurred.
 hl.layer_rule({
     name  = "qs-blur",
-    match = { namespace = "^qs-(bar|panel|launcher|dashboard|notify|overview|power)$" },
+    match = { namespace = "^qs-(bar|panel|launcher|notify|overview|power)$" },
 
     blur         = true,
     ignore_alpha = 0.3,

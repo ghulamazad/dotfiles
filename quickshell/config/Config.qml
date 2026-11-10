@@ -18,11 +18,5 @@ Singleton {
     readonly property int radius: 12
     readonly property string fontFamily: "JetBrainsMono Nerd Font"
     readonly property int fontSize: 13
-    readonly property string terminal: "kitty"
-
-    // Dashboard shortcuts. Only programs that packages.txt installs.
-    readonly property var shortcuts: [
-        { name: "Terminal", glyph: "", command: ["kitty"] },
-        { name: "Neovim",   glyph: "", command: ["kitty", "nvim"] }
-    ]
+    readonly property string terminal: "ghostty"
 }

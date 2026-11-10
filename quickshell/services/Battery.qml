@@ -19,4 +19,14 @@ Singleton {
     readonly property int percent: Math.round(fraction * 100)
     readonly property bool charging: present && device !== null && device.state === UPowerDeviceState.Charging
     readonly property bool low: present && !charging && fraction <= 0.15
+
+    // UPower reports seconds; 0 means unknown.
+    readonly property real seconds: !present || device === null ? 0
+        : (charging ? device.timeToFull : device.timeToEmpty)
+    readonly property string timeText: {
+        if (seconds <= 0) return "";
+        const h = Math.floor(seconds / 3600);
+        const m = Math.round((seconds % 3600) / 60);
+        return (h > 0 ? h + " h " : "") + m + " min";
+    }
 }

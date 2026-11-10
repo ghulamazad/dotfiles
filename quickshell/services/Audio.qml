@@ -18,6 +18,14 @@ Singleton {
     readonly property bool micAvailable: source !== null && source.audio !== null
     readonly property bool micMuted: micAvailable ? source.audio.muted : false
 
+    // Output devices (not application streams). Pipewire.nodes may hold
+    // nulls and non-audio nodes, hence the filter.
+    readonly property var sinks: Array.from(Pipewire.nodes.values)
+        .filter(n => n !== null && n.isSink && !n.isStream && n.audio !== null)
+
+    function describe(node) { return node.nickname || node.description || node.name; }
+    function setDefaultSink(node) { Pipewire.preferredDefaultAudioSink = node; }
+
     function setVolume(value) {
         if (available) sink.audio.volume = Math.max(0, Math.min(1.5, value));
     }
@@ -31,6 +39,6 @@ Singleton {
     // Audio properties are only valid while the node is tracked (Quickshell docs).
     // The list may contain nulls (verified in source).
     PwObjectTracker {
-        objects: [root.sink, root.source]
+        objects: [root.sink, root.source].concat(root.sinks)
     }
 }

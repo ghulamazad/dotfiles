@@ -1,7 +1,7 @@
 pragma Singleton
 // Display brightness through `brightnessctl` (the same tool the hardware keys
 // in hypr/keybindings.lua use). `available` stays false when no backlight
-// device exists, as in most VMs, and the UI hides the slider.
+// device exists, as in most VMs; the monitor panel then says so.
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -23,6 +23,7 @@ Singleton {
     Component.onCompleted: refresh()
 
     // `brightnessctl -m` prints: device,class,current,percent%,max
+    // UNVERIFIED on a real backlight (this was written without one).
     Process {
         id: query
         command: ["brightnessctl", "-m"]

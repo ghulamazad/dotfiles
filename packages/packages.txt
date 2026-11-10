@@ -5,7 +5,7 @@
 # Name verification status:
 #   Confirmed on archlinux.org by search: quickshell, hyprland, hyprlock,
 #   hyprpolkitagent, cliphist, wl-clipboard, tree-sitter-cli.
-#   The rest are standard Arch names but were NOT individually confirmed.
+#   The rest (including ghostty, nautilus, btop, jq, dconf) are standard Arch names but were NOT individually confirmed.
 #   install.sh runs `pacman -Si` on every name first and reports unknown ones
 #   instead of failing halfway through an install.
 
@@ -21,17 +21,23 @@ xdg-desktop-portal-gtk
 qt6-wayland
 
 # --- Terminal and shell ---
-kitty
+ghostty
 zsh
 zsh-autosuggestions
 zsh-syntax-highlighting
 ttf-jetbrains-mono-nerd
 
+# --- Apps ---
+nautilus            # file manager (GNOME Files, as on Ubuntu)
+btop                # system monitor (replaces a dashboard)
+
 # --- Utilities used by keybindings and Quickshell ---
 wl-clipboard        # wl-copy / wl-paste
 cliphist            # clipboard history
 grim                # screenshots
-slurp               # region selection
+slurp               # region / window selection
+jq                  # reads window list for window screenshots
+dconf               # lets gsettings (dark theme) persist
 brightnessctl
 playerctl
 libnotify           # notify-send

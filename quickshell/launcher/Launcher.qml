@@ -58,7 +58,7 @@ Variants {
             Recents.add(entry.id);
             UIState.closeAll();
             if (entry.runInTerminal) {
-                Quickshell.execDetached([Config.terminal].concat(Array.from(entry.command)));
+                Quickshell.execDetached([Config.terminal, "-e"].concat(Array.from(entry.command)));
             } else {
                 entry.execute();
             }
@@ -135,9 +135,12 @@ Variants {
                 .filter(p => q === "" || p.toLowerCase().includes(q))
                 .slice(0, 200)
                 .map(p => ({
-                    title: p.split("/").pop(), subtitle: p === Wallpapers.current ? "Current" : "", glyph: Icons.image,
+                    title: p.split("/").pop(),
+                    subtitle: "Enter: desktop   Ctrl+Enter: lock screen" + (p === Wallpapers.current ? "   (current)" : ""),
+                    glyph: Icons.image,
                     image: p,
-                    run: () => { UIState.closeAll(); Wallpapers.choose(p); }
+                    run: () => { UIState.closeAll(); Wallpapers.choose(p); },
+                    runAlt: () => { UIState.closeAll(); Wallpapers.chooseLock(p); }
                 }));
         }
 
@@ -148,8 +151,13 @@ Variants {
             return appResults(q);
         }
 
-        function activate() {
-            if (results.length > 0 && selected >= 0 && selected < results.length) results[selected].run();
+        // Ctrl+Enter runs the entry's alternative action, if it has one
+        // (wallpapers: set the lock screen image instead of the desktop one).
+        function activate(alt) {
+            if (results.length === 0 || selected < 0 || selected >= results.length) return;
+            const entry = results[selected];
+            if (alt && entry.runAlt) entry.runAlt();
+            else entry.run();
         }
 
         // --------------------------------------------------------------- view
@@ -200,8 +208,19 @@ Variants {
                         }
                         Keys.onDownPressed: win.selected = Math.min(win.selected + 1, win.results.length - 1)
                         Keys.onUpPressed: win.selected = Math.max(win.selected - 1, 0)
-                        Keys.onReturnPressed: win.activate()
-                        Keys.onEnterPressed: win.activate()
+                        Keys.onReturnPressed: event => win.activate(event.modifiers & Qt.ControlModifier)
+                        Keys.onEnterPressed: event => win.activate(event.modifiers & Qt.ControlModifier)
+                        // Vim/readline-style movement: Ctrl+N or Ctrl+J down, Ctrl+P or Ctrl+K up.
+                        Keys.onPressed: event => {
+                            if (!(event.modifiers & Qt.ControlModifier)) return;
+                            if (event.key === Qt.Key_N || event.key === Qt.Key_J) {
+                                win.selected = Math.min(win.selected + 1, win.results.length - 1);
+                                event.accepted = true;
+                            } else if (event.key === Qt.Key_P || event.key === Qt.Key_K) {
+                                win.selected = Math.max(win.selected - 1, 0);
+                                event.accepted = true;
+                            }
+                        }
                     }
 
                     Txt {

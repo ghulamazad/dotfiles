@@ -1,8 +1,8 @@
 # dotfiles: minimal Hyprland + Quickshell for systems programming
 
 A small, readable desktop for CachyOS (Arch-based): Hyprland (tiling, Lua config),
-Quickshell as the whole shell (bar, launcher, dashboard, notifications, quick
-settings, power menu, overview), Kitty, Zsh and a C/C++/kernel-oriented Neovim.
+Quickshell as the whole shell (bar with clickable panels, launcher, notifications,
+power menu, overview), Ghostty, Nautilus, Zsh and a C/C++/kernel-oriented Neovim.
 No AI features, no telemetry, no AUR packages, no Waybar/Rofi/dock.
 
 ## Status: read this first
@@ -47,24 +47,36 @@ Existing files are moved to `~/.dotfiles-backup/<timestamp>/` first.
 | Path | Purpose |
 |---|---|
 | `hypr/` | Lua config split by topic; `local.lua` (git-ignored) for per-machine overrides |
-| `quickshell/` | `shell.qml` plus `modules, widgets, launcher, dashboard, notifications, quicksettings, services, components, themes, config` |
+| `quickshell/` | `shell.qml` plus `modules, widgets, panels, launcher, notifications, services, components, themes, config` |
 | `nvim/` | LazyVim-based config, system toolchain instead of Mason |
-| `kitty/`, `zsh/` | Terminal and shell |
-| `scripts/` | `screenshot.sh`, `wallpaper.sh`, `system-info.sh`, `restart-shell.sh`, `cpu-temp.sh` |
+| `ghostty/`, `zsh/` | Terminal and shell |
+| `scripts/` | `screenshot.sh`, `wallpaper.sh`, `dark-theme.sh`, `system-info.sh`, `restart-shell.sh` |
 | `packages/` | `packages.txt` (package list), `links.txt` (symlink table) |
 | `docs/` | installation, keybindings, troubleshooting, security, kernel-dev |
 
 ## Known limitations (by design or unverified)
 
-- **Wi-Fi**: status and on/off only (via `nmcli`). No network list, no password entry.
-  Use `nmtui` or `nmcli` in a terminal.
+- **Bar panels** (click an icon): Wi-Fi, Bluetooth, sound, display, battery, and the
+  calendar (click the clock). None of these panels could be run here.
+- **Wi-Fi**: list, connect, on/off. New secured networks ask for a password; it is
+  passed to NetworkManager through a private temporary file, never on a command
+  line. WPA/WPA2/WPA3 personal only. Enterprise, hidden and WEP networks: use `nmtui`.
+  A VM usually has no Wi-Fi adapter, so this is untested.
+- **Bluetooth**: on/off, scan, connect/disconnect, simple pairing. Pairing that needs a
+  PIN: use `bluetoothctl`. Untested (no adapter in a VM).
+- **Display**: brightness only, via `brightnessctl -m` (unverified). A VM has no
+  backlight and the panel says so.
 - **Overview** (Super+Tab) lists windows by title. No live thumbnails.
-- **Wallpapers**: none by default. Put images in `~/Pictures/Wallpapers` (or set
-  `DOTFILES_WALLPAPER_DIR`).
-- **Night light** uses `hyprsunset`; package name and flags are unverified and it is
-  not in `packages.txt`. The toggle does nothing useful unless you install it and check.
+- **Wallpapers**: none by default. Put images in `~/Pictures/Wallpapers`. In the
+  picker (Super+Shift+W) Enter sets the desktop image and Ctrl+Enter the lock screen.
+  Lock screen support depends on `hyprlock.conf`, which is unverified.
+- **Screenshots**: Super+Shift+S (or Print) picks a window or an area; Shift+Print takes
+  the whole screen. Saved to `~/Pictures/Screenshots` and copied. The window-picking
+  logic was tested against sample data only, not a live Hyprland.
+- **Dark theme**: `scripts/dark-theme.sh` sets the GTK/portal dark preference. Qt apps and apps
+  with their own theme setting may still need a manual change.
+- **mpv**: not configured yet. See `docs/pending-requirements.md`.
 - **Notifications**: Quickshell is the notification daemon. Do not run mako/dunst/swaync.
-- **Brightness** relies on `brightnessctl` machine-readable output (`-m`); unverified.
 - `hyprlock.conf` and `hypridle.conf` are unverified against current syntax.
 - Not touched on purpose: disk layout, LUKS, Btrfs/Snapper, Limine, the bootloader.
 
