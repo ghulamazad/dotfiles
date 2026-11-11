@@ -14,11 +14,44 @@ If Hyprland shows a black screen or exits immediately, it is almost always the G
 setup, not these dotfiles. Your host Intel iGPU does not matter inside the VM:
 the guest sees a virtual GPU.
 
-## 2. Base system
+## 2. Base system: Arch Linux
 
-Install CachyOS (or Arch). Create your user, enable networking, boot to a TTY or a
-display manager session. Disk encryption, Btrfs and the bootloader are your
-installer's job; nothing here modifies them.
+Boot the official Arch ISO (UEFI) and install. The ISO ships `archinstall`, a guided
+installer: run `archinstall` in the live shell and work through its menu. Menu names
+below are from memory and change between versions, so read what your version shows.
+
+- **Profile / desktop:** choose *Minimal*. Do not pick a desktop; the dotfiles provide it.
+- **Disk:** a simple layout is fine in the VM (ext4 or Btrfs). On real hardware you can
+  choose Btrfs and encryption here; nothing in this repo touches disk layout, LUKS,
+  Btrfs/Snapper or the bootloader.
+- **Bootloader:** whatever you prefer (your real machine uses Limine; the guided
+  installer's choices vary by version).
+- **Network:** choose NetworkManager (the Wi-Fi panel and status use `nmcli`).
+- **Audio:** PipeWire (the sound panel uses PipeWire).
+- **Additional packages:** add `git` and `sudo` (or `base-devel`) so you can clone
+  this repo and install packages, and a user with sudo rights.
+
+Or follow the Arch Installation guide by hand. Reboot into the installed system and
+log in on a TTY. I could not open the Arch Wiki from my environment, so I did not
+check these steps against it. Verify against the wiki before relying on them.
+
+## 2a. Services plain Arch does not enable for you
+
+`install.sh` installs packages and links config. It never enables services. After it
+finishes, check and enable what you need:
+
+```sh
+sudo systemctl enable --now NetworkManager bluetooth upower
+systemctl --user status pipewire wireplumber   # normally socket-activated; confirm
+sudo systemctl enable sddm                     # graphical login screen (optional)
+```
+
+Only one display manager may be enabled. If you keep logging in on a TTY, skip `sddm`
+and run `start-hyprland` (or `Hyprland`) yourself. If `sddm` fails, press Ctrl+Alt+F3,
+log in and run `sudo systemctl disable sddm`.
+
+`paru` is not in the official repositories. If you want it, build it by hand from the
+AUR and read the PKGBUILD first. It is not needed by this repo.
 
 ## 3. Install the dotfiles
 

@@ -14,7 +14,7 @@
 #     --dry-run          print every action, change nothing
 #     --yes              answer "yes" to prompts (backups still happen)
 #     --no-packages      skip the package step; only link and validate
-#     --no-distro-check  allow other Arch derivatives (also used for testing)
+#     --no-distro-check  allow other distributions (also used for testing)
 set -euo pipefail
 
 REPO_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
@@ -61,10 +61,10 @@ detect_distro() {
         id="$(. /etc/os-release; echo "${ID:-}")"
         like="$(. /etc/os-release; echo "${ID_LIKE:-}")"
     fi
-    if [[ $id == cachyos ]]; then
-        log "Detected CachyOS."
-    elif [[ $id == arch || $like == *arch* ]]; then
-        warn "This is '$id', not CachyOS. It is Arch-like, so packages should work."
+    if [[ $id == arch ]]; then
+        log "Detected Arch Linux."
+    elif [[ $like == *arch* ]]; then
+        warn "This is '$id', an Arch derivative, not Arch Linux. Package names should match, but its repositories may differ."
         ask "Continue anyway?" || die "aborted."
     else
         die "unsupported distribution '${id:-unknown}'. Use --no-distro-check to override (links only work reliably; packages will not)."

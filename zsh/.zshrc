@@ -71,7 +71,7 @@ alias gp='git pull --ff-only'
 alias cmk='cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -G Ninja && cmake --build build'
 alias bear-make='bear -- make'
 
-# --- Plugins (Arch/CachyOS package paths; skipped silently if missing) ----
+# --- Plugins (Arch package paths; skipped silently if missing) ----
 # pacman -S zsh-autosuggestions zsh-syntax-highlighting
 _zp=/usr/share/zsh/plugins
 [[ -r $_zp/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source $_zp/zsh-autosuggestions/zsh-autosuggestions.zsh

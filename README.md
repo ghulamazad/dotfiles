@@ -1,6 +1,6 @@
 # dotfiles: minimal Hyprland + Quickshell for systems programming
 
-A small, readable desktop for CachyOS (Arch-based): Hyprland (tiling, Lua config),
+A small, readable desktop for Arch Linux: Hyprland (tiling, Lua config),
 Quickshell as the whole shell (bar with clickable panels, launcher, notifications,
 power menu, overview), Ghostty, Nautilus, Zsh and a C/C++/kernel-oriented Neovim.
 No AI features, no telemetry, no AUR packages, no Waybar/Rofi/dock.
@@ -52,7 +52,7 @@ Existing files are moved to `~/.dotfiles-backup/<timestamp>/` first.
 | `ghostty/`, `zsh/` | Terminal and shell |
 | `scripts/` | `screenshot.sh`, `wallpaper.sh`, `dark-theme.sh`, `system-info.sh`, `restart-shell.sh` |
 | `packages/` | `packages.txt` (package list), `links.txt` (symlink table) |
-| `docs/` | installation, keybindings, troubleshooting, security, kernel-dev |
+| `docs/` | installation, keybindings, troubleshooting, security, kernel-dev, pending-requirements, omarchy-port-brief (task brief for an AI agent) |
 
 ## Known limitations (by design or unverified)
 

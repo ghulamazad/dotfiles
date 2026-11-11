@@ -19,6 +19,14 @@ PanelWindow {
     default property alias content: holder.data
     property real progress: open ? 1 : 0
     signal closeRequested()
+    // Emitted shortly after the surface is up, when the compositor has had time
+    // to hand it keyboard focus. Owners use it to focus their text input:
+    // calling forceActiveFocus() in the same step as opening can run before the
+    // window exists, which leaves typing dead until you click into it.
+    signal shown()
+
+    onOpenChanged: if (open) shownTimer.restart()
+    Timer { id: shownTimer; interval: 60; onTriggered: if (root.open) root.shown() }
 
     Behavior on progress { NumberAnimation { duration: 140; easing.type: Easing.OutCubic } }
 

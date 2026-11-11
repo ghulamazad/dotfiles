@@ -4,6 +4,8 @@ Things the owner wants that are NOT implemented yet. An AI agent (Claude Code,
 Antigravity, etc.) or a person should read this file before changing the repo.
 Do not mark an item done unless it was actually implemented and checked.
 
+> For the full Omarchy-to-Arch look-and-feel task, read `docs/omarchy-port-brief.md`.
+
 ## mpv: configure it like Omarchy
 
 **Status:** not implemented. The Omarchy mpv config was not available when this
@@ -33,7 +35,7 @@ Omarchy ships, so mpv behaves the same here.
    Report what was and was not tested, especially under a VM where hardware
    decoding may not work.
 
-**Owner's environment:** Hyprland on CachyOS, currently in a QEMU/KVM VM.
+**Owner's environment:** Hyprland on Arch Linux, currently in a QEMU/KVM VM.
 
 ## Implemented in the last build (statically checked only, not run live)
 

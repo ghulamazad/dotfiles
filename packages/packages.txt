@@ -5,9 +5,19 @@
 # Name verification status:
 #   Confirmed on archlinux.org by search: quickshell, hyprland, hyprlock,
 #   hyprpolkitagent, cliphist, wl-clipboard, tree-sitter-cli.
-#   The rest (including ghostty, nautilus, btop, jq, dconf) are standard Arch names but were NOT individually confirmed.
+#   The rest (including ghostty, nautilus, btop, jq, dconf, sddm, mesa) are standard
+#   Arch names but were NOT individually confirmed.
+#   Plain Arch installs very little, so this list also carries the basics a
+#   desktop needs (graphics driver, fonts, login screen). Anything already
+#   installed is skipped by `pacman -S --needed`.
 #   install.sh runs `pacman -Si` on every name first and reports unknown ones
 #   instead of failing halfway through an install.
+
+# --- Base for a graphical session (plain Arch has none of this) ---
+mesa                # OpenGL/Vulkan drivers; Intel iGPU and virtio-gpu in a VM
+sddm                # graphical login screen (install.sh does NOT enable it; see docs/installation.md)
+noto-fonts          # fallback glyphs
+xdg-user-dirs       # ~/Pictures, ~/Downloads etc.
 
 # --- Desktop core ---
 hyprland            # compositor / window manager

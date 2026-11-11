@@ -29,6 +29,8 @@ Variants {
         property int selected: 0
         readonly property string mode: UIState.launcherMode
 
+        onShown: input.forceActiveFocus()
+
         onOpenChanged: {
             if (!open) return;
             query = "";
