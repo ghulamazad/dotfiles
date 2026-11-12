@@ -16,7 +16,7 @@ Rectangle {
 
     width: parent ? parent.width : 300
     height: 44
-    radius: 10
+    radius: Config.radius
     color: mouse.containsMouse ? Theme.surface2 : (highlighted ? Theme.surface : "transparent")
 
     Txt {

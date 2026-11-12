@@ -25,7 +25,7 @@ Item {
                 visible: modelData.id > 0   // Row skips invisible items
                 width: 26
                 height: 22
-                radius: 8
+                radius: Config.radius
                 color: modelData.focused ? Theme.accent
                      : modelData.urgent ? Theme.red
                      : modelData.active ? Theme.surface2

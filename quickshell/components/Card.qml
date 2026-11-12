@@ -5,7 +5,7 @@ import qs.themes
 
 Rectangle {
     color: Theme.panel
-    radius: Config.radius + 4
+    radius: Config.radius
     border.color: Theme.border
     border.width: 1
 }

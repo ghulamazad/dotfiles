@@ -83,7 +83,7 @@ Variants {
 
                         width: 42
                         height: 30
-                        radius: 8
+                        radius: Config.radius
                         color: isToday ? Theme.accent : "transparent"
 
                         Txt {

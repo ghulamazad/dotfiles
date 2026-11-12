@@ -120,7 +120,7 @@ Variants {
                 Rectangle {
                     width: parent.width
                     height: 34
-                    radius: 8
+                    radius: Config.radius
                     color: Theme.surface
                     border.color: Theme.accent
                     border.width: 1

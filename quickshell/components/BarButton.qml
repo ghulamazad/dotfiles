@@ -1,5 +1,6 @@
 // A clickable pill for the top bar. Children are laid out in a Row.
 import QtQuick
+import qs.config
 import qs.themes
 
 Rectangle {
@@ -12,7 +13,7 @@ Rectangle {
 
     implicitWidth: row.implicitWidth + 16
     implicitHeight: 24
-    radius: 8
+    radius: Config.radius
     color: (mouse.containsMouse || active) ? Theme.surface2 : "transparent"
 
     Row {

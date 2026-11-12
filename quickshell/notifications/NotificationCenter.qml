@@ -90,7 +90,7 @@ Variants {
 
                     width: ListView.view.width
                     height: col.implicitHeight + 20
-                    radius: 10
+                    radius: Config.radius
                     color: Theme.surface
 
                     Column {

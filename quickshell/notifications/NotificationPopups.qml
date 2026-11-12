@@ -64,7 +64,7 @@ Variants {
 
                     width: stack.width
                     height: body.implicitHeight + 24
-                    border.color: critical ? Theme.red : Theme.border
+                    border.color: critical ? Theme.red : Theme.accent
 
                     // expireTimeout is in seconds; 0 or less means "server default".
                     Timer {

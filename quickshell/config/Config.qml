@@ -14,9 +14,9 @@ Singleton {
     readonly property string scriptsDir: home + "/.local/share/dotfiles/scripts"
     readonly property string wallpaperDir: Quickshell.env("DOTFILES_WALLPAPER_DIR") || (home + "/Pictures/Wallpapers")
 
-    readonly property int barHeight: 34
-    readonly property int radius: 12
+    readonly property int barHeight: 35
+    readonly property int radius: 0
     readonly property string fontFamily: "VictorMono Nerd Font"
-    readonly property int fontSize: 13
+    readonly property int fontSize: 12
     readonly property string terminal: "ghostty"
 }

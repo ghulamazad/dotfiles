@@ -258,7 +258,7 @@ Variants {
 
                     width: list.width
                     height: 46
-                    radius: 10
+                    radius: Config.radius
                     color: index === win.selected ? Theme.surface2 : "transparent"
 
                     Row {
