@@ -1,47 +1,42 @@
--- Look and feel. Option names follow the official example config shipped with
--- Hyprland (example/hyprland.lua) and https://wiki.hypr.land/configuring/core/config-options/
+-- Look and feel matching Omarchy compositor settings (Inventory §3).
+-- Reference: https://wiki.hypr.land/Configuring/Variables/
 
 hl.config({
     general = {
-        gaps_in     = 4,
-        gaps_out    = 10,
+        gaps_in     = 2,
+        gaps_out    = 1,
         border_size = 2,
 
         col = {
-            -- Accent gradient on the focused window, muted grey otherwise.
-            active_border   = { colors = { "rgba(7aa2f7ee)", "rgba(bb9af7ee)" }, angle = 45 },
-            inactive_border = "rgba(3b4252aa)",
+            -- Tokyo Night accent border on focused window, muted grey otherwise
+            active_border   = "rgba(7aa2f7ee)",
+            inactive_border = "rgba(595959aa)",
         },
 
-        -- Drag borders/gaps with the mouse to resize.
-        resize_on_border = true,
+        -- Drag borders/gaps with the mouse to resize
+        resize_on_border        = true,
+        extend_border_grab_area = 8,
+        hover_icon_on_border    = true,
 
-        -- Tearing is a gaming feature with tradeoffs; leave it off.
+        -- Tearing is a gaming feature with tradeoffs; leave it off
         allow_tearing = false,
 
-        -- Default layout. Toggle at runtime with SUPER+SHIFT+SPACE.
+        -- Default layout
         layout = "dwindle",
     },
 
     decoration = {
-        rounding       = 10,
-        rounding_power = 2,
+        rounding = 0,
 
         active_opacity   = 1.0,
         inactive_opacity = 1.0,
 
         shadow = {
-            enabled      = true,
-            range        = 8,
-            render_power = 3,
-            color        = 0xee0b0d12,
+            enabled = false,
         },
 
         blur = {
-            enabled  = true,
-            size     = 4,
-            passes   = 2,
-            vibrancy = 0.17,
+            enabled = false,
         },
     },
 
@@ -49,21 +44,31 @@ hl.config({
         enabled = true,
     },
 
+    cursor = {
+        hide_on_key_press        = true,
+        warp_on_change_workspace = 1,
+    },
+
     misc = {
-        force_default_wallpaper = 0,    -- no mascot wallpapers; Quickshell draws the wallpaper
-        disable_hyprland_logo   = true,
+        force_default_wallpaper    = 0,
+        disable_hyprland_logo      = true,
+        disable_splash_rendering   = true,
+        background_color           = "rgb(000000)",
+        focus_on_activate          = true,
+        initial_workspace_tracking = 0,
+        allow_session_lock_restore = true,
     },
 })
 
--- Dwindle: binary-tree tiling. preserve_split keeps split direction stable
--- when windows close.
+-- Dwindle: binary-tree tiling. preserve_split keeps split direction stable.
 hl.config({
     dwindle = {
         preserve_split = true,
+        force_split    = 2,
     },
 })
 
--- Master: one large window plus a stack. New windows join the stack.
+-- Master layout fallback
 hl.config({
     master = {
         new_status = "slave",

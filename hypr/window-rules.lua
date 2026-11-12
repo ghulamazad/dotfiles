@@ -55,13 +55,12 @@ hl.window_rule({
 
 -- Layer rules for Quickshell surfaces. Every Quickshell window sets a
 -- WlrLayershell namespace starting with "qs-" so one rule covers all of them.
--- Blur panels slightly; ignore_alpha keeps fully transparent areas unblurred.
+-- Omarchy uses flat, opaque surfaces with blur disabled (Inventory §3).
 hl.layer_rule({
-    name  = "qs-blur",
+    name  = "qs-surface",
     match = { namespace = "^qs-(bar|panel|launcher|notify|overview|power)$" },
 
-    blur         = true,
-    ignore_alpha = 0.3,
+    blur = false,
 })
 
 -- The wallpaper is a Quickshell layer surface; never animate or blur it.
