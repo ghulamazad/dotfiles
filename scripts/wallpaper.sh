@@ -6,6 +6,8 @@
 # watches, so changing it never needs a privileged or long-running helper.
 set -euo pipefail
 
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+repo_wall_dir="$(dirname "$script_dir")/wallpapers"
 wall_dir="${DOTFILES_WALLPAPER_DIR:-$HOME/Pictures/Wallpapers}"
 state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles"
 state_file="$state_dir/wallpaper"
@@ -20,10 +22,13 @@ is_image() {
 }
 
 list_images() {
-    [[ -d "$wall_dir" ]] || return 0
-    find "$wall_dir" -maxdepth 2 -type f \
+    local -a dirs=()
+    [[ -d "$wall_dir" ]] && dirs+=("$wall_dir")
+    [[ -d "$repo_wall_dir" ]] && dirs+=("$repo_wall_dir")
+    (( ${#dirs[@]} )) || return 0
+    find "${dirs[@]}" -maxdepth 2 -type f \
         \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' \) \
-        | sort
+        | sort -u
 }
 
 set_wallpaper() {
@@ -43,7 +48,7 @@ write_lock() {
     if [[ -n ${1:-} ]]; then
         printf 'background {\n    monitor =\n    path = %s\n    blur_passes = 2\n}\n' "$1" > "$lock_file"
     else
-        printf 'background {\n    monitor =\n    color = rgba(14161bff)\n}\n' > "$lock_file"
+        printf 'background {\n    monitor =\n    color = rgba(1a1b26ff)\n}\n' > "$lock_file"
     fi
 }
 
