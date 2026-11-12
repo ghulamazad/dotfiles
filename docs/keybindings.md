@@ -5,6 +5,10 @@
 | Keys | Action |
 |---|---|
 | Super+Return | Terminal (Ghostty) |
+| Super+Shift+N | Editor (Neovim in Ghostty) |
+| Super+Shift+F | File manager (Nautilus) |
+| Super+Shift+T | Activity monitor (btop in Ghostty) |
+| Super+G / Super+Alt+G | Toggle window group / Move out of group |
 | Super+Space | Launcher (apps, calculator, recents, power actions; just type) |
 | Super+C | Clipboard history |
 | Super+Shift+W | Wallpaper picker (Enter: desktop, Ctrl+Enter: lock screen) |

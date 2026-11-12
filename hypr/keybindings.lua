@@ -28,7 +28,14 @@ hl.bind(mainMod .. " + F",      hl.dsp.window.fullscreen({ mode = "fullscreen", 
 hl.bind(mainMod .. " + V",      hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + P",      hl.dsp.window.pseudo())              -- dwindle only
 hl.bind(mainMod .. " + J",      hl.dsp.layout("togglesplit"))        -- dwindle only
+hl.bind(mainMod .. " + G",      hl.dsp.group.toggle())               -- toggle window group
+hl.bind(mainMod .. " + ALT + G", hl.dsp.window.move({ out_of_group = true }))
 hl.bind(mainMod .. " + L",      hl.dsp.exec_cmd("loginctl lock-session"))
+
+-- Applications (non-conflicting, non-AI developer binds from Omarchy Inventory §13)
+hl.bind(mainMod .. " + SHIFT + N", hl.dsp.exec_cmd("ghostty -e nvim"))
+hl.bind(mainMod .. " + SHIFT + F", hl.dsp.exec_cmd("nautilus --new-window"))
+hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd("ghostty -e btop"))
 
 -- Reload the Hyprland config / restart the Quickshell shell independently.
 hl.bind(mainMod .. " + SHIFT + R", hl.dsp.reload_config())
