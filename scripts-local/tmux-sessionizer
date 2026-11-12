@@ -1,0 +1,288 @@
+#!/usr/bin/env bash
+# tmux-sessionizer – fast, fuzzy project switcher for tmux
+#
+# Config: ~/.config/tmux-sessionizer/config (optional, loaded if present)
+# Install: env/.local/scripts/tmux-sessionizer → ~/.local/scripts/tmux-sessionizer
+# Bind:
+#   - In zsh:  bindkey -s '^f' "tmux-sessionizer\n"
+#   - In tmux: bind-key -r f run-shell "tmux neww ~/.local/scripts/tmux-sessionizer"
+
+set -euo pipefail
+
+# ── Configuration Loading ──────────────────────────────────────────────────────
+CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/tmux-sessionizer/config"
+[[ -f "$CONFIG_FILE" ]] && source "$CONFIG_FILE"
+
+# Safe default initialization (under set -u)
+[[ "${TS_ROOT_PATHS+set}" ]] || TS_ROOT_PATHS=("$HOME/Projects" "$HOME/Work")
+[[ "${TS_SEARCH_PATHS+set}" ]] || TS_SEARCH_PATHS=(
+    "$HOME/Projects:1"
+    "$HOME/Work:1"
+)
+[[ "${TS_EXTRA_SEARCH_PATHS+set}" ]] || TS_EXTRA_SEARCH_PATHS=()
+[[ "${TS_MAX_DEPTH+set}" ]] || TS_MAX_DEPTH=1
+[[ "${TS_EXCLUDE+set}" ]] || TS_EXCLUDE=(
+    ".git" "node_modules" "target" "dist" "build"
+    ".cache" ".venv" "venv" "__pycache__" ".next" ".turbo" ".cargo" ".rustup"
+)
+[[ "${TS_HOOK_NAMES+set}" ]] || TS_HOOK_NAMES=(".tmux-sessionizer" ".sessionizer")
+
+# ── Dependency Check ──────────────────────────────────────────────────────────
+_require() {
+    command -v "$1" &>/dev/null || { echo "error: '$1' not found on PATH" >&2; exit 1; }
+}
+_require tmux
+_require fzf
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
+# Check if a session exists
+has_session() {
+    tmux list-sessions -F "#{session_name}" 2>/dev/null | grep -qxF "$1"
+}
+
+# Attach or switch to session depending on current context
+switch_to() {
+    local target="$1"
+    if [[ -z "${TMUX:-}" ]]; then
+        tmux attach-session -t "$target"
+    else
+        tmux switch-client -t "$target"
+    fi
+}
+
+# Get current path of an existing tmux session
+get_session_path() {
+    local sname="$1"
+    tmux display-message -p -t "$sname" "#{pane_current_path}" 2>/dev/null || true
+}
+
+# Smart session name with collision avoidance
+session_name() {
+    local target="$1"
+    local base parent name
+
+    base="$(basename "$target" | tr '.' '_' | tr ' ' '_' | tr ':' '_')"
+    parent="$(basename "$(dirname "$target")" | tr '.' '_' | tr ' ' '_' | tr ':' '_')"
+
+    name="$base"
+
+    # If session already exists with this name
+    if has_session "$name"; then
+        local existing_path
+        existing_path="$(get_session_path "$name")"
+
+        # If it points to the exact same folder, reuse name
+        if [[ "$existing_path" == "$target" ]]; then
+            echo "$name"
+            return 0
+        fi
+
+        # Otherwise disambiguate with parent folder name
+        name="${parent}_${base}"
+    fi
+
+    # If parent_base still collides with a different directory, append index
+    if has_session "$name"; then
+        local existing_path
+        existing_path="$(get_session_path "$name")"
+        if [[ "$existing_path" != "$target" ]]; then
+            local count=2
+            while has_session "${name}_${count}"; do
+                local cur_p
+                cur_p="$(get_session_path "${name}_${count}")"
+                [[ "$cur_p" == "$target" ]] && break
+                (( count++ ))
+            done
+            name="${name}_${count}"
+        fi
+    fi
+
+    echo "$name"
+}
+
+# Run hydration hook on a newly created session
+hydrate() {
+    local session="$1" project="$2"
+    local hook=""
+    local candidates=()
+
+    # 1. Project-level hook
+    for hname in "${TS_HOOK_NAMES[@]}"; do
+        candidates+=("$project/$hname")
+    done
+
+    # 2. Global user hook
+    for hname in "${TS_HOOK_NAMES[@]}"; do
+        candidates+=("$HOME/$hname")
+    done
+
+    for cand in "${candidates[@]}"; do
+        if [[ -f "$cand" ]]; then
+            hook="$cand"
+            break
+        fi
+    done
+
+    if [[ -n "$hook" ]]; then
+        tmux send-keys -t "$session" "source \"$hook\"" Enter
+    fi
+}
+
+# ── CLI Flags ─────────────────────────────────────────────────────────────────
+case "${1:-}" in
+    --kill|-k)
+        session=$(tmux list-sessions -F "#{session_name}" 2>/dev/null \
+            | fzf --prompt="Kill session: " --header="Select session to kill (ESC to cancel)") || exit 0
+        tmux kill-session -t "$session"
+        echo "Killed session: $session"
+        exit 0
+        ;;
+    --list|-l)
+        tmux list-sessions 2>/dev/null || echo "(no active tmux sessions)"
+        exit 0
+        ;;
+    --help|-h)
+        sed -n '2,17p' "$0" | sed 's/^# \?//'
+        exit 0
+        ;;
+esac
+
+# ── Directory Collector ───────────────────────────────────────────────────────
+find_dirs() {
+    # 1. Active tmux sessions first (instant switch)
+    if [[ -n "${TMUX:-}" ]]; then
+        local current
+        current=$(tmux display-message -p '#S' 2>/dev/null || true)
+        tmux list-sessions -F "[session] #{session_name}" 2>/dev/null \
+            | grep -vFx "[session] $current" || true
+    else
+        tmux list-sessions -F "[session] #{session_name}" 2>/dev/null || true
+    fi
+
+    # 2. Gather directories from roots and search paths
+    {
+        # Include root paths (e.g. Projects, Alien)
+        for root in "${TS_ROOT_PATHS[@]}"; do
+            root="${root/#\~/$HOME}"
+            [[ -d "$root" ]] && echo "$root"
+        done
+
+        # Build exclude arguments for find
+        local exclude_args=()
+        for exc in "${TS_EXCLUDE[@]}"; do
+            if [[ ${#exclude_args[@]} -gt 0 ]]; then
+                exclude_args+=("-o" "-name" "$exc")
+            else
+                exclude_args+=("-name" "$exc")
+            fi
+        done
+
+        # Scan search paths
+        local all_paths=("${TS_SEARCH_PATHS[@]}")
+        [[ ${#TS_EXTRA_SEARCH_PATHS[@]} -gt 0 ]] && all_paths+=("${TS_EXTRA_SEARCH_PATHS[@]}")
+
+        for entry in "${all_paths[@]}"; do
+            local path depth
+            if [[ "$entry" =~ ^([^:]+):([0-9]+)$ ]]; then
+                path="${BASH_REMATCH[1]}"
+                depth="${BASH_REMATCH[2]}"
+            else
+                path="$entry"
+                depth="$TS_MAX_DEPTH"
+            fi
+            path="${path/#\~/$HOME}"
+            [[ -d "$path" ]] || continue
+
+            find -L "$path" \
+                -mindepth 1 -maxdepth "$depth" \
+                \( "${exclude_args[@]}" \) -prune \
+                -o -type d -print 2>/dev/null
+        done
+    } | awk '!seen[$0]++'
+}
+
+# ── fzf Preview Script ────────────────────────────────────────────────────────
+FZF_PREVIEW='
+    entry="$1"
+
+    # Active tmux session preview
+    if [[ "$entry" == "[session] "* ]]; then
+        sname="${entry#[session] }"
+        echo "=== Active Tmux Session: $sname ==="
+        echo ""
+        tmux list-windows -t "$sname" -F "  Window #I: #W #{?window_active,(active),} [layout: #{window_layout}]" 2>/dev/null
+        exit 0
+    fi
+
+    # Directory preview
+    dir="$entry"
+    echo "=== $dir ==="
+    echo ""
+
+    # Git information if inside a repo
+    if git -C "$dir" rev-parse --git-dir &>/dev/null 2>&1; then
+        branch=$(git -C "$dir" branch --show-current 2>/dev/null || echo "detached")
+        commit=$(git -C "$dir" log -1 --format="  last: %h - %s (%cr)" 2>/dev/null || true)
+        status=$(git -C "$dir" status --short 2>/dev/null | head -5)
+        echo "  [git branch: $branch]"
+        [[ -n "$commit" ]] && echo "$commit"
+        if [[ -n "$status" ]]; then
+            echo "  changes:"
+            echo "$status" | sed "s/^/    /"
+        else
+            echo "  working tree: clean"
+        fi
+        echo ""
+    fi
+
+    # Directory listing
+    if command -v eza &>/dev/null; then
+        eza --color=always --icons --group-directories-first --level=1 "$dir" 2>/dev/null | head -20
+    else
+        ls -la --color=always "$dir" 2>/dev/null | head -20
+    fi
+'
+
+# ── Select Project ────────────────────────────────────────────────────────────
+if [[ $# -ge 1 ]]; then
+    selected="$1"
+    # Resolve relative paths or ~
+    selected="${selected/#\~/$HOME}"
+    selected="$(cd "$selected" 2>/dev/null && pwd || echo "$selected")"
+else
+    selected=$(find_dirs | fzf \
+        --prompt="  project: " \
+        --pointer="▶" \
+        --header="Enter: open  |  Ctrl-k: kill session  |  Ctrl-r: reload" \
+        --preview-window="right:50%:wrap" \
+        --preview="bash -c '$FZF_PREVIEW' _ {}" \
+        --bind="ctrl-k:execute(session=\$(echo {} | sed 's/^\\[session\\] //'); tmux kill-session -t \"\$session\" 2>/dev/null)+reload($0 --internal-list)" \
+        --bind="ctrl-r:reload($0 --internal-list)" \
+    ) || exit 0
+fi
+
+# Hidden internal helper for reload binding
+if [[ "${1:-}" == "--internal-list" ]]; then
+    find_dirs
+    exit 0
+fi
+
+[[ -z "$selected" ]] && exit 0
+
+# ── Handle Existing Session Selection ─────────────────────────────────────────
+if [[ "$selected" =~ ^\[session\]\ (.+)$ ]]; then
+    switch_to "${BASH_REMATCH[1]}"
+    exit 0
+fi
+
+# ── Create or Attach to Session ───────────────────────────────────────────────
+[[ -d "$selected" ]] || { echo "error: directory does not exist: $selected" >&2; exit 1; }
+
+name="$(session_name "$selected")"
+
+if ! has_session "$name"; then
+    tmux new-session -ds "$name" -c "$selected"
+    hydrate "$name" "$selected"
+fi
+
+switch_to "$name"

@@ -1,80 +1,120 @@
-# ~/.zshrc. Deliberately small: no framework, no plugin manager.
-# Startup cost: one compinit (cached) plus two sourced plugin files.
+# ~/.zshrc – main zsh configuration
+# Target: interactive startup < 100 ms.  No framework, no plugin manager.
 
-# --- Environment --------------------------------------------------------
-export EDITOR=nvim
-export VISUAL=nvim
-export PAGER=less
-export LESS='-R'
-export MANPAGER='nvim +Man!'
-# Parallel builds by default. Override per command: make -j2
-export MAKEFLAGS="-j$(nproc 2>/dev/null || echo 2)"
-# Colored GCC/Clang diagnostics. Compiler FLAGS are intentionally NOT set
-# globally: the Linux kernel (kbuild) and other projects choose their own.
-export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-# Keep local binaries on PATH without duplicating entries.
-typeset -U path PATH
-path=("$HOME/.local/bin" $path)
+# ── Environment ────────────────────────────────────────────────────────────────
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 
-# --- History ------------------------------------------------------------
-HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
-mkdir -p "${HISTFILE:h}"
-HISTSIZE=50000
-SAVEHIST=50000
-setopt HIST_IGNORE_ALL_DUPS HIST_IGNORE_SPACE HIST_REDUCE_BLANKS
-setopt SHARE_HISTORY INC_APPEND_HISTORY
+export EDITOR="nvim"
+export VISUAL="nvim"
+export PAGER="less"
+export LESS="-RFX"
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"  # man pages via bat
 
-# --- Shell options ------------------------------------------------------
-setopt AUTO_CD AUTO_PUSHD PUSHD_IGNORE_DUPS INTERACTIVE_COMMENTS
-setopt NO_BEEP
+# Prefer XDG paths for common tools
+export HISTFILE="${XDG_DATA_HOME}/zsh/history"
+export GOPATH="${HOME}/go"
+export GOBIN="${GOPATH}/bin"
+export CARGO_HOME="${XDG_DATA_HOME}/cargo"
+export RUSTUP_HOME="${XDG_DATA_HOME}/rustup"
+export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME}/npm/npmrc"
+export DOCKER_CONFIG="${XDG_CONFIG_HOME}/docker"
 
-# --- Completion ---------------------------------------------------------
-# Full security check + rebuild only if the dump is missing or older than a
-# day; otherwise `compinit -C` skips the check for a faster start.
+# ── PATH (order matters: user bins first) ─────────────────────────────────────
+path=(
+    "${HOME}/.local/bin"
+    "${HOME}/.local/scripts"
+    "${GOBIN}"
+    "${CARGO_HOME}/bin"
+    "$path[@]"
+)
+export PATH
+
+# ── History ────────────────────────────────────────────────────────────────────
+HISTSIZE=100000
+SAVEHIST=100000
+mkdir -p "$(dirname "$HISTFILE")"
+
+setopt HIST_IGNORE_DUPS      # no consecutive duplicates
+setopt HIST_IGNORE_ALL_DUPS  # deduplicate across sessions
+setopt HIST_FIND_NO_DUPS     # skip dups in history search
+setopt HIST_SAVE_NO_DUPS     # don't write dups to file
+setopt HIST_REDUCE_BLANKS    # trim extra whitespace
+setopt INC_APPEND_HISTORY    # write immediately, not on shell exit
+setopt SHARE_HISTORY         # read shared history from all sessions
+
+# ── Options ────────────────────────────────────────────────────────────────────
+setopt AUTO_PUSHD            # cd pushes to directory stack
+setopt PUSHD_IGNORE_DUPS     # no duplicate dirs on stack
+setopt PUSHD_SILENT          # quiet pushd
+setopt CORRECT               # spell-correct commands
+setopt NO_BEEP               # silence
+setopt INTERACTIVE_COMMENTS  # allow # comments in interactive shell
+setopt GLOB_DOTS             # include dotfiles in globs
+
+# ── Completion ─────────────────────────────────────────────────────────────────
+# Once-a-day full rebuild; setopt extendedglob scoped to just this check.
 autoload -Uz compinit
-_zcomp="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
-mkdir -p "${_zcomp:h}"
-if [[ ! -f $_zcomp || -n "$(find "$_zcomp" -mtime +1 2>/dev/null)" ]]; then
-    compinit -d "$_zcomp"
-else
-    compinit -C -d "$_zcomp"
-fi
-unset _zcomp
+
+_zcompdump="${XDG_CACHE_HOME}/zsh/zcompdump-${ZSH_VERSION}"
+mkdir -p "$(dirname "$_zcompdump")"
+
+{
+    setopt extendedglob
+    # Rebuild if dump is older than 20 hours (~once daily).
+    if [[ -n "${_zcompdump}"(#qN.mh+20) ]]; then
+        compinit -d "$_zcompdump"
+    else
+        compinit -C -d "$_zcompdump"
+    fi
+    unsetopt extendedglob
+} 2>/dev/null
+
+# Completion styling
 zstyle ':completion:*' menu select
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
+zstyle ':completion:*:warnings' format '%F{red}No matches for:%f %d'
 
-# --- Prompt: directory, git branch, exit status -------------------------
-autoload -Uz vcs_info
-zstyle ':vcs_info:*' enable git
-zstyle ':vcs_info:git:*' formats ' %F{magenta}%b%f'
-precmd() { vcs_info }
-setopt PROMPT_SUBST
-PROMPT='%F{blue}%~%f${vcs_info_msg_0_} %(?.%F{green}.%F{red})❯%f '
+# ── mise (runtime version manager) ─────────────────────────────────────────────
+# Activate shims; must come before anything that calls node/go/python.
+if command -v mise &>/dev/null; then
+    eval "$(mise activate zsh)"
+fi
 
-# --- Aliases --------------------------------------------------------------
-alias ls='ls --color=auto --group-directories-first'
-alias ll='ls -lAh'
-alias grep='grep --color=auto'
-alias v='nvim'
-alias ..='cd ..'
-alias ...='cd ../..'
+# ── zoxide (smart cd) ──────────────────────────────────────────────────────────
+if command -v zoxide &>/dev/null; then
+    eval "$(zoxide init zsh --cmd cd)"  # replaces cd with zoxide
+fi
 
-alias gs='git status -sb'
-alias ga='git add'
-alias gc='git commit'
-alias gd='git diff'
-alias gl='git log --oneline --graph --decorate -20'
-alias gp='git pull --ff-only'
+# ── starship prompt ────────────────────────────────────────────────────────────
+if command -v starship &>/dev/null; then
+    eval "$(starship init zsh)"
+fi
 
-# Build helpers for systems work. compile_commands.json feeds clangd.
-alias cmk='cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -G Ninja && cmake --build build'
-alias bear-make='bear -- make'
+# ── Load sub-configs ───────────────────────────────────────────────────────────
+for _f in "${HOME}/.zsh/"*.zsh; do
+    [[ -r "$_f" ]] && source "$_f"
+done
+unset _f
 
-# --- Plugins (Arch package paths; skipped silently if missing) ----
-# pacman -S zsh-autosuggestions zsh-syntax-highlighting
-_zp=/usr/share/zsh/plugins
-[[ -r $_zp/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source $_zp/zsh-autosuggestions/zsh-autosuggestions.zsh
-# Syntax highlighting must be sourced last.
-[[ -r $_zp/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source $_zp/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-unset _zp
+# ── Plugins (sourced last – highest startup cost) ─────────────────────────────
+# zsh-autosuggestions: fish-style inline history completion
+_zas="/usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+[[ -r "$_zas" ]] && source "$_zas"
+unset _zas
+
+# zsh-syntax-highlighting: real-time command coloring (must be last)
+_zsh_hl="/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+[[ -r "$_zsh_hl" ]] && source "$_zsh_hl"
+unset _zsh_hl
+
+# ── Key bindings ──────────────────────────────────────────────────────────────
+bindkey -e                              # emacs keys (works well with readline)
+bindkey '^[[A' history-search-backward  # up arrow: history search
+bindkey '^[[B' history-search-forward   # down arrow
+bindkey '^[[1;5C' forward-word          # ctrl+right
+bindkey '^[[1;5D' backward-word         # ctrl+left
+bindkey -s '^f' "tmux-sessionizer\n"    # ctrl+f → tmux project picker

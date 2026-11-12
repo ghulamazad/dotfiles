@@ -36,6 +36,9 @@ zsh
 zsh-autosuggestions
 zsh-syntax-highlighting
 ttf-jetbrains-mono-nerd
+ttf-victor-mono-nerd     # VictorMono Nerd Font used by Ghostty, Hyprland, Hyprlock
+starship                 # cross-shell prompt (zsh/.zsh/fzf.zsh + .zshrc)
+tmux                     # terminal multiplexer
 
 # --- Apps ---
 nautilus            # file manager (GNOME Files, as on Ubuntu)
@@ -74,3 +77,8 @@ bear                # compile_commands.json for Makefile projects
 tree-sitter-cli
 ripgrep
 fd
+bat                      # better cat; used by fzf previews and man pages
+eza                      # modern ls with icons and git status
+zoxide                   # smart cd (replaces cd in .zshrc)
+fzf                      # fuzzy finder; used by shell, tmux-sessionizer
+lazygit                  # TUI git client

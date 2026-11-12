@@ -1,11 +1,17 @@
 # Symlink table used by install.sh and uninstall.sh.
 # Format: <path inside this repo>  <target path>   ('~' means your home directory)
 # Only paths under your home directory are ever touched.
-hypr            ~/.config/hypr
-quickshell      ~/.config/quickshell
-nvim            ~/.config/nvim
-ghostty         ~/.config/ghostty
-btop            ~/.config/btop
-mpv             ~/.config/mpv
-zsh/.zshrc      ~/.zshrc
-scripts         ~/.local/share/dotfiles/scripts
+hypr                       ~/.config/hypr
+quickshell                 ~/.config/quickshell
+nvim                       ~/.config/nvim
+ghostty                    ~/.config/ghostty
+btop                       ~/.config/btop
+mpv                        ~/.config/mpv
+zsh/.zshrc                 ~/.zshrc
+zsh/.zsh                   ~/.zsh
+tmux                       ~/.config/tmux
+starship/starship.toml     ~/.config/starship.toml
+lazygit                    ~/.config/lazygit
+tmux-sessionizer-config    ~/.config/tmux-sessionizer
+scripts                    ~/.local/share/dotfiles/scripts
+scripts-local              ~/.local/scripts

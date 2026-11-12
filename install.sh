@@ -156,7 +156,7 @@ link_all() {
 link_all
 
 # Executable bits on repo scripts (git preserves them, archives may not).
-run chmod +x "$REPO_DIR"/scripts/*.sh "$REPO_DIR/install.sh" "$REPO_DIR/uninstall.sh"
+run chmod +x "$REPO_DIR"/scripts/*.sh "$REPO_DIR"/scripts-local/* "$REPO_DIR/install.sh" "$REPO_DIR/uninstall.sh"
 
 # Lock screen needs a file to include (see hypr/hyprlock.conf); dark theme
 # for GTK apps is a per-user setting. Both are harmless to repeat.

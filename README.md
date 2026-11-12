@@ -49,7 +49,12 @@ Existing files are moved to `~/.dotfiles-backup/<timestamp>/` first.
 | `hypr/` | Lua config split by topic; `local.lua` (git-ignored) for per-machine overrides |
 | `quickshell/` | `shell.qml` plus `modules, widgets, panels, launcher, notifications, services, components, themes, config` |
 | `nvim/` | LazyVim-based config, system toolchain instead of Mason |
-| `ghostty/`, `zsh/` | Terminal and shell |
+| `ghostty/`, `zsh/` | Terminal and shell (with aliases, functions, fzf integration) |
+| `tmux/` | Terminal multiplexer configured with Tokyo Night theme |
+| `starship/` | Cross-shell prompt configuration |
+| `lazygit/` | TUI Git interface styled with Tokyo Night theme |
+| `tmux-sessionizer-config/` | Fuzzy project switcher configuration |
+| `scripts-local/` | User scripts (`tmux-sessionizer`) linked to `~/.local/scripts` |
 | `btop/` | System monitor configuration and Tokyo Night theme |
 | `mpv/` | GPU-accelerated video player config (ported from Omarchy) |
 | `wallpapers/` | Shipped Tokyo Night desktop wallpapers |
