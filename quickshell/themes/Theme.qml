@@ -1,7 +1,7 @@
 pragma Singleton
 // Colors and the dark/light switch. The choice is persisted in
 // ~/.local/state/dotfiles/theme so it survives restarts and works offline.
-// Palette matches ghostty/config (Tokyo Night style).
+// Palette: Tokyo Night Night — values from /usr/share/omarchy/themes/tokyo-night/colors.toml
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -12,20 +12,21 @@ Singleton {
 
     property bool dark: true
 
-    readonly property color bg:       dark ? "#150f1d" : "#eceff4"
-    readonly property color surface:  dark ? "#1e1727" : "#ffffff"
-    readonly property color surface2: dark ? "#295d50" : "#dfe4ec"
-    readonly property color border:   dark ? "#31343d" : "#c8ced9"
-    readonly property color text:     dark ? "#c6bdce" : "#2e3440"
-    readonly property color subtext:  dark ? "#8f8498" : "#4c566a"
-    readonly property color accent:   "#7db6a7"
-    readonly property color accent2:  "#9fbc79"
-    readonly property color red:      "#d88d91"
-    readonly property color green:    "#81beae"
-    readonly property color yellow:   "#d7ba7d"
-    // Deep obsidian-plum opaque background matching theme aesthetic
-    readonly property color panel:    dark ? "#150f1d" : "#eceff4"
-    readonly property color scrim:    "#80150f1d"
+    readonly property color bg:       dark ? "#1a1b26" : "#eceff4"
+    readonly property color surface:  dark ? "#24283b" : "#ffffff"
+    // surface2 = dark olive/green for selected rows (##-heading bar look from screenshot)
+    readonly property color surface2: dark ? "#1a2a1a" : "#dfe4ec"
+    readonly property color border:   dark ? "#414868" : "#c8ced9"
+    readonly property color text:     dark ? "#a9b1d6" : "#2e3440"
+    readonly property color subtext:  dark ? "#565f89" : "#4c566a"
+    readonly property color accent:   "#7aa2f7"
+    readonly property color accent2:  "#9ece6a"
+    readonly property color red:      "#f7768e"
+    readonly property color green:    "#9ece6a"
+    readonly property color yellow:   "#e0af68"
+    // Tokyo Night Night opaque panel background
+    readonly property color panel:    dark ? "#1a1b26" : "#eceff4"
+    readonly property color scrim:    "#801a1b26"
 
     readonly property string fontFamily: Config.fontFamily
 

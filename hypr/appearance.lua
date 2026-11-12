@@ -1,4 +1,5 @@
 -- Look and feel matching Omarchy compositor settings (Inventory §3).
+-- Palette: Tokyo Night Night — values from /usr/share/omarchy/themes/tokyo-night/colors.toml
 -- Reference: https://wiki.hypr.land/Configuring/Variables/
 
 hl.config({
@@ -8,9 +9,9 @@ hl.config({
         border_size = 2,
 
         col = {
-            -- Sage jade accent border on focused window, muted plum-slate otherwise
-            active_border   = "rgba(7db6a7ee)",
-            inactive_border = "rgba(31343daa)",
+            -- Tokyo Night blue accent on focused window, muted slate otherwise
+            active_border   = "rgba(7aa2f7ee)",
+            inactive_border = "rgba(414868aa)",
         },
 
         -- Drag borders/gaps with the mouse to resize
@@ -53,7 +54,7 @@ hl.config({
         force_default_wallpaper    = 0,
         disable_hyprland_logo      = true,
         disable_splash_rendering   = true,
-        background_color           = "rgb(150F1D)",
+        background_color           = "rgb(1A1B26)",
         focus_on_activate          = true,
         initial_workspace_tracking = 0,
         allow_session_lock_restore = true,
