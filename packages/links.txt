@@ -6,5 +6,6 @@ quickshell      ~/.config/quickshell
 nvim            ~/.config/nvim
 ghostty         ~/.config/ghostty
 btop            ~/.config/btop
+mpv             ~/.config/mpv
 zsh/.zshrc      ~/.zshrc
 scripts         ~/.local/share/dotfiles/scripts

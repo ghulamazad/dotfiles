@@ -8,9 +8,8 @@ Do not mark an item done unless it was actually implemented and checked.
 
 ## mpv: configure it like Omarchy
 
-**Status:** not implemented. The Omarchy mpv config was not available when this
-was written, and it was not found in the public pages that were checked. Nothing
-here is a copy of Omarchy's file, and no Omarchy mpv settings should be guessed.
+**Status:** IMPLEMENTED. Ported from Omarchy's live `~/.config/mpv/` (`mpv.conf` and `input.conf`).
+Linked in `packages/links.txt` and package added to `packages/packages.txt`.
 
 **What is wanted:** `mpv/mpv.conf` in this repo that reproduces the mpv setup
 Omarchy ships, so mpv behaves the same here.

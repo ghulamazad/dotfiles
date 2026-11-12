@@ -40,6 +40,7 @@ ttf-jetbrains-mono-nerd
 # --- Apps ---
 nautilus            # file manager (GNOME Files, as on Ubuntu)
 btop                # system monitor (replaces a dashboard)
+mpv                 # media player (configured to match Omarchy)
 
 # --- Utilities used by keybindings and Quickshell ---
 wl-clipboard        # wl-copy / wl-paste
