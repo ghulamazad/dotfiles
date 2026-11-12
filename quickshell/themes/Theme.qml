@@ -12,20 +12,20 @@ Singleton {
 
     property bool dark: true
 
-    readonly property color bg:       dark ? "#14161b" : "#eceff4"
-    readonly property color surface:  dark ? "#1c1f26" : "#ffffff"
-    readonly property color surface2: dark ? "#2a2f3a" : "#dfe4ec"
-    readonly property color border:   dark ? "#3b4252" : "#c8ced9"
-    readonly property color text:     dark ? "#d8dee9" : "#2e3440"
+    readonly property color bg:       dark ? "#1a1b26" : "#eceff4"
+    readonly property color surface:  dark ? "#24283b" : "#ffffff"
+    readonly property color surface2: dark ? "#292e42" : "#dfe4ec"
+    readonly property color border:   dark ? "#414868" : "#c8ced9"
+    readonly property color text:     dark ? "#c0caf5" : "#2e3440"
     readonly property color subtext:  dark ? "#a9b1d6" : "#4c566a"
     readonly property color accent:   "#7aa2f7"
     readonly property color accent2:  "#bb9af7"
     readonly property color red:      "#f7768e"
     readonly property color green:    "#9ece6a"
     readonly property color yellow:   "#e0af68"
-    // Slightly translucent so Hyprland's layer blur (hypr/window-rules.lua) shows through.
-    readonly property color panel:    dark ? "#ee14161b" : "#eeeceff4"
-    readonly property color scrim:    "#66000000"
+    // Omarchy shell surfaces are opaque Tokyo Night background by default.
+    readonly property color panel:    dark ? "#1a1b26" : "#eceff4"
+    readonly property color scrim:    "#801a1b26"
 
     readonly property string fontFamily: Config.fontFamily
 

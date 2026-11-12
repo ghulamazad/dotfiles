@@ -5,5 +5,6 @@ hypr            ~/.config/hypr
 quickshell      ~/.config/quickshell
 nvim            ~/.config/nvim
 ghostty         ~/.config/ghostty
+btop            ~/.config/btop
 zsh/.zshrc      ~/.zshrc
 scripts         ~/.local/share/dotfiles/scripts

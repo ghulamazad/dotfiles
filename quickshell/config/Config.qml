@@ -16,7 +16,7 @@ Singleton {
 
     readonly property int barHeight: 34
     readonly property int radius: 12
-    readonly property string fontFamily: "JetBrainsMono Nerd Font"
+    readonly property string fontFamily: "VictorMono Nerd Font"
     readonly property int fontSize: 13
     readonly property string terminal: "ghostty"
 }
