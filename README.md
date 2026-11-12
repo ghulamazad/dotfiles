@@ -26,7 +26,7 @@ Expect a few runtime errors on first launch. Fix them from the logs (see
 - Hyprland **0.55 or newer** (Lua configuration). Check: `Hyprland --version`.
   Older versions will not read `hyprland.lua`.
 - Quickshell 0.3.x.
-- A Nerd Font (`ttf-jetbrains-mono-nerd`); icons are Nerd Font glyphs.
+- A Nerd Font (`ttf-victor-mono-nerd` or `ttf-jetbrains-mono-nerd`); icons are Nerd Font glyphs.
 - In a VM: UEFI and virtio-gpu with 3D acceleration (QEMU/KVM + virt-manager).
   Details in `docs/installation.md`.
 
@@ -50,9 +50,12 @@ Existing files are moved to `~/.dotfiles-backup/<timestamp>/` first.
 | `quickshell/` | `shell.qml` plus `modules, widgets, panels, launcher, notifications, services, components, themes, config` |
 | `nvim/` | LazyVim-based config, system toolchain instead of Mason |
 | `ghostty/`, `zsh/` | Terminal and shell |
+| `btop/` | System monitor configuration and Tokyo Night theme |
+| `mpv/` | GPU-accelerated video player config (ported from Omarchy) |
+| `wallpapers/` | Shipped Tokyo Night desktop wallpapers |
 | `scripts/` | `screenshot.sh`, `wallpaper.sh`, `dark-theme.sh`, `system-info.sh`, `restart-shell.sh` |
 | `packages/` | `packages.txt` (package list), `links.txt` (symlink table) |
-| `docs/` | installation, keybindings, troubleshooting, security, kernel-dev, pending-requirements, omarchy-port-brief (task brief for an AI agent) |
+| `docs/` | installation, keybindings, troubleshooting, security, kernel-dev, pending-requirements, omarchy-port-brief, omarchy-inventory, omarchy-port-plan |
 
 ## Known limitations (by design or unverified)
 
@@ -67,15 +70,14 @@ Existing files are moved to `~/.dotfiles-backup/<timestamp>/` first.
 - **Display**: brightness only, via `brightnessctl -m` (unverified). A VM has no
   backlight and the panel says so.
 - **Overview** (Super+Tab) lists windows by title. No live thumbnails.
-- **Wallpapers**: none by default. Put images in `~/Pictures/Wallpapers`. In the
-  picker (Super+Shift+W) Enter sets the desktop image and Ctrl+Enter the lock screen.
-  Lock screen support depends on `hyprlock.conf`, which is unverified.
+- **Wallpapers**: shipped Tokyo Night wallpapers are included in `wallpapers/`. Put extra images in
+  `~/Pictures/Wallpapers`. In the picker (Super+Shift+W) Enter sets the desktop image and Ctrl+Enter the lock screen.
 - **Screenshots**: Super+Shift+S (or Print) picks a window or an area; Shift+Print takes
   the whole screen. Saved to `~/Pictures/Screenshots` and copied. The window-picking
   logic was tested against sample data only, not a live Hyprland.
 - **Dark theme**: `scripts/dark-theme.sh` sets the GTK/portal dark preference. Qt apps and apps
   with their own theme setting may still need a manual change.
-- **mpv**: not configured yet. See `docs/pending-requirements.md`.
+- **mpv**: configured with GPU acceleration (`vo=gpu-next`), Vulkan, VAAPI, frameless UI and custom bindings ported from Omarchy.
 - **Notifications**: Quickshell is the notification daemon. Do not run mako/dunst/swaync.
 - `hyprlock.conf` and `hypridle.conf` are unverified against current syntax.
 - Not touched on purpose: disk layout, LUKS, Btrfs/Snapper, Limine, the bootloader.
