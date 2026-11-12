@@ -1,27 +1,27 @@
 # lazygit config
 # Reference: https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
-# Tokyo Night Night theme colours applied.
+# Styled with Obsidian Plum & Sage Jade theme matching reference screenshot.
 
 gui:
   theme:
     activeBorderColor:
-      - '#7aa2f7'
+      - '#7db6a7'
       - bold
     inactiveBorderColor:
-      - '#414868'
+      - '#31343d'
     optionsTextColor:
-      - '#7aa2f7'
+      - '#7db6a7'
     selectedLineBgColor:
-      - '#292e42'
+      - '#295d50'
     selectedRangeBgColor:
-      - '#292e42'
+      - '#295d50'
     cherryPickedCommitBgColor:
-      - '#1a2a1a'
+      - '#2b5147'
     cherryPickedCommitFgColor:
-      - '#9ece6a'
+      - '#81beae'
     unstagedChangesColor:
-      - '#f7768e'
+      - '#d88d91'
     defaultFgColor:
-      - '#a9b1d6'
+      - '#c6bdce'
   nerdFontsVersion: "3"
   border: single

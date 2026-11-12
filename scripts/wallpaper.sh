@@ -6,7 +6,9 @@
 # watches, so changing it never needs a privileged or long-running helper.
 set -euo pipefail
 
-script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+# Resolve symlinks: Quickshell calls this through ~/.local/share/dotfiles/scripts,
+# which links into the repo. Without this, the repo wallpapers/ is never found.
+script_dir="$(cd -- "$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")" && pwd -P)"
 repo_wall_dir="$(dirname "$script_dir")/wallpapers"
 wall_dir="${DOTFILES_WALLPAPER_DIR:-$HOME/Pictures/Wallpapers}"
 state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles"
@@ -48,7 +50,7 @@ write_lock() {
     if [[ -n ${1:-} ]]; then
         printf 'background {\n    monitor =\n    path = %s\n    blur_passes = 2\n}\n' "$1" > "$lock_file"
     else
-        printf 'background {\n    monitor =\n    color = rgba(1a1b26ff)\n}\n' > "$lock_file"
+        printf 'background {\n    monitor =\n    color = rgba(150f1dff)\n}\n' > "$lock_file"
     fi
 }
 

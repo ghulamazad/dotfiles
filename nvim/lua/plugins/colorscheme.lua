@@ -1,7 +1,4 @@
--- Tokyo Night Night colorscheme with screenshot-matching overrides.
--- Base palette: /usr/share/omarchy/themes/tokyo-night/colors.toml
--- Visual reference: screenshot showing dark bg, green ##-banner sections,
--- amber # headings, teal links, very dark status bar.
+-- Obsidian Plum & Sage Jade colorscheme (matching reference screenshot).
 
 return {
   {
@@ -15,70 +12,55 @@ return {
         floats = "normal",
       },
       on_colors = function(c)
-        -- Exact Tokyo Night Night values from colors.toml
-        c.bg            = "#1a1b26"
-        c.bg_dark       = "#13141c"
-        c.bg_float      = "#1a1b26"
-        c.bg_highlight  = "#292e42"
-        c.bg_popup      = "#1a1b26"
-        c.bg_search     = "#3d59a1"
-        c.bg_sidebar    = "#1a1b26"
-        c.bg_statusline = "#13141c"
-        c.bg_visual     = "#292e42"
-        c.border        = "#414868"
-        c.border_highlight = "#7aa2f7"
-        c.fg            = "#a9b1d6"
-        c.fg_dark       = "#565f89"
-        c.fg_float      = "#a9b1d6"
-        c.fg_gutter     = "#3b3d57"
-        c.fg_sidebar    = "#a9b1d6"
-        c.blue          = "#7aa2f7"
-        c.blue0         = "#7da6ff"
-        c.blue1         = "#2ac3de"
-        c.cyan          = "#449dab"
-        c.green         = "#9ece6a"
-        c.green1        = "#73daca"
-        c.green2        = "#41a6b5"
-        c.magenta       = "#ad8ee6"
-        c.magenta2      = "#bb9af7"
-        c.orange        = "#ff9e64"
-        c.purple        = "#9d7cd8"
-        c.red           = "#f7768e"
-        c.red1          = "#ff7a93"
-        c.teal          = "#1abc9c"
-        c.yellow        = "#e0af68"
+        c.bg = "#150f1d"
+        c.bg_dark = "#100a18"
+        c.bg_float = "#1a1224"
+        c.bg_highlight = "#281e36"
+        c.bg_popup = "#1a1224"
+        c.bg_search = "#295d50"
+        c.bg_sidebar = "#140e1c"
+        c.bg_statusline = "#2d3739"
+        c.bg_visual = "#295d50"
+        c.border = "#31343d"
+        c.border_highlight = "#7db6a7"
+        c.fg = "#c6bdce"
+        c.fg_dark = "#8f8498"
+        c.fg_float = "#c6bdce"
+        c.fg_gutter = "#4f4657"
+        c.fg_sidebar = "#c6bdce"
+        c.blue = "#7db6a7"
+        c.blue0 = "#78b0a2"
+        c.blue1 = "#81beae"
+        c.cyan = "#8bcbb1"
+        c.green = "#81beae"
+        c.green1 = "#9fbc79"
+        c.green2 = "#a7dfc5"
+        c.magenta = "#b7a1c8"
+        c.magenta2 = "#cfbce0"
+        c.orange = "#d7ba7d"
+        c.purple = "#b5acbd"
+        c.red = "#d88d91"
+        c.red1 = "#e6a6aa"
+        c.teal = "#78b0a2"
+        c.yellow = "#d7ba7d"
       end,
       on_highlights = function(hl, c)
         -- Markdown heading banners matching the screenshot
-        -- # heading: amber text, no background
-        hl["@markup.heading.1.marker"] = { fg = "#e0af68", bold = true }
-        hl["@markup.heading.1"]        = { fg = "#e0af68", bold = true }
-        -- ## heading: full-width dark-green bar + green text (screenshot)
-        hl["@markup.heading.2.marker"] = { bg = "#1a2a1a", fg = "#9ece6a", bold = true }
-        hl["@markup.heading.2"]        = { bg = "#1a2a1a", fg = "#9ece6a", bold = true }
-        -- ### heading: slightly lighter green bar
-        hl["@markup.heading.3.marker"] = { bg = "#172217", fg = "#73daca", bold = true }
-        hl["@markup.heading.3"]        = { bg = "#172217", fg = "#73daca", bold = true }
-        -- Inline code: slight dark tint
-        hl["@markup.raw.inline"] = { bg = "#292e42", fg = "#73daca" }
-        hl["@markup.raw.block"]  = { bg = "#1a1b26" }
-        -- Links: teal underlined (screenshot)
-        hl["@markup.link"]       = { fg = "#449dab", underline = true }
-        hl["@markup.link.url"]   = { fg = "#449dab", underline = true }
+        hl["@markup.heading.1"] = { bg = "#7db6a7", fg = "#150f1d", bold = true }
+        hl["@markup.heading.2"] = { bg = "#2b5147", fg = "#81beae", bold = true }
+        hl["@markup.heading.3"] = { bg = "#203b31", fg = "#a7dfc5", bold = true }
+        hl["@markup.raw.inline"] = { bg = "#295d50", fg = "#a7dfc5" }
+        hl["@markup.raw.block"] = { bg = "#1a1224" }
+        hl["@markup.link"] = { fg = "#7db6a7", underline = true }
 
-        -- Statusline: very dark bg (screenshot), green mode indicator
-        hl.StatusLine   = { bg = "#13141c", fg = "#a9b1d6" }
-        hl.StatusLineNC = { bg = "#13141c", fg = "#565f89" }
-        -- Window separator: muted border only, no bg
-        hl.WinSeparator = { fg = "#414868", bg = "NONE" }
-        -- Floats: same dark bg
-        hl.NormalFloat  = { bg = "#1a1b26", fg = "#a9b1d6" }
-        hl.FloatBorder  = { bg = "#1a1b26", fg = "#414868" }
-        -- Line numbers: muted; current line: blue accent
-        hl.LineNr       = { fg = "#3b3d57" }
-        hl.CursorLineNr = { fg = "#7aa2f7", bold = true }
-        -- Diagnostics hint in status bar (amber, matching screenshot)
-        hl.DiagnosticWarn = { fg = "#e0af68" }
+        -- Statusline matching the screenshot (sage green normal mode + dark teal bar)
+        hl.StatusLine = { bg = "#2d3739", fg = "#c6bdce" }
+        hl.StatusLineNC = { bg = "#180f20", fg = "#4f4657" }
+        hl.WinSeparator = { fg = "#31343d", bg = "NONE" }
+        hl.NormalFloat = { bg = "#1a1224", fg = "#c6bdce" }
+        hl.FloatBorder = { bg = "#1a1224", fg = "#31343d" }
+        hl.LineNr = { fg = "#4f4657" }
+        hl.CursorLineNr = { fg = "#7db6a7", bold = true }
       end,
     },
   },

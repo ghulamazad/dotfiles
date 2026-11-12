@@ -102,16 +102,13 @@ session_name() {
 
 # Run hydration hook on a newly created session
 hydrate() {
-    local session="$1" project="$2"
+    local session="$1"
     local hook=""
     local candidates=()
 
-    # 1. Project-level hook
-    for hname in "${TS_HOOK_NAMES[@]}"; do
-        candidates+=("$project/$hname")
-    done
-
-    # 2. Global user hook
+    # Only the global hook in $HOME runs. A hook file inside the project folder is
+    # deliberately NOT sourced: opening a freshly cloned, untrusted repository
+    # would otherwise run whatever code that repository ships.
     for hname in "${TS_HOOK_NAMES[@]}"; do
         candidates+=("$HOME/$hname")
     done
@@ -282,7 +279,7 @@ name="$(session_name "$selected")"
 
 if ! has_session "$name"; then
     tmux new-session -ds "$name" -c "$selected"
-    hydrate "$name" "$selected"
+    hydrate "$name"
 fi
 
 switch_to "$name"
