@@ -58,7 +58,7 @@ hl.window_rule({
 -- Omarchy uses flat, opaque surfaces with blur disabled (Inventory §3).
 hl.layer_rule({
     name  = "qs-surface",
-    match = { namespace = "^qs-(bar|panel|launcher|notify|overview|power)$" },
+    match = { namespace = "^qs-(bar|launcher|notify)$" },
 
     blur = false,
 })

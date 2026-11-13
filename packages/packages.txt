@@ -4,7 +4,7 @@
 #
 # Name verification status:
 #   Confirmed on archlinux.org by search: quickshell, hyprland, hyprlock,
-#   hyprpolkitagent, cliphist, wl-clipboard, tree-sitter-cli.
+#   hyprpolkitagent, wl-clipboard, tree-sitter-cli.
 #   The rest (including ghostty, nautilus, btop, jq, dconf, sddm, mesa) are standard
 #   Arch names but were NOT individually confirmed.
 #   Plain Arch installs very little, so this list also carries the basics a
@@ -47,7 +47,6 @@ mpv                 # media player (configured to match Omarchy)
 
 # --- Utilities used by keybindings and Quickshell ---
 wl-clipboard        # wl-copy / wl-paste
-cliphist            # clipboard history
 grim                # screenshots
 slurp               # region / window selection
 jq                  # reads window list for window screenshots
@@ -63,9 +62,6 @@ networkmanager      # provides nmcli
 bluez
 bluez-utils         # provides bluetoothctl
 upower
-qrencode            # Wi-Fi panel: join-QR code (scripts/wifi-qr.sh)
-iputils             # ping, for the Wi-Fi panel stats (normally already in base)
-curl                # Wi-Fi panel speed test (normally already in base)
 
 # --- Development (Neovim + systems programming) ---
 neovim

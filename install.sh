@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# install.sh: install the dotfiles as symlinks into your home directory.
+# install.sh: install (COPY) the dotfiles into your home directory.
+# The repo and your live config are separate: edit either, re-run this script
+# to deploy repo changes. Nothing in $HOME points back into the repo.
 #
 # SAFETY SCOPE
 #   * Runs as your normal user; refuses to run as root.
@@ -7,13 +9,15 @@
 #     Snapper, EFI, Limine, Secure Boot or the firewall.
 #   * The only privileged step is `sudo pacman -S --needed ...`, and only after
 #     you confirm. No AUR packages. No downloaded scripts are executed.
-#   * Existing files are moved to a timestamped backup, never deleted.
+#   * A file that differs from the repo's version is copied to a timestamped
+#     backup before it is overwritten. Files that are not in the repo (for
+#     example hypr/local.lua) are never touched.
 #
 # USAGE
 #   ./install.sh [--dry-run] [--yes] [--no-packages] [--no-distro-check]
 #     --dry-run          print every action, change nothing
 #     --yes              answer "yes" to prompts (backups still happen)
-#     --no-packages      skip the package step; only link and validate
+#     --no-packages      skip the package step; only copy and validate
 #     --no-distro-check  allow other distributions (also used for testing)
 set -euo pipefail
 
@@ -67,7 +71,7 @@ detect_distro() {
         warn "This is '$id', an Arch derivative, not Arch Linux. Package names should match, but its repositories may differ."
         ask "Continue anyway?" || die "aborted."
     else
-        die "unsupported distribution '${id:-unknown}'. Use --no-distro-check to override (links only work reliably; packages will not)."
+        die "unsupported distribution '${id:-unknown}'. Use --no-distro-check to override (file copying works; packages will not)."
     fi
 }
 if (( CHECK_DISTRO )); then detect_distro; else warn "Distro check skipped."; fi
@@ -112,56 +116,117 @@ install_packages() {
 }
 if (( DO_PACKAGES )); then install_packages; else log "Skipping packages (--no-packages)."; fi
 
-# -------------------------------------------------------------------- links
+# --------------------------------------------------------------------- copy
 BACKUP_MADE=0
-backup_target() {
+MANIFEST="$STATE_DIR/manifest"       # "target<TAB>source" per installed file
+NEW_MANIFEST="$(mktemp)"
+trap 'rm -f "$NEW_MANIFEST"' EXIT
+N_NEW=0 N_CHANGED=0 N_SAME=0
+
+backup_file() {
     local target="$1" rel dest
     rel="${target#"$HOME"/}"
     dest="$BACKUP_DIR/$rel"
     run mkdir -p "$(dirname "$dest")"
-    run mv -- "$target" "$dest"
+    run cp -a -- "$target" "$dest"
     BACKUP_MADE=1
-    log "Backed up $target -> $dest"
 }
 
-link_one() {
+# Copy one file. Returns quietly if it is already identical.
+copy_file() {
     local src="$1" target="$2"
+    printf '%s\t%s\n' "$target" "$src" >> "$NEW_MANIFEST"
+    if [[ -f $target && ! -L $target ]] && cmp -s -- "$src" "$target"; then
+        N_SAME=$((N_SAME + 1)); return 0
+    fi
+    if [[ -e $target || -L $target ]]; then
+        backup_file "$target"
+        run rm -f -- "$target"
+        N_CHANGED=$((N_CHANGED + 1))
+    else
+        N_NEW=$((N_NEW + 1))
+    fi
+    run mkdir -p "$(dirname "$target")"
+    run cp -p -- "$src" "$target"
+}
+
+# Copy a file or a whole directory tree. Extra files already in the target
+# directory (local.lua, caches, plugin lockfile edits) are left alone.
+copy_entry() {
+    local src="$1" target="$2" f rel
     [[ -e $src ]] || die "source missing in repo: $src"
 
-    # Already correct: nothing to do (idempotent).
-    if [[ -L $target && "$(readlink -- "$target")" == "$src" ]]; then
-        log "ok      $target"; return 0
+    # An older symlink-based install: replace our own link with real files.
+    if [[ -L $target ]]; then
+        if [[ "$(readlink -f -- "$target")" == "$src" || "$(readlink -f -- "$target")" == "$REPO_DIR"/* ]]; then
+            log "replacing old symlink $target with a copy"
+            run rm -- "$target"
+        else
+            warn "$target is a symlink to somewhere else."
+            ask "Move it to the backup directory and copy ours?" || { warn "skipped $target"; return 0; }
+            local rel_t="${target#"$HOME"/}"
+            run mkdir -p "$(dirname "$BACKUP_DIR/$rel_t")"
+            run mv -- "$target" "$BACKUP_DIR/$rel_t"
+            BACKUP_MADE=1
+        fi
     fi
 
-    if [[ -e $target || -L $target ]]; then
-        warn "$target already exists."
-        ask "Move it to the backup directory and link ours?" || { warn "skipped $target"; return 0; }
-        backup_target "$target"
+    if [[ -d $src ]]; then
+        [[ -e $target && ! -d $target ]] && die "$target exists and is not a directory."
+        # Ask once per entry if anything would be overwritten.
+        local differing=0
+        while IFS= read -r -d '' f; do
+            rel="${f#"$src"/}"
+            if [[ -e $target/$rel ]] && ! cmp -s -- "$f" "$target/$rel"; then differing=$((differing + 1)); fi
+        done < <(find "$src" -type f -print0)
+        if (( differing )); then
+            warn "$differing file(s) in $target differ from the repo version."
+            ask "Back them up to $BACKUP_DIR and overwrite?" || { warn "skipped $target"; return 0; }
+        fi
+        while IFS= read -r -d '' f; do
+            rel="${f#"$src"/}"
+            copy_file "$f" "$target/$rel"
+        done < <(find "$src" -type f -print0)
+    else
+        if [[ -e $target ]] && ! cmp -s -- "$src" "$target"; then
+            warn "$target differs from the repo version."
+            ask "Back it up to $BACKUP_DIR and overwrite?" || { warn "skipped $target"; return 0; }
+        fi
+        copy_file "$src" "$target"
     fi
-
-    run mkdir -p "$(dirname "$target")"
-    run ln -s -- "$src" "$target"
-    log "linked  $target -> $src"
+    log "ok      $target"
 }
 
-link_all() {
+copy_all() {
     local rel target
     while read -r rel target; do
         [[ -z ${rel:-} || $rel == \#* ]] && continue
         target="${target/#\~/$HOME}"
         case "$target" in "$HOME"/*) ;; *) die "refusing target outside \$HOME: $target" ;; esac
-        link_one "$REPO_DIR/$rel" "$target"
+        copy_entry "$REPO_DIR/$rel" "$target"
     done < "$REPO_DIR/packages/links.txt"
+    log "Files: $N_NEW new, $N_CHANGED updated (old version backed up), $N_SAME already identical."
 }
-link_all
+copy_all
+
+# Remember what we installed so uninstall.sh removes only unmodified copies.
+if (( ! DRY_RUN )); then
+    mkdir -p "$STATE_DIR"
+    # New entries first; awk keeps the first line per target. (cat on a missing
+    # old manifest must not abort the script under `set -e`.)
+    { cat "$NEW_MANIFEST"; if [[ -f $MANIFEST ]]; then cat "$MANIFEST"; fi; } \
+        | awk -F'\t' '!seen[$1]++' > "$MANIFEST.tmp"
+    mv "$MANIFEST.tmp" "$MANIFEST"
+fi
 
 # Executable bits on repo scripts (git preserves them, archives may not).
 run chmod +x "$REPO_DIR"/scripts/*.sh "$REPO_DIR"/scripts-local/* "$REPO_DIR/install.sh" "$REPO_DIR/uninstall.sh"
+(( DRY_RUN )) || chmod +x "$HOME/.local/share/dotfiles/scripts/"*.sh "$HOME/.local/scripts/"* 2>/dev/null || true
 
 # Lock screen needs a file to include (see hypr/hyprlock.conf); dark theme
 # for GTK apps is a per-user setting. Both are harmless to repeat.
-run "$REPO_DIR/scripts/wallpaper.sh" init-lock
-run "$REPO_DIR/scripts/dark-theme.sh"
+run "$HOME/.local/share/dotfiles/scripts/wallpaper.sh" init-lock
+run "$HOME/.local/share/dotfiles/scripts/dark-theme.sh"
 
 # Remember where the backup is so uninstall.sh can restore it.
 if (( BACKUP_MADE && ! DRY_RUN )); then
@@ -203,7 +268,7 @@ validate() {
     fi
 
     # Every command the keybindings and scripts rely on.
-    local -a need=(Hyprland qs ghostty nautilus btop jq nvim zsh grim slurp wl-copy wl-paste cliphist hypridle hyprlock brightnessctl wpctl playerctl nmcli bluetoothctl)
+    local -a need=(Hyprland qs ghostty nautilus btop jq nvim zsh grim slurp wl-copy hypridle hyprlock brightnessctl wpctl playerctl nmcli)
     local -a absent=()
     for c in "${need[@]}"; do command -v "$c" >/dev/null 2>&1 || absent+=("$c"); done
     if (( ${#absent[@]} )); then warn "Commands not found yet: ${absent[*]}"; else log "All required commands are present."; fi
@@ -223,8 +288,9 @@ else
         echo "  Backups:   $BACKUP_DIR"
     fi
     cat <<EOF
-  Rollback:  $REPO_DIR/uninstall.sh   (removes our links, restores backups)
-  Manual:    rm <link>; mv "$BACKUP_DIR/<path>" <original location>
+  Update:    edit the repo, then re-run ./install.sh --yes (only changed files are copied)
+  Rollback:  $REPO_DIR/uninstall.sh   (removes unmodified copies, restores backups)
+  Manual:    your old files are in "$BACKUP_DIR"
   Neovim:    run once while online:  nvim --headless "+Lazy! sync" +qa
   Zsh:       to make it your login shell:  chsh -s "\$(command -v zsh)"
   Start:     log in on a TTY and run:  start-hyprland   (or select Hyprland in your display manager)

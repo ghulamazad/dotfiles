@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
-# uninstall.sh: remove the symlinks created by install.sh and restore backups.
+# uninstall.sh: remove the files install.sh copied, and restore your backups.
 #
-# It only removes a link if it points INTO this repository, so a file or link
-# you created yourself is never touched. Installed packages are NOT removed.
+# A copied file is removed only if it is still IDENTICAL to what the installer
+# put there. A file you edited since is kept (and reported), so your changes are
+# never deleted. Installed packages are NOT removed.
 #
 # USAGE
 #   ./uninstall.sh [--dry-run] [--yes] [--backup DIR]
-#     --backup DIR   restore from DIR (default: the backup recorded by install.sh)
+#     --backup DIR   restore only from DIR (default: every backup under
+#                    ~/.dotfiles-backup, oldest first)
 set -euo pipefail
 
-REPO_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles"
 
 DRY_RUN=0 ASSUME_YES=0 BACKUP_DIR=""
@@ -37,43 +38,61 @@ ask() {
 (( EUID != 0 )) || die "do not run as root."
 [[ -n "${HOME:-}" && -d "$HOME" ]] || die "\$HOME is not set to a directory."
 
-if [[ -z $BACKUP_DIR && -f "$STATE_DIR/last-backup" ]]; then
-    BACKUP_DIR="$(<"$STATE_DIR/last-backup")"
-fi
-if [[ -n $BACKUP_DIR && ! -d $BACKUP_DIR ]]; then
-    warn "Recorded backup directory is missing: $BACKUP_DIR"; BACKUP_DIR=""
-fi
+# Backups: each install run that changed something made its own dated folder.
+# For each file we restore from the OLDEST backup that has it, because that is
+# the version you had before this setup touched it.
+BACKUPS=()
 if [[ -n $BACKUP_DIR ]]; then
-    log "Using backup: $BACKUP_DIR"
+    [[ -d $BACKUP_DIR ]] || die "backup directory not found: $BACKUP_DIR"
+    BACKUPS=("$BACKUP_DIR")
+elif [[ -d $HOME/.dotfiles-backup ]]; then
+    while IFS= read -r d; do BACKUPS+=("$d"); done < <(find "$HOME/.dotfiles-backup" -mindepth 1 -maxdepth 1 -type d | sort)
+fi
+if (( ${#BACKUPS[@]} )); then
+    log "Backups found: ${#BACKUPS[@]} (oldest is used first)"
 else
-    warn "No backup found: links will be removed, nothing restored."
+    warn "No backups found: copies will be removed, nothing restored."
 fi
 
 (( DRY_RUN )) && log "DRY RUN: nothing will be changed."
 
-while read -r rel target; do
-    [[ -z ${rel:-} || $rel == \#* ]] && continue
-    target="${target/#\~/$HOME}"
-    case "$target" in "$HOME"/*) ;; *) die "refusing target outside \$HOME: $target" ;; esac
-    src="$REPO_DIR/$rel"
+MANIFEST="$STATE_DIR/manifest"
+[[ -f $MANIFEST ]] || die "no install record ($MANIFEST). Nothing to uninstall."
 
-    if [[ -L $target && "$(readlink -- "$target")" == "$src" ]]; then
-        ask "Remove link $target?" || { warn "kept $target"; continue; }
-        run rm -- "$target"
-        log "removed $target"
+removed=0 kept=0 restored=0
+while IFS=$'\t' read -r target src; do
+    [[ -z ${target:-} ]] && continue
+    case "$target" in "$HOME"/*) ;; *) warn "ignoring entry outside \$HOME: $target"; continue ;; esac
+    if [[ -f $target && ! -L $target ]]; then
+        if [[ -f $src ]] && cmp -s -- "$src" "$target"; then
+            run rm -f -- "$target"
+            removed=$((removed + 1))
+        else
+            warn "kept $target (edited since install, or repo copy is gone)"
+            kept=$((kept + 1))
+            continue
+        fi
     elif [[ -e $target || -L $target ]]; then
-        warn "$target is not our link; leaving it alone."
-        continue
+        warn "kept $target (not a regular file)"; continue
     fi
-
-    if [[ -n $BACKUP_DIR ]]; then
-        backup_path="$BACKUP_DIR/${target#"$HOME"/}"
-        if [[ -e $backup_path || -L $backup_path ]] && [[ ! -e $target && ! -L $target ]]; then
+    for bdir in "${BACKUPS[@]}"; do
+        backup_path="$bdir/${target#"$HOME"/}"
+        if [[ -e $backup_path ]] && [[ ! -e $target ]]; then
             run mkdir -p "$(dirname "$target")"
             run mv -- "$backup_path" "$target"
-            log "restored $target"
+            restored=$((restored + 1))
+            break
         fi
-    fi
-done < "$REPO_DIR/packages/links.txt"
+    done
+done < "$MANIFEST"
+log "Removed $removed file(s), kept $kept edited file(s), restored $restored from backup."
+
+# Tidy: remove directories that became empty (only empty ones; rmdir cannot delete content).
+if (( ! DRY_RUN )); then
+    cut -f1 "$MANIFEST" | while IFS= read -r f; do dirname "$f"; done | sort -u -r | while IFS= read -r d; do
+        case "$d" in "$HOME"/*) while [[ $d != "$HOME" ]] && rmdir "$d" 2>/dev/null; do d="$(dirname "$d")"; done ;; esac
+    done
+    rm -f "$MANIFEST"
+fi
 
 log "Done. Packages were not removed; use pacman -Rns manually if you want them gone."

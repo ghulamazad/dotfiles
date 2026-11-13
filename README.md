@@ -1,8 +1,8 @@
 # dotfiles: minimal Hyprland + Quickshell for systems programming
 
 A small, readable desktop for Arch Linux: Hyprland (tiling, Lua config),
-Quickshell as the whole shell (bar with clickable panels, launcher, notifications,
-power menu, overview), Ghostty, Nautilus, Zsh and your own Neovim config (`ghulamazad`).
+Quickshell as a minimal shell (a bar, an app launcher and notification popups, nothing
+else), Ghostty, Nautilus, Zsh and your own Neovim config (`ghulamazad`).
 No AI features, no telemetry, no AUR packages, no Waybar/Rofi/dock.
 
 ## Status: read this first
@@ -35,7 +35,7 @@ Expect a few runtime errors on first launch. Fix them from the logs (see
 ```sh
 git clone <this repo> ~/dotfiles && cd ~/dotfiles
 ./install.sh --dry-run      # shows everything, changes nothing
-./install.sh                # packages (official repos only) + symlinks
+./install.sh                # packages (official repos only) + copies your config into ~/.config etc.
 ```
 
 Flags: `--dry-run`, `--yes`, `--no-packages`, `--no-distro-check`. Refuses to run as root.
@@ -47,7 +47,7 @@ Existing files are moved to `~/.dotfiles-backup/<timestamp>/` first.
 | Path | Purpose |
 |---|---|
 | `hypr/` | Lua config split by topic; `local.lua` (git-ignored) for per-machine overrides |
-| `quickshell/` | `shell.qml` plus `modules, widgets, panels, launcher, notifications, services, components, themes, config` |
+| `quickshell/` | `shell.qml` plus `modules, widgets, launcher, notifications, services, components, themes, config` |
 | `nvim/` | Your own Neovim config (`ghulamazad`) with the standalone Petrol Lagoon colourscheme (`colors/`, `lua/ghulamazad/petrol_lagoon.lua`); tokyodark removed |
 | `git/` | Your git config and ignore file (identity stays in `~/.config/git/local`, not in this repo) |
 | `ghostty/`, `zsh/` | Terminal and shell (with aliases, functions, fzf integration) |
@@ -55,43 +55,33 @@ Existing files are moved to `~/.dotfiles-backup/<timestamp>/` first.
 | `starship/` | Cross-shell prompt configuration |
 | `lazygit/` | TUI Git interface styled with the Petrol Lagoon theme |
 | `tmux-sessionizer-config/` | Fuzzy project switcher configuration |
-| `scripts-local/` | User scripts (`tmux-sessionizer`) linked to `~/.local/scripts` |
+| `scripts-local/` | User scripts (`tmux-sessionizer`) copied to `~/.local/scripts` |
 | `btop/` | System monitor configuration and Petrol Lagoon theme |
 | `mpv/` | GPU-accelerated video player config (ported from Omarchy) |
 | `wallpapers/` | Shipped desktop wallpapers (not recolored) |
-| `scripts/` | `screenshot.sh`, `wallpaper.sh`, `dark-theme.sh`, `system-info.sh`, `restart-shell.sh` |
-| `packages/` | `packages.txt` (package list), `links.txt` (symlink table) |
+| `scripts/` | `screenshot.sh`, `wallpaper.sh`, `dark-theme.sh`, `restart-shell.sh` |
+| `packages/` | `packages.txt` (package list), `links.txt` (copy table) |
 | `docs/` | installation, keybindings, troubleshooting, security, pending-requirements, omarchy-port-brief, omarchy-inventory, omarchy-port-plan |
 
 ## Known limitations (by design or unverified)
 
-- **Bar panels** (click an icon): Wi-Fi, Bluetooth, sound, display, battery, and the
-  calendar (click the clock). None of these panels could be run here.
-- **Network panel** (click the Wi-Fi icon): connection name and state, ping to the
-  router, packet loss, live receive/send rate, totals since the interface came up,
-  IP and gateway; DNS provider (DHCP, Cloudflare, Google, Custom); a download speed
-  test; a join-QR for the current Wi-Fi; known and other networks; connect and
-  on/off. New secured networks ask for a password; it is passed to NetworkManager
-  through a private temporary file, never on a command line. Needs `qrencode`
-  (in `packages.txt`) for the QR. A VM usually has no Wi-Fi adapter, so the Wi-Fi
-  parts are untested; stats, DNS and speed test also work on a wired connection.
-  Speed test: one 25 MB download from `speed.cloudflare.com` (endpoint from memory,
-  not verified here); the number is a rough single-stream download figure.
-  Wi-Fi: WPA/WPA2/WPA3 personal only. Enterprise, hidden and WEP networks: use `nmtui`.
-- **Bluetooth**: on/off, scan, connect/disconnect, simple pairing. Pairing that needs a
-  PIN: use `bluetoothctl`. Untested (no adapter in a VM).
-- **Display**: brightness only, via `brightnessctl -m` (unverified). A VM has no
-  backlight and the panel says so.
-- **Overview** (Super+Tab) lists windows by title. No live thumbnails.
-- **Wallpapers**: shipped wallpapers are included in `wallpapers/`. Put extra images in
-  `~/Pictures/Wallpapers`. In the picker (Super+Shift+W) Enter sets the desktop image and Ctrl+Enter the lock screen.
+- **Bar**: workspaces (left), date and time (center), tray plus Bluetooth, network, sound
+  and battery icons (right). The icons are display-only: nothing opens when you click
+  them. Manage things yourself: `nmtui`, `bluetoothctl`, `wpctl`, `btop`. Not run live.
+- **Launcher** (Super+Space): apps and recents only. No calculator, clipboard history,
+  wallpaper picker, power menu or window overview (removed on purpose). Power off or
+  log out from a terminal (`systemctl poweroff`, `hyprctl dispatch exit`).
+- **Wallpaper**: drawn by Quickshell from a state file. Set it from a terminal with
+  `~/.local/share/dotfiles/scripts/wallpaper.sh set FILE` (`set-lock FILE` for the lock
+  screen, `list` to see choices). Shipped images are in `wallpapers/`.
 - **Screenshots**: Super+Shift+S (or Print) picks a window or an area; Shift+Print takes
   the whole screen. Saved to `~/Pictures/Screenshots` and copied. The window-picking
   logic was tested against sample data only, not a live Hyprland.
 - **Dark theme**: `scripts/dark-theme.sh` sets the GTK/portal dark preference. Qt apps and apps
   with their own theme setting may still need a manual change.
 - **mpv**: configured with GPU acceleration (`vo=gpu-next`), Vulkan, VAAPI, frameless UI and custom bindings ported from Omarchy.
-- **Notifications**: Quickshell is the notification daemon. Do not run mako/dunst/swaync.
+- **Notifications**: popups only (no history, no Do Not Disturb). Quickshell is the
+  notification daemon. Do not run mako/dunst/swaync.
 - `hyprlock.conf` and `hypridle.conf` are unverified against current syntax.
 - Not touched on purpose: disk layout, LUKS, Btrfs/Snapper, Limine, the bootloader.
 

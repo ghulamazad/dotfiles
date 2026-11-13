@@ -26,8 +26,8 @@ below are from memory and change between versions, so read what your version sho
   Btrfs/Snapper or the bootloader.
 - **Bootloader:** whatever you prefer (your real machine uses Limine; the guided
   installer's choices vary by version).
-- **Network:** choose NetworkManager (the Wi-Fi panel and status use `nmcli`).
-- **Audio:** PipeWire (the sound panel uses PipeWire).
+- **Network:** choose NetworkManager (the bar's network icon uses `nmcli`; manage Wi-Fi with `nmtui`).
+- **Audio:** PipeWire (the bar's sound icon uses PipeWire).
 - **Additional packages:** add `git` and `sudo` (or `base-devel`) so you can clone
   this repo and install packages, and a user with sudo rights.
 
@@ -63,7 +63,9 @@ git clone <repo> ~/dotfiles && cd ~/dotfiles
 
 The installer: checks it is not root and not on an unexpected distro; verifies each
 package exists with `pacman -Si`; installs with `sudo pacman -S --needed` (it asks
-first unless `--yes`); backs up conflicting files; creates symlinks; validates.
+first unless `--yes`); copies the files into `~/.config` etc. (a changed file is backed up first); validates.
+Your live config is a copy: edit the repo and re-run `./install.sh --yes` to deploy,
+or edit `~/.config/...` directly (a later install backs your edit up before overwriting).
 No AUR, no `makepkg`, no disk operations.
 
 ## 4. First run order
@@ -76,5 +78,6 @@ No AUR, no `makepkg`, no disk operations.
 
 ## 5. Per-machine settings
 
-Copy `hypr/local.lua.example` to `hypr/local.lua` (git-ignored) for monitors,
-keyboard layout etc.
+Copy `hypr/local.lua.example` to `~/.config/hypr/local.lua` for monitors, keyboard
+layout etc. The installer never touches a file that is not in the repo, so it survives
+re-installs.

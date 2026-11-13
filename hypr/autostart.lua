@@ -2,7 +2,7 @@
 -- Keep this list short: every entry is a background process.
 
 hl.on("hyprland.start", function()
-    -- Quickshell: the whole desktop UI (bar, launcher, notifications, wallpaper).
+    -- Quickshell: the whole desktop UI (bar, launcher, notification popups, wallpaper).
     -- If it crashes, Hyprland keeps working; SUPER+SHIFT+B restarts it.
     hl.exec_cmd("qs")
 
@@ -16,8 +16,4 @@ hl.on("hyprland.start", function()
     -- Dark preference for GTK/portal apps. Needs the session D-Bus, so it is
     -- (re)applied here as well as by install.sh (which may run on a TTY).
     hl.exec_cmd(os.getenv("HOME") .. "/.local/share/dotfiles/scripts/dark-theme.sh")
-
-    -- Clipboard history database (read by the Quickshell launcher).
-    hl.exec_cmd("wl-paste --type text --watch cliphist store")
-    hl.exec_cmd("wl-paste --type image --watch cliphist store")
 end)

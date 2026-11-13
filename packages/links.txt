@@ -1,4 +1,5 @@
-# Symlink table used by install.sh and uninstall.sh.
+# Copy table used by install.sh and uninstall.sh (the file name is historical:
+# these are COPIED, not symlinked).
 # Format: <path inside this repo>  <target path>   ('~' means your home directory)
 # Only paths under your home directory are ever touched.
 hypr                       ~/.config/hypr
@@ -15,4 +16,5 @@ lazygit                    ~/.config/lazygit
 git                        ~/.config/git
 tmux-sessionizer-config    ~/.config/tmux-sessionizer
 scripts                    ~/.local/share/dotfiles/scripts
+wallpapers                 ~/.local/share/dotfiles/wallpapers
 scripts-local              ~/.local/scripts

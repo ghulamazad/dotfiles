@@ -1,4 +1,4 @@
--- ~/.config/hypr/hyprland.lua  (symlinked from dotfiles/hypr)
+-- ~/.config/hypr/hyprland.lua  (copied from dotfiles/hypr by install.sh)
 --
 -- Entry point. Hyprland >= 0.55 uses Lua; the old hyprlang .conf format is
 -- deprecated upstream, so this repo ships .lua modules instead of .conf files.

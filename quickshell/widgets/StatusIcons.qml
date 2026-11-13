@@ -1,5 +1,5 @@
-// Status icons: Bluetooth, network, sound, display, battery. Each is its own
-// button and opens the matching panel.
+// Status icons: Bluetooth, network, sound, battery. Display only: nothing here
+// is clickable. Manage them yourself (nmtui, bluetoothctl, wpctl, ...).
 import QtQuick
 import Quickshell.Bluetooth
 import qs.components
@@ -7,55 +7,36 @@ import qs.services
 import qs.themes
 
 Row {
-    spacing: 4
+    spacing: 12
     anchors.verticalCenter: parent ? parent.verticalCenter : undefined
 
     readonly property var adapter: Bluetooth.defaultAdapter
     readonly property bool btOn: adapter !== null && adapter.enabled
     readonly property bool btConnected: Array.from(Bluetooth.devices.values).some(d => d.connected)
 
-    BarButton {
+    Txt {
         visible: adapter !== null
-        active: UIState.bluetooth
-        onClicked: UIState.toggle("bluetooth")
-        Txt {
-            text: Icons.bluetooth
-            font.pixelSize: 15
-            color: btConnected ? Theme.accent : (btOn ? Theme.text : Theme.subtext)
-        }
+        text: Icons.bluetooth
+        font.pixelSize: 15
+        color: btConnected ? Theme.accent : (btOn ? Theme.text : Theme.subtext)
     }
 
-    BarButton {
-        active: UIState.wifi
-        onClicked: UIState.toggle("wifi")
-        Txt {
-            text: Network.kind === "wifi" ? Icons.wifi : Icons.wired
-            font.pixelSize: 15
-            color: Network.connected ? Theme.text : Theme.red
-        }
+    Txt {
+        text: Network.kind === "wifi" ? Icons.wifi : Icons.wired
+        font.pixelSize: 15
+        color: Network.connected ? Theme.text : Theme.red
     }
 
-    BarButton {
-        active: UIState.audio
-        onClicked: UIState.toggle("audio")
-        Txt {
-            text: (Audio.muted || Audio.volume === 0) ? Icons.volumeOff
-                : Audio.volume < 0.5 ? Icons.volumeLow : Icons.volumeHigh
-            font.pixelSize: 15
-            color: Audio.muted ? Theme.red : Theme.text
-        }
+    Txt {
+        text: (Audio.muted || Audio.volume === 0) ? Icons.volumeOff
+            : Audio.volume < 0.5 ? Icons.volumeLow : Icons.volumeHigh
+        font.pixelSize: 15
+        color: Audio.muted ? Theme.red : Theme.text
     }
 
-    BarButton {
-        active: UIState.monitor
-        onClicked: UIState.toggle("monitor")
-        Txt { text: Icons.desktop; font.pixelSize: 15 }
-    }
-
-    BarButton {
+    Row {
         visible: Battery.present
-        active: UIState.battery
-        onClicked: UIState.toggle("battery")
+        spacing: 6
         Txt {
             text: Battery.charging ? Icons.bolt : Icons.battery(Battery.fraction)
             font.pixelSize: 15

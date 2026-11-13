@@ -1,8 +1,6 @@
 pragma Singleton
-// Wallpaper list and current choice. The choice lives in a plain state file
-// written by scripts/wallpaper.sh, so the keybinding, the picker and a shell
-// prompt can all change it. No wallpaper daemon runs: modules/Wallpaper.qml
-// draws it as a Quickshell background layer.
+// Current wallpaper path, read from the state file written by scripts/wallpaper.sh
+// (`wallpaper.sh set FILE`). No wallpaper daemon runs: modules/Wallpaper.qml draws it.
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -12,24 +10,6 @@ Singleton {
     id: root
 
     property string current: ""
-    property var images: []
-
-    function refresh() { lister.running = true; }
-
-    function choose(path) {
-        Quickshell.execDetached([Config.scriptsDir + "/wallpaper.sh", "set", path]);
-        // The state file may not exist yet, so a file watcher could miss its
-        // creation. Re-read explicitly shortly after writing.
-        recheck.restart();
-    }
-
-    // Lock screen image: wallpaper.sh writes a small hyprlock snippet that
-    // hypr/hyprlock.conf includes. Nothing to watch here.
-    function chooseLock(path) {
-        Quickshell.execDetached([Config.scriptsDir + "/wallpaper.sh", "set-lock", path]);
-    }
-
-    Timer { id: recheck; interval: 400; onTriggered: store.reload() }
 
     FileView {
         id: store
@@ -38,13 +18,5 @@ Singleton {
         printErrors: false   // missing before the first choice
         onFileChanged: reload()
         onLoaded: root.current = text().trim()
-    }
-
-    Process {
-        id: lister
-        command: [Config.scriptsDir + "/wallpaper.sh", "list"]
-        stdout: StdioCollector {
-            onStreamFinished: root.images = text.split("\n").filter(line => line.length > 0)
-        }
     }
 }

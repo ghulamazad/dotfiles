@@ -38,9 +38,10 @@ Omarchy ships, so mpv behaves the same here.
 
 ## Implemented in the last build (statically checked only, not run live)
 
-Bar and panels, Ghostty instead of kitty, Nautilus, `btop`, dark-theme script,
-Super+W close, launcher Ctrl keys, window-or-area screenshot, scratchpad and
-dashboard removed, lock-screen wallpaper through `wallpaper.sh set-lock`.
+Minimal Quickshell (bar, launcher, notification popups; panels, overview, power menu,
+clipboard history and wallpaper picker removed), Ghostty instead of kitty, Nautilus,
+`btop`, dark-theme script, Super+W close, launcher Ctrl keys, window-or-area
+screenshot, lock-screen wallpaper through `wallpaper.sh set-lock`.
 See README "Known limitations" for what is unverified.
 
 ## Still manual (not done by any script)

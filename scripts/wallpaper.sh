@@ -6,8 +6,9 @@
 # watches, so changing it never needs a privileged or long-running helper.
 set -euo pipefail
 
-# Resolve symlinks: Quickshell calls this through ~/.local/share/dotfiles/scripts,
-# which links into the repo. Without this, the repo wallpapers/ is never found.
+# The repo's wallpapers/ sits next to scripts/ (in the repo and, after install.sh,
+# under ~/.local/share/dotfiles). readlink -f also keeps this working if someone
+# runs it through a symlink.
 script_dir="$(cd -- "$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")" && pwd -P)"
 repo_wall_dir="$(dirname "$script_dir")/wallpapers"
 wall_dir="${DOTFILES_WALLPAPER_DIR:-$HOME/Pictures/Wallpapers}"

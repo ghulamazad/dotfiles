@@ -1,8 +1,7 @@
 // The single top panel, one per monitor.
 //   left:   workspaces
-//   center: date and time (click opens the calendar)
-//   right:  tray, then Bluetooth, network, sound, display, battery. Each icon
-//           opens its own panel (see ../panels).
+//   center: date and time
+//   right:  tray, then Bluetooth, network, sound, battery (display only)
 //
 // Exclusion mode is left at Auto: with three anchors (top, left, right)
 // Quickshell reserves exactly the bar's height, so Hyprland tiles below it.
@@ -53,10 +52,7 @@ Variants {
                 Workspaces {}
             }
 
-            Clock {
-                anchors.centerIn: parent
-                active: UIState.calendar
-            }
+            Clock { anchors.centerIn: parent }
 
             Row {
                 anchors.right: parent.right

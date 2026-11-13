@@ -5,7 +5,7 @@
 --
 -- Design rule: everything essential to survive a crashed Quickshell works
 -- WITHOUT Quickshell: terminal, close, focus, workspaces, lock, screenshots,
--- restart-shell. Only the launcher and the bar panels depend on it.
+-- restart-shell. Only the launcher depends on it.
 --
 -- No two binds share the same key combination. When adding a bind, search
 -- this file for the combo first.
@@ -50,14 +50,9 @@ hl.bind(mainMod .. " + SHIFT + Space", function()
 end)
 
 -------------------------------------------------------------------------------
--- Quickshell UI (qs ipc call <target> <function>)
+-- App launcher (qs ipc call launcher toggle)
 -------------------------------------------------------------------------------
 hl.bind(mainMod .. " + Space",       qs("launcher", "toggle"))
-hl.bind(mainMod .. " + N",           qs("notifications", "toggleCenter"))
-hl.bind(mainMod .. " + C",           qs("launcher", "openClipboard"))
-hl.bind(mainMod .. " + SHIFT + W", qs("launcher", "openWallpapers"))
-hl.bind(mainMod .. " + Tab",         qs("overview", "toggle"))
-hl.bind(mainMod .. " + SHIFT + E",   qs("power", "toggle"))
 
 -------------------------------------------------------------------------------
 -- Focus / move windows
