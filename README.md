@@ -67,10 +67,17 @@ Existing files are moved to `~/.dotfiles-backup/<timestamp>/` first.
 
 - **Bar panels** (click an icon): Wi-Fi, Bluetooth, sound, display, battery, and the
   calendar (click the clock). None of these panels could be run here.
-- **Wi-Fi**: list, connect, on/off. New secured networks ask for a password; it is
-  passed to NetworkManager through a private temporary file, never on a command
-  line. WPA/WPA2/WPA3 personal only. Enterprise, hidden and WEP networks: use `nmtui`.
-  A VM usually has no Wi-Fi adapter, so this is untested.
+- **Network panel** (click the Wi-Fi icon): connection name and state, ping to the
+  router, packet loss, live receive/send rate, totals since the interface came up,
+  IP and gateway; DNS provider (DHCP, Cloudflare, Google, Custom); a download speed
+  test; a join-QR for the current Wi-Fi; known and other networks; connect and
+  on/off. New secured networks ask for a password; it is passed to NetworkManager
+  through a private temporary file, never on a command line. Needs `qrencode`
+  (in `packages.txt`) for the QR. A VM usually has no Wi-Fi adapter, so the Wi-Fi
+  parts are untested; stats, DNS and speed test also work on a wired connection.
+  Speed test: one 25 MB download from `speed.cloudflare.com` (endpoint from memory,
+  not verified here); the number is a rough single-stream download figure.
+  Wi-Fi: WPA/WPA2/WPA3 personal only. Enterprise, hidden and WEP networks: use `nmtui`.
 - **Bluetooth**: on/off, scan, connect/disconnect, simple pairing. Pairing that needs a
   PIN: use `bluetoothctl`. Untested (no adapter in a VM).
 - **Display**: brightness only, via `brightnessctl -m` (unverified). A VM has no

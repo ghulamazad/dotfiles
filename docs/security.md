@@ -26,6 +26,17 @@ read changes before pulling them, and apply the same care to any third-party
 (`cliphist wipe`) or do not use Super+C if that bothers you. Password managers that
 clear the clipboard do not necessarily remove it from history.
 
+## Network panel extras
+- **QR code** (`scripts/wifi-qr.sh`): reads the saved password from NetworkManager,
+  pipes it to `qrencode` over stdin (never argv) and writes a 0600 PNG in
+  `$XDG_RUNTIME_DIR`. The picture contains the password, so it is deleted when the QR
+  view or the panel closes. Do not screenshot it unless you mean to share it.
+- **DNS switch**: runs `nmcli connection modify` / `device reapply` on the active
+  profile with a fixed argument list. Custom addresses are validated as IPv4/IPv6
+  before use. Changes the profile permanently until you pick DHCP again.
+- **Speed test**: one 25 MB download from Cloudflare, only when you press the button.
+  Ping goes to your router only.
+
 ## Not covered / unverified
 - Hyprland's own permission system for screencopy/keyboard grabs exists in recent
   versions; its exact options were not verified here, so none are configured.

@@ -63,6 +63,9 @@ networkmanager      # provides nmcli
 bluez
 bluez-utils         # provides bluetoothctl
 upower
+qrencode            # Wi-Fi panel: join-QR code (scripts/wifi-qr.sh)
+iputils             # ping, for the Wi-Fi panel stats (normally already in base)
+curl                # Wi-Fi panel speed test (normally already in base)
 
 # --- Development (Neovim + systems programming) ---
 neovim
