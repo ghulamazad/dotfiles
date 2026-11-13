@@ -25,28 +25,29 @@ mouse-scroll-multiplier = 0.95
 async-backend = epoll
 
 # Colours: Deep obsidian plum & sage jade palette (matching reference screenshot)
-background = 150f1d
-foreground = c6bdce
-selection-background = 295d50
-selection-foreground = f0faf4
-cursor-color = 7db6a7
+background = 0c1618
+foreground = c2d8d8
+selection-background = 17393d
+selection-foreground = dfeeee
+cursor-color = 35d0c0
+cursor-text = 0c1618
 
-palette = 0=#1a1323
-palette = 1=#d88d91
-palette = 2=#81beae
-palette = 3=#d7ba7d
-palette = 4=#7db6a7
-palette = 5=#b7a1c8
-palette = 6=#78b0a2
-palette = 7=#c6bdce
-palette = 8=#4f4657
-palette = 9=#e6a6aa
-palette = 10=#9fbc79
-palette = 11=#e8cca0
-palette = 12=#8bcbb1
-palette = 13=#cfbce0
-palette = 14=#a2dcda
-palette = 15=#f0faf4
+palette = 0=#152325
+palette = 1=#e0736e
+palette = 2=#6cc48e
+palette = 3=#d1b366
+palette = 4=#35d0c0
+palette = 5=#9d8ccc
+palette = 6=#3fc4b7
+palette = 7=#c2d8d8
+palette = 8=#4d6467
+palette = 9=#ec8f88
+palette = 10=#8adaa8
+palette = 11=#e2c985
+palette = 12=#7db8d8
+palette = 13=#b5a7dd
+palette = 14=#66d9cd
+palette = 15=#dfeeee
 
 # Copy/paste. Ctrl+Shift only, so nothing collides with Hyprland's Super binds.
 keybind = ctrl+shift+c=copy_to_clipboard

@@ -1,27 +1,27 @@
 # lazygit config
 # Reference: https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
-# Styled with Obsidian Plum & Sage Jade theme matching reference screenshot.
+# Styled with the Petrol Lagoon theme (see docs/theme.md).
 
 gui:
   theme:
     activeBorderColor:
-      - '#7db6a7'
+      - '#35d0c0'
       - bold
     inactiveBorderColor:
-      - '#31343d'
+      - '#2a3f42'
     optionsTextColor:
-      - '#7db6a7'
+      - '#35d0c0'
     selectedLineBgColor:
-      - '#295d50'
+      - '#17393d'
     selectedRangeBgColor:
-      - '#295d50'
+      - '#17393d'
     cherryPickedCommitBgColor:
-      - '#2b5147'
+      - '#17393d'
     cherryPickedCommitFgColor:
-      - '#81beae'
+      - '#6cc48e'
     unstagedChangesColor:
-      - '#d88d91'
+      - '#e0736e'
     defaultFgColor:
-      - '#c6bdce'
+      - '#c2d8d8'
   nerdFontsVersion: "3"
   border: single

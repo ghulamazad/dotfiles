@@ -50,14 +50,14 @@ Existing files are moved to `~/.dotfiles-backup/<timestamp>/` first.
 | `quickshell/` | `shell.qml` plus `modules, widgets, panels, launcher, notifications, services, components, themes, config` |
 | `nvim/` | LazyVim-based config, system toolchain instead of Mason |
 | `ghostty/`, `zsh/` | Terminal and shell (with aliases, functions, fzf integration) |
-| `tmux/` | Terminal multiplexer configured with Tokyo Night theme |
+| `tmux/` | Terminal multiplexer configured with the Petrol Lagoon theme |
 | `starship/` | Cross-shell prompt configuration |
-| `lazygit/` | TUI Git interface styled with Tokyo Night theme |
+| `lazygit/` | TUI Git interface styled with the Petrol Lagoon theme |
 | `tmux-sessionizer-config/` | Fuzzy project switcher configuration |
 | `scripts-local/` | User scripts (`tmux-sessionizer`) linked to `~/.local/scripts` |
-| `btop/` | System monitor configuration and Tokyo Night theme |
+| `btop/` | System monitor configuration and Petrol Lagoon theme |
 | `mpv/` | GPU-accelerated video player config (ported from Omarchy) |
-| `wallpapers/` | Shipped Tokyo Night desktop wallpapers |
+| `wallpapers/` | Shipped desktop wallpapers (not recolored) |
 | `scripts/` | `screenshot.sh`, `wallpaper.sh`, `dark-theme.sh`, `system-info.sh`, `restart-shell.sh` |
 | `packages/` | `packages.txt` (package list), `links.txt` (symlink table) |
 | `docs/` | installation, keybindings, troubleshooting, security, kernel-dev, pending-requirements, omarchy-port-brief, omarchy-inventory, omarchy-port-plan |
@@ -75,7 +75,7 @@ Existing files are moved to `~/.dotfiles-backup/<timestamp>/` first.
 - **Display**: brightness only, via `brightnessctl -m` (unverified). A VM has no
   backlight and the panel says so.
 - **Overview** (Super+Tab) lists windows by title. No live thumbnails.
-- **Wallpapers**: shipped Tokyo Night wallpapers are included in `wallpapers/`. Put extra images in
+- **Wallpapers**: shipped wallpapers are included in `wallpapers/`. Put extra images in
   `~/Pictures/Wallpapers`. In the picker (Super+Shift+W) Enter sets the desktop image and Ctrl+Enter the lock screen.
 - **Screenshots**: Super+Shift+S (or Print) picks a window or an area; Shift+Print takes
   the whole screen. Saved to `~/Pictures/Screenshots` and copied. The window-picking

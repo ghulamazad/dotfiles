@@ -8,9 +8,9 @@ hl.config({
         border_size = 2,
 
         col = {
-            -- Sage jade accent border on focused window, muted plum-slate otherwise
-            active_border   = "rgba(7db6a7ee)",
-            inactive_border = "rgba(31343daa)",
+            -- Teal accent border on the focused window, muted teal-grey otherwise
+            active_border   = "rgba(35d0c0ee)",
+            inactive_border = "rgba(2a3f42aa)",
         },
 
         -- Drag borders/gaps with the mouse to resize
@@ -53,7 +53,7 @@ hl.config({
         force_default_wallpaper    = 0,
         disable_hyprland_logo      = true,
         disable_splash_rendering   = true,
-        background_color           = "rgb(150F1D)",
+        background_color           = "rgb(0C1618)",
         focus_on_activate          = true,
         initial_workspace_tracking = 0,
         allow_session_lock_restore = true,

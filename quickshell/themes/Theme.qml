@@ -1,7 +1,7 @@
 pragma Singleton
 // Colors and the dark/light switch. The choice is persisted in
 // ~/.local/state/dotfiles/theme so it survives restarts and works offline.
-// Palette matches the obsidian plum & sage jade reference theme.
+// Palette: Petrol Lagoon (see docs/theme.md). Light mode keeps a neutral light set.
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -12,20 +12,20 @@ Singleton {
 
     property bool dark: true
 
-    readonly property color bg:       dark ? "#150f1d" : "#eceff4"
-    readonly property color surface:  dark ? "#1e1727" : "#ffffff"
-    readonly property color surface2: dark ? "#2b5147" : "#dfe4ec"
-    readonly property color border:   dark ? "#31343d" : "#c8ced9"
-    readonly property color text:     dark ? "#c6bdce" : "#2e3440"
-    readonly property color subtext:  dark ? "#8f8498" : "#4c566a"
-    readonly property color accent:   "#7db6a7"
-    readonly property color accent2:  "#9fbc79"
-    readonly property color red:      "#d88d91"
-    readonly property color green:    "#81beae"
-    readonly property color yellow:   "#d7ba7d"
-    // Deep obsidian-plum opaque background matching theme aesthetic
-    readonly property color panel:    dark ? "#150f1d" : "#eceff4"
-    readonly property color scrim:    "#80150f1d"
+    readonly property color bg:       dark ? "#0c1618" : "#eceff4"
+    readonly property color surface:  dark ? "#152325" : "#ffffff"
+    readonly property color surface2: dark ? "#17393d" : "#dfe4ec"
+    readonly property color border:   dark ? "#2a3f42" : "#c8ced9"
+    readonly property color text:     dark ? "#c2d8d8" : "#2e3440"
+    readonly property color subtext:  dark ? "#a0b8b8" : "#4c566a"
+    readonly property color accent:   "#35d0c0"
+    readonly property color accent2:  "#8adaa8"
+    readonly property color red:      "#e0736e"
+    readonly property color green:    "#6cc48e"
+    readonly property color yellow:   "#d1b366"
+    // Opaque panel background (same as bg in dark mode)
+    readonly property color panel:    dark ? "#0c1618" : "#eceff4"
+    readonly property color scrim:    "#800c1618"
 
     readonly property string fontFamily: Config.fontFamily
 

@@ -50,7 +50,7 @@ write_lock() {
     if [[ -n ${1:-} ]]; then
         printf 'background {\n    monitor =\n    path = %s\n    blur_passes = 2\n}\n' "$1" > "$lock_file"
     else
-        printf 'background {\n    monitor =\n    color = rgba(150f1dff)\n}\n' > "$lock_file"
+        printf 'background {\n    monitor =\n    color = rgba(0c1618ff)\n}\n' > "$lock_file"
     fi
 }
 

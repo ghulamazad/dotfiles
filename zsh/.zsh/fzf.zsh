@@ -1,6 +1,6 @@
 # ~/.zsh/fzf.zsh – fzf integration for the shell
 # Requires: fzf, fd, bat, eza
-# Colours: Obsidian Plum & Sage Jade palette (matching reference screenshot)
+# Colours: Petrol Lagoon palette (see docs/theme.md)
 
 # ── fzf defaults: fd for files, bat for previews ─────────────────────────────
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
@@ -12,9 +12,9 @@ export FZF_DEFAULT_OPTS="
   --prompt='❯ '
   --pointer='▶'
   --marker='✓'
-  --color=bg+:#1e1727,bg:#150f1d,spinner:#81beae,hl:#d88d91
-  --color=fg:#c6bdce,header:#7db6a7,info:#b7a1c8,pointer:#7db6a7
-  --color=marker:#81beae,fg+:#f0faf4,prompt:#7db6a7,hl+:#d88d91
+  --color=bg+:#152325,bg:#0c1618,spinner:#6cc48e,hl:#e0736e
+  --color=fg:#c2d8d8,header:#35d0c0,info:#9d8ccc,pointer:#35d0c0
+  --color=marker:#6cc48e,fg+:#dfeeee,prompt:#35d0c0,hl+:#e0736e
   --bind='ctrl-/:toggle-preview'
   --bind='ctrl-a:select-all'
   --bind='ctrl-d:deselect-all'
