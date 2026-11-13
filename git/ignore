@@ -1,0 +1,57 @@
+# ~/.config/git/ignore – global gitignore
+# Patterns here apply to every repo on this machine.
+# Keep this small; project-specific ignores belong in each repo's .gitignore.
+
+# ── Editor / IDE ──────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.netrwhist
+Session.vim
+.nvimlog
+
+# ── OS / filesystem ───────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Shell / tool outputs ──────────────────────────────────────────────────────
+.envrc.local
+.direnv/
+
+# ── Secrets / credentials – never committed ───────────────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# ── Build / test artefacts ────────────────────────────────────────────────────
+coverage.out
+coverage.html
+*.test
+__debug_bin*
+
+# ── Language-specific ────────────────────────────────────────────────────────
+# Go
+vendor/
+*.prof
+
+# Node
+node_modules/
+.npm/
+dist/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+*.egg-info/
+
+# Rust
+target/

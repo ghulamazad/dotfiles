@@ -1,0 +1,126 @@
+# ── Identity delegation ──────────────────────────────────────────────────────
+[include]
+    # Personal identity and signing key live here.
+    path = ~/.config/git/local
+
+
+# ── Core ──────────────────────────────────────────────────────────────────────
+[core]
+    editor       = nvim
+    pager        = delta
+    autocrlf      = input
+    whitespace   = trailing-space,space-before-tab
+    excludesFile = ~/.config/git/ignore
+
+
+# ── Repository initialization ────────────────────────────────────────────────
+[init]
+    defaultBranch = main
+
+
+# ── Fetch / remote ────────────────────────────────────────────────────────────
+[fetch]
+    # Remove local remote-tracking refs that no longer exist on the remote.
+    prune = true
+
+
+# ── Pull ──────────────────────────────────────────────────────────────────────
+[pull]
+    # Never create an implicit merge commit during `git pull`.
+    # Use `git pull --rebase` when you explicitly want to rebase.
+    ff = only
+
+
+# ── Push ──────────────────────────────────────────────────────────────────────
+[push]
+    # Automatically configure the upstream for newly created branches.
+    autoSetupRemote = true
+
+    # Push annotated tags that are reachable from pushed commits.
+    followTags = true
+
+
+# ── Rebase ────────────────────────────────────────────────────────────────────
+[rebase]
+    # Automatically handle fixup!/squash! commits during interactive rebase.
+    autoSquash = true
+
+    # Automatically stash and restore local changes around a rebase.
+    autoStash = true
+
+
+# ── Merge ─────────────────────────────────────────────────────────────────────
+[merge]
+    # Include common-ancestor context in conflict markers.
+    conflictStyle = zdiff3
+
+
+# ── Diff ──────────────────────────────────────────────────────────────────────
+[diff]
+    # Produces cleaner diffs for source code.
+    algorithm = histogram
+
+    # Highlight moved code.
+    colorMoved = default
+
+    # Ignore whitespace-only changes when detecting moved code.
+    colorMovedWS = ignore-all-space
+
+
+# ── Rerere ────────────────────────────────────────────────────────────────────
+[rerere]
+    # Record conflict resolutions and reuse them automatically.
+    enabled = true
+
+    # Intentionally disabled:
+    # autoupdate = true
+    #
+    # Rerere resolutions should be reviewed before being staged.
+
+
+# ── Branch / tag sorting ──────────────────────────────────────────────────────
+[branch]
+    # Show recently committed branches first.
+    sort = -committerdate
+
+[tag]
+    # Sort version tags naturally: v1.2.0 before v1.10.0.
+    sort = version:refname
+
+# ── GitHub URL rewrite ────────────────────────────────────────────────────────
+[url "git@github.com:"]
+    # Convert GitHub HTTPS URLs to SSH automatically.
+    insteadOf = https://github.com/
+
+
+# ── Delta ─────────────────────────────────────────────────────────────────────
+[delta]
+    navigate    = true
+    line-numbers = true
+    side-by-side = false
+    syntax-theme = gruvbox-dark
+
+
+# ── Aliases ───────────────────────────────────────────────────────────────────
+[alias]
+
+    # Status / branches
+    st = status -sb
+    br = branch
+    co = checkout
+    sw = switch
+
+    # Log
+    lg = log --oneline --graph --decorate --all
+
+    # Undo the most recent commit while keeping changes staged.
+    undo = reset --soft HEAD~1
+
+    # Quick checkpoint.
+    wip = !git add -A && git commit -m "wip: checkpoint [ci skip]"
+
+    # Remove the most recent WIP commit while keeping its changes.
+    unwip = reset HEAD~1
+
+    # List configured aliases.
+    aliases = !git config --get-regexp '^alias\\.' | sed 's/^alias\\.//'

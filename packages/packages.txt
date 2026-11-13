@@ -82,3 +82,42 @@ eza                      # modern ls with icons and git status
 zoxide                   # smart cd (replaces cd in .zshrc)
 fzf                      # fuzzy finder; used by shell, tmux-sessionizer
 lazygit                  # TUI git client
+
+# --- Your existing toolchain (from your current_config packages.txt) ---
+# Official repos only. Names are standard Arch names, not individually verified;
+# install.sh reports any name pacman does not know.
+openssh
+rsync
+xdg-utils
+htop
+git-delta           # core.pager in git/config
+difftastic
+glow                # markdown viewer
+dust                # du alternative
+entr
+hyperfine
+tokei
+xh                  # HTTP client
+yq
+zsh-completions
+mise                # tool version manager
+docker
+docker-compose
+gcc
+go
+gopls
+delve               # Go debugger (dlv)
+gofumpt
+golangci-lint
+rust
+rust-analyzer
+nodejs
+npm
+prettier
+python
+python-pip
+python-black
+pyright
+ruff
+lua-language-server
+stylua

@@ -33,13 +33,12 @@ Obsidian Plum & Sage Jade (still in git history).
 `quickshell/themes/Theme.qml`, `ghostty/config`, `hypr/appearance.lua`,
 `hypr/hyprlock.conf`, `scripts/wallpaper.sh` (lock fallback), `tmux/tmux.conf`,
 `lazygit/config.yml`, `zsh/.zsh/fzf.zsh`, `btop/themes/petrol-lagoon.theme`,
-`nvim/lua/plugins/colorscheme.lua`.
+`nvim/lua/ghulamazad/petrol_lagoon.lua`.
 
 ## Limits
 
 - Petrol Lagoon is a dark theme. The Quickshell light mode keeps a neutral light set.
-- Neovim uses the tokyonight plugin with these colors overriding its main slots.
-  Slots not overridden keep the plugin's own colors.
+- Neovim: tokyodark is removed. `nvim/lua/ghulamazad/petrol_lagoon.lua` is a standalone colourscheme (`nvim/colors/petrol-lagoon.lua`) that defines the groups itself. Groups that only a plugin defines and that are not listed there follow their links to the standard groups.
 - Wallpapers in `wallpapers/` were not recolored.
 - GTK/Qt apps only get the dark preference, not this palette.
 - Not viewed on a live desktop: check contrast on first boot.

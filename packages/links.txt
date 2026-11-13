@@ -12,6 +12,7 @@ zsh/.zsh                   ~/.zsh
 tmux                       ~/.config/tmux
 starship/starship.toml     ~/.config/starship.toml
 lazygit                    ~/.config/lazygit
+git                        ~/.config/git
 tmux-sessionizer-config    ~/.config/tmux-sessionizer
 scripts                    ~/.local/share/dotfiles/scripts
 scripts-local              ~/.local/scripts

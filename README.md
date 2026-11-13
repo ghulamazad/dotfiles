@@ -2,7 +2,7 @@
 
 A small, readable desktop for Arch Linux: Hyprland (tiling, Lua config),
 Quickshell as the whole shell (bar with clickable panels, launcher, notifications,
-power menu, overview), Ghostty, Nautilus, Zsh and a C/C++/kernel-oriented Neovim.
+power menu, overview), Ghostty, Nautilus, Zsh and your own Neovim config (`ghulamazad`).
 No AI features, no telemetry, no AUR packages, no Waybar/Rofi/dock.
 
 ## Status: read this first
@@ -16,7 +16,7 @@ so the honest status is:
 | Installer: dry-run, backup, idempotent re-run, uninstall restore | Quickshell loading every QML file at runtime |
 | Hyprland Lua: every `hl.*` call matches names found in Hyprland's source (strict mock) | `hypridle.conf` / `hyprlock.conf` syntax |
 | QML: all files parse; imports, IPC names, scripts and layer namespaces cross-checked | Package names in `packages.txt` (only some verified) |
-| Neovim Lua: syntax, kernel-tree detection unit tests | LazyVim plugin loading, clangd/DAP behaviour |
+| Neovim Lua: syntax; colour module runs against a mock `vim` | Plugin loading, clangd/DAP behaviour, how the colours look |
 
 Expect a few runtime errors on first launch. Fix them from the logs (see
 `docs/troubleshooting.md`). Treat this as a solid starting point, not a finished product.
@@ -48,7 +48,8 @@ Existing files are moved to `~/.dotfiles-backup/<timestamp>/` first.
 |---|---|
 | `hypr/` | Lua config split by topic; `local.lua` (git-ignored) for per-machine overrides |
 | `quickshell/` | `shell.qml` plus `modules, widgets, panels, launcher, notifications, services, components, themes, config` |
-| `nvim/` | LazyVim-based config, system toolchain instead of Mason |
+| `nvim/` | Your own Neovim config (`ghulamazad`) with the standalone Petrol Lagoon colourscheme (`colors/`, `lua/ghulamazad/petrol_lagoon.lua`); tokyodark removed |
+| `git/` | Your git config and ignore file (identity stays in `~/.config/git/local`, not in this repo) |
 | `ghostty/`, `zsh/` | Terminal and shell (with aliases, functions, fzf integration) |
 | `tmux/` | Terminal multiplexer configured with the Petrol Lagoon theme |
 | `starship/` | Cross-shell prompt configuration |
@@ -60,7 +61,7 @@ Existing files are moved to `~/.dotfiles-backup/<timestamp>/` first.
 | `wallpapers/` | Shipped desktop wallpapers (not recolored) |
 | `scripts/` | `screenshot.sh`, `wallpaper.sh`, `dark-theme.sh`, `system-info.sh`, `restart-shell.sh` |
 | `packages/` | `packages.txt` (package list), `links.txt` (symlink table) |
-| `docs/` | installation, keybindings, troubleshooting, security, kernel-dev, pending-requirements, omarchy-port-brief, omarchy-inventory, omarchy-port-plan |
+| `docs/` | installation, keybindings, troubleshooting, security, pending-requirements, omarchy-port-brief, omarchy-inventory, omarchy-port-plan |
 
 ## Known limitations (by design or unverified)
 
