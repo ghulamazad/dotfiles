@@ -12,7 +12,7 @@
 
 local mainMod = "SUPER"
 local home    = os.getenv("HOME") or ""
-local scripts = home .. "/.local/share/dotfiles/scripts"
+local scripts = home .. "/.local/scripts"
 
 -- Helper: call a method on a Quickshell IPC target (see quickshell/shell.qml).
 local function qs(target, fn)

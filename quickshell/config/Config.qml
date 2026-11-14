@@ -10,9 +10,9 @@ import Quickshell
 Singleton {
     readonly property string home: Quickshell.env("HOME") || ""
     readonly property string stateDir: (Quickshell.env("XDG_STATE_HOME") || (home + "/.local/state")) + "/dotfiles"
-    // install.sh links the repo's scripts/ here (see packages/links.txt).
-    readonly property string scriptsDir: home + "/.local/share/dotfiles/scripts"
-    readonly property string wallpaperDir: Quickshell.env("DOTFILES_WALLPAPER_DIR") || (home + "/Pictures/Wallpapers")
+    // install-config.sh copies the repo's scripts/ here (~/.local/scripts) (see packages/links.txt).
+    readonly property string scriptsDir: home + "/.local/scripts"
+    readonly property string wallpaperDir: Quickshell.env("DOTFILES_WALLPAPER_DIR") || (home + "/Pictures/wallpapers")
 
     readonly property int barHeight: 35
     readonly property int radius: 0

@@ -10,12 +10,12 @@
 #   Plain Arch installs very little, so this list also carries the basics a
 #   desktop needs (graphics driver, fonts, login screen). Anything already
 #   installed is skipped by `pacman -S --needed`.
-#   install.sh runs `pacman -Si` on every name first and reports unknown ones
+#   install-packages.sh runs `pacman -Si` on every name first and reports unknown ones
 #   instead of failing halfway through an install.
 
 # --- Base for a graphical session (plain Arch has none of this) ---
 mesa                # OpenGL/Vulkan drivers; Intel iGPU and virtio-gpu in a VM
-sddm                # graphical login screen (install.sh does NOT enable it; see docs/installation.md)
+sddm                # graphical login screen (install-packages.sh does NOT enable it; see docs/installation.md)
 noto-fonts          # fallback glyphs
 xdg-user-dirs       # ~/Pictures, ~/Downloads etc.
 
@@ -33,8 +33,8 @@ qt6-wayland
 # --- Terminal and shell ---
 ghostty
 zsh
-zsh-autosuggestions
-zsh-syntax-highlighting
+#zsh-autosuggestions
+#zsh-syntax-highlighting
 ttf-jetbrains-mono-nerd
 ttf-victor-mono-nerd     # VictorMono Nerd Font used by Ghostty, Hyprland, Hyprlock
 starship                 # cross-shell prompt (zsh/.zsh/fzf.zsh + .zshrc)
@@ -87,7 +87,7 @@ lazygit                  # TUI git client
 
 # --- Your existing toolchain (from your current_config packages.txt) ---
 # Official repos only. Names are standard Arch names, not individually verified;
-# install.sh reports any name pacman does not know.
+# install-packages.sh reports any name pacman does not know.
 openssh
 rsync
 xdg-utils

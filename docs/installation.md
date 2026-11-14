@@ -37,8 +37,8 @@ check these steps against it. Verify against the wiki before relying on them.
 
 ## 2a. Services plain Arch does not enable for you
 
-`install.sh` installs packages and links config. It never enables services. After it
-finishes, check and enable what you need:
+Neither install script enables services. After `install-packages.sh` finishes, check
+and enable what you need:
 
 ```sh
 sudo systemctl enable --now NetworkManager bluetooth upower
@@ -57,14 +57,17 @@ AUR and read the PKGBUILD first. It is not needed by this repo.
 
 ```sh
 git clone <repo> ~/dotfiles && cd ~/dotfiles
-./install.sh --dry-run
-./install.sh
+./install-packages.sh --dry-run && ./install-packages.sh   # step 1: programs
+./install-config.sh --dry-run   && ./install-config.sh     # step 2: configuration
 ```
 
-The installer: checks it is not root and not on an unexpected distro; verifies each
-package exists with `pacman -Si`; installs with `sudo pacman -S --needed` (it asks
-first unless `--yes`); copies the files into `~/.config` etc. (a changed file is backed up first); validates.
-Your live config is a copy: edit the repo and re-run `./install.sh --yes` to deploy,
+Two separate scripts, run in this order on a fresh Arch install:
+- `install-packages.sh`: checks it is not root and is on Arch; verifies each package
+  exists with `pacman -Si`; installs with `sudo pacman -S --needed` (it asks first unless
+  `--yes`; pacman asks again). Writes no config files.
+- `install-config.sh`: no sudo, no packages. Copies the files into `~/.config` etc. (a
+  changed file is overwritten, with a prompt and no backup) and validates them.
+Your live config is a copy: edit the repo and re-run `./install-config.sh --yes` to deploy,
 or edit `~/.config/...` directly (a later install backs your edit up before overwriting).
 No AUR, no `makepkg`, no disk operations.
 

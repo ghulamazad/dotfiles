@@ -1,40 +1,33 @@
 #!/usr/bin/env bash
-# install.sh: install (COPY) the dotfiles into your home directory.
+# install-config.sh: copy the dotfiles into your home directory. NO packages.
+# (Run install-packages.sh first on a fresh system: it installs the programs.)
 # The repo and your live config are separate: edit either, re-run this script
 # to deploy repo changes. Nothing in $HOME points back into the repo.
 #
 # SAFETY SCOPE
-#   * Runs as your normal user; refuses to run as root.
+#   * Runs as your normal user; refuses to run as root. Never uses sudo.
 #   * Writes only under $HOME. It never touches disks, partitions, LUKS, Btrfs,
 #     Snapper, EFI, Limine, Secure Boot or the firewall.
-#   * The only privileged step is `sudo pacman -S --needed ...`, and only after
-#     you confirm. No AUR packages. No downloaded scripts are executed.
-#   * A file that differs from the repo's version is copied to a timestamped
-#     backup before it is overwritten. Files that are not in the repo (for
-#     example hypr/local.lua) are never touched.
+#   * NO BACKUPS are made. A file that differs from the repo's version is
+#     overwritten (you are asked first, unless --yes). Files that are not in the
+#     repo (for example hypr/local.lua) are never touched.
 #
 # USAGE
-#   ./install.sh [--dry-run] [--yes] [--no-packages] [--no-distro-check]
-#     --dry-run          print every action, change nothing
-#     --yes              answer "yes" to prompts (backups still happen)
-#     --no-packages      skip the package step; only copy and validate
-#     --no-distro-check  allow other distributions (also used for testing)
+#   ./install-config.sh [--dry-run] [--yes]
+#     --dry-run   print every action, change nothing
+#     --yes       answer "yes" to prompts (existing files are overwritten without asking)
 set -euo pipefail
 
 REPO_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles"
-TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
-BACKUP_DIR="$HOME/.dotfiles-backup/$TIMESTAMP"
 
-DRY_RUN=0 ASSUME_YES=0 DO_PACKAGES=1 CHECK_DISTRO=1
+DRY_RUN=0 ASSUME_YES=0
 for arg in "$@"; do
     case "$arg" in
         --dry-run)         DRY_RUN=1 ;;
         --yes|-y)          ASSUME_YES=1 ;;
-        --no-packages)     DO_PACKAGES=0 ;;
-        --no-distro-check) CHECK_DISTRO=0 ;;
-        -h|--help)         sed -n '2,19p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
-        *) echo "install.sh: unknown option: $arg (try --help)" >&2; exit 2 ;;
+        -h|--help)         sed -n '2,16p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
+        *) echo "install-config.sh: unknown option: $arg (try --help)" >&2; exit 2 ;;
     esac
 done
 
@@ -55,82 +48,17 @@ ask() {
 }
 
 # ---------------------------------------------------------------- preflight
-(( EUID != 0 )) || die "do not run as root. Run as your normal user; sudo is requested only for pacman."
+(( EUID != 0 )) || die "do not run as root. Run as your normal user."
 [[ -n "${HOME:-}" && -d "$HOME" ]] || die "\$HOME is not set to a directory."
-[[ -f "$REPO_DIR/packages/links.txt" ]] || die "packages/links.txt not found next to install.sh."
-
-detect_distro() {
-    local id="" like=""
-    if [[ -r /etc/os-release ]]; then
-        id="$(. /etc/os-release; echo "${ID:-}")"
-        like="$(. /etc/os-release; echo "${ID_LIKE:-}")"
-    fi
-    if [[ $id == arch ]]; then
-        log "Detected Arch Linux."
-    elif [[ $like == *arch* ]]; then
-        warn "This is '$id', an Arch derivative, not Arch Linux. Package names should match, but its repositories may differ."
-        ask "Continue anyway?" || die "aborted."
-    else
-        die "unsupported distribution '${id:-unknown}'. Use --no-distro-check to override (file copying works; packages will not)."
-    fi
-}
-if (( CHECK_DISTRO )); then detect_distro; else warn "Distro check skipped."; fi
+[[ -f "$REPO_DIR/packages/links.txt" ]] || die "packages/links.txt not found next to install-config.sh."
 
 (( DRY_RUN )) && log "DRY RUN: nothing will be changed."
 
-# ----------------------------------------------------------------- packages
-install_packages() {
-    command -v pacman >/dev/null 2>&1 || { warn "pacman not found; skipping packages."; return 0; }
-
-    local -a wanted=() missing=() unknown=()
-    local line pkg
-    while IFS= read -r line; do
-        pkg="${line%%#*}"; pkg="${pkg//[[:space:]]/}"
-        [[ -n $pkg ]] && wanted+=("$pkg")
-    done < "$REPO_DIR/packages/packages.txt"
-
-    for pkg in "${wanted[@]}"; do
-        pacman -Qq "$pkg" >/dev/null 2>&1 || missing+=("$pkg")
-    done
-
-    if (( ${#missing[@]} == 0 )); then log "All ${#wanted[@]} packages already installed."; return 0; fi
-
-    # Verify names exist in the configured repos before asking the user.
-    local -a installable=()
-    for pkg in "${missing[@]}"; do
-        if pacman -Si "$pkg" >/dev/null 2>&1; then installable+=("$pkg"); else unknown+=("$pkg"); fi
-    done
-    if (( ${#unknown[@]} )); then
-        warn "Not found in your configured repositories (sync with 'sudo pacman -Sy' or fix packages.txt):"
-        printf '      %s\n' "${unknown[@]}" >&2
-    fi
-    (( ${#installable[@]} )) || return 0
-
-    log "Missing packages (${#installable[@]}): ${installable[*]}"
-    if ask "Install these with 'sudo pacman -S --needed'?"; then
-        # No --noconfirm: pacman shows its own prompt so you can review.
-        run sudo pacman -S --needed "${installable[@]}"
-    else
-        warn "Skipped package installation."
-    fi
-}
-if (( DO_PACKAGES )); then install_packages; else log "Skipping packages (--no-packages)."; fi
-
 # --------------------------------------------------------------------- copy
-BACKUP_MADE=0
 MANIFEST="$STATE_DIR/manifest"       # "target<TAB>source" per installed file
 NEW_MANIFEST="$(mktemp)"
 trap 'rm -f "$NEW_MANIFEST"' EXIT
 N_NEW=0 N_CHANGED=0 N_SAME=0
-
-backup_file() {
-    local target="$1" rel dest
-    rel="${target#"$HOME"/}"
-    dest="$BACKUP_DIR/$rel"
-    run mkdir -p "$(dirname "$dest")"
-    run cp -a -- "$target" "$dest"
-    BACKUP_MADE=1
-}
 
 # Copy one file. Returns quietly if it is already identical.
 copy_file() {
@@ -140,7 +68,6 @@ copy_file() {
         N_SAME=$((N_SAME + 1)); return 0
     fi
     if [[ -e $target || -L $target ]]; then
-        backup_file "$target"
         run rm -f -- "$target"
         N_CHANGED=$((N_CHANGED + 1))
     else
@@ -163,11 +90,8 @@ copy_entry() {
             run rm -- "$target"
         else
             warn "$target is a symlink to somewhere else."
-            ask "Move it to the backup directory and copy ours?" || { warn "skipped $target"; return 0; }
-            local rel_t="${target#"$HOME"/}"
-            run mkdir -p "$(dirname "$BACKUP_DIR/$rel_t")"
-            run mv -- "$target" "$BACKUP_DIR/$rel_t"
-            BACKUP_MADE=1
+            ask "Remove that symlink (not what it points to) and copy ours?" || { warn "skipped $target"; return 0; }
+            run rm -- "$target"
         fi
     fi
 
@@ -181,7 +105,7 @@ copy_entry() {
         done < <(find "$src" -type f -print0)
         if (( differing )); then
             warn "$differing file(s) in $target differ from the repo version."
-            ask "Back them up to $BACKUP_DIR and overwrite?" || { warn "skipped $target"; return 0; }
+            ask "Overwrite them (no backup is made)?" || { warn "skipped $target"; return 0; }
         fi
         while IFS= read -r -d '' f; do
             rel="${f#"$src"/}"
@@ -190,7 +114,7 @@ copy_entry() {
     else
         if [[ -e $target ]] && ! cmp -s -- "$src" "$target"; then
             warn "$target differs from the repo version."
-            ask "Back it up to $BACKUP_DIR and overwrite?" || { warn "skipped $target"; return 0; }
+            ask "Overwrite it (no backup is made)?" || { warn "skipped $target"; return 0; }
         fi
         copy_file "$src" "$target"
     fi
@@ -205,7 +129,7 @@ copy_all() {
         case "$target" in "$HOME"/*) ;; *) die "refusing target outside \$HOME: $target" ;; esac
         copy_entry "$REPO_DIR/$rel" "$target"
     done < "$REPO_DIR/packages/links.txt"
-    log "Files: $N_NEW new, $N_CHANGED updated (old version backed up), $N_SAME already identical."
+    log "Files: $N_NEW new, $N_CHANGED overwritten, $N_SAME already identical."
 }
 copy_all
 
@@ -220,30 +144,24 @@ if (( ! DRY_RUN )); then
 fi
 
 # Executable bits on repo scripts (git preserves them, archives may not).
-run chmod +x "$REPO_DIR"/scripts/*.sh "$REPO_DIR"/scripts-local/* "$REPO_DIR/install.sh" "$REPO_DIR/uninstall.sh"
-(( DRY_RUN )) || chmod +x "$HOME/.local/share/dotfiles/scripts/"*.sh "$HOME/.local/scripts/"* 2>/dev/null || true
+run chmod +x "$REPO_DIR"/scripts/* "$REPO_DIR/install-packages.sh" "$REPO_DIR/install-config.sh" "$REPO_DIR/uninstall.sh"
+(( DRY_RUN )) || chmod +x "$HOME/.local/scripts/"* 2>/dev/null || true
 
 # Lock screen needs a file to include (see hypr/hyprlock.conf); dark theme
 # for GTK apps is a per-user setting. Both are harmless to repeat.
-run "$HOME/.local/share/dotfiles/scripts/wallpaper.sh" init-lock
-run "$HOME/.local/share/dotfiles/scripts/dark-theme.sh"
-
-# Remember where the backup is so uninstall.sh can restore it.
-if (( BACKUP_MADE && ! DRY_RUN )); then
-    mkdir -p "$STATE_DIR"
-    printf '%s\n' "$BACKUP_DIR" > "$STATE_DIR/last-backup"
-fi
+run "$HOME/.local/scripts/wallpaper.sh" init-lock
+run "$HOME/.local/scripts/dark-theme.sh"
 
 # --------------------------------------------------------------- validation
 validate() {
     local bad=0 f
     log "Validating configuration files..."
 
-    for f in "$REPO_DIR"/install.sh "$REPO_DIR"/uninstall.sh "$REPO_DIR"/scripts/*.sh; do
+    for f in "$REPO_DIR"/install-packages.sh "$REPO_DIR"/install-config.sh "$REPO_DIR"/uninstall.sh "$REPO_DIR"/scripts/*.sh; do
         bash -n "$f" || { warn "shell syntax error: $f"; bad=1; }
     done
     if command -v shellcheck >/dev/null 2>&1; then
-        shellcheck -x "$REPO_DIR"/scripts/*.sh "$REPO_DIR"/install.sh "$REPO_DIR"/uninstall.sh || bad=1
+        shellcheck -x "$REPO_DIR"/scripts/*.sh "$REPO_DIR"/install-packages.sh "$REPO_DIR"/install-config.sh "$REPO_DIR"/uninstall.sh || bad=1
     else
         log "shellcheck not installed; skipped lint."
     fi
@@ -271,7 +189,7 @@ validate() {
     local -a need=(Hyprland qs ghostty nautilus btop jq nvim zsh grim slurp wl-copy wl-paste cliphist hypridle hyprlock brightnessctl wpctl playerctl nmcli bluetoothctl)
     local -a absent=()
     for c in "${need[@]}"; do command -v "$c" >/dev/null 2>&1 || absent+=("$c"); done
-    if (( ${#absent[@]} )); then warn "Commands not found yet: ${absent[*]}"; else log "All required commands are present."; fi
+    if (( ${#absent[@]} )); then warn "Commands not found yet: ${absent[*]} (run ./install-packages.sh)"; else log "All required commands are present."; fi
 
     return "$bad"
 }
@@ -284,13 +202,9 @@ if (( DRY_RUN )); then
     log "Dry run finished. Re-run without --dry-run to apply."
 else
     log "Done."
-    if (( BACKUP_MADE )); then
-        echo "  Backups:   $BACKUP_DIR"
-    fi
     cat <<EOF
-  Update:    edit the repo, then re-run ./install.sh --yes (only changed files are copied)
-  Rollback:  $REPO_DIR/uninstall.sh   (removes unmodified copies, restores backups)
-  Manual:    your old files are in "$BACKUP_DIR"
+  Update:    edit the repo, then re-run ./install-config.sh --yes (only changed files are copied)
+  Rollback:  $REPO_DIR/uninstall.sh   (removes the copies it made, if you have not edited them)
   Neovim:    run once while online:  nvim --headless "+Lazy! sync" +qa
   Zsh:       to make it your login shell:  chsh -s "\$(command -v zsh)"
   Start:     log in on a TTY and run:  start-hyprland   (or select Hyprland in your display manager)

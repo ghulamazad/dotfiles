@@ -1,7 +1,7 @@
 // Keyboard-first launcher (SUPER+Space). Three modes share one window:
 //   apps       live search over installed applications, recents, calculator, power actions
 //   clipboard  cliphist history (SUPER+C)
-//   wallpapers pick a wallpaper from ~/Pictures/Wallpapers (SUPER+W)
+//   wallpapers pick a wallpaper from ~/Pictures/wallpapers (SUPER+SHIFT+W)
 //
 // Keys: type to filter, Up/Down to move, Enter to run, Escape to close.
 pragma ComponentBehavior: Bound

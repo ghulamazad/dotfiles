@@ -6,13 +6,13 @@ privileges silently, stay recoverable.
 
 ## What this repo does
 - No `sudo`/`pkexec` in any QML, Lua or script. The only `sudo` is `pacman -S` in
-  `install.sh`, which asks first. Privileged desktop actions go through polkit
+  `install-packages.sh`, which asks first. Privileged desktop actions go through polkit
   (`hyprpolkitagent`).
 - Commands are fixed argument lists, not shell strings built from user input. The
   launcher calculator accepts only a regex-whitelisted expression.
 - Official repositories only; every package checked with `pacman -Si`. No AUR.
 - Installer never touches partitions, LUKS, Btrfs, Snapper or the bootloader, only
-  paths under `$HOME`, with backups and an uninstaller.
+  paths under `$HOME`, with an uninstaller (no backups).
 - No network access from the config itself; no telemetry, no AI services.
 
 ## Quickshell is code, not a theme
@@ -41,7 +41,8 @@ clear the clipboard do not necessarily remove it from history.
 
 ## Reviewing before you run
 ```sh
-./install.sh --dry-run
+./install-packages.sh --dry-run
+./install-config.sh --dry-run
 grep -rn "sudo\|pkexec" . --include='*' 2>/dev/null | grep -v '^./docs'
 grep -rn "command:" quickshell
 ```

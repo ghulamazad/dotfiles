@@ -14,8 +14,8 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("hypridle")
 
     -- Dark preference for GTK/portal apps. Needs the session D-Bus, so it is
-    -- (re)applied here as well as by install.sh (which may run on a TTY).
-    hl.exec_cmd(os.getenv("HOME") .. "/.local/share/dotfiles/scripts/dark-theme.sh")
+    -- (re)applied here as well as by install-config.sh (which may run on a TTY).
+    hl.exec_cmd(os.getenv("HOME") .. "/.local/scripts/dark-theme.sh")
 
     -- Clipboard history database (read by the Quickshell launcher).
     hl.exec_cmd("wl-paste --type text --watch cliphist store")

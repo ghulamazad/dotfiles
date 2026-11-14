@@ -6,12 +6,9 @@
 # watches, so changing it never needs a privileged or long-running helper.
 set -euo pipefail
 
-# The repo's wallpapers/ sits next to scripts/ (in the repo and, after install.sh,
-# under ~/.local/share/dotfiles). readlink -f also keeps this working if someone
-# runs it through a symlink.
-script_dir="$(cd -- "$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")" && pwd -P)"
-repo_wall_dir="$(dirname "$script_dir")/wallpapers"
-wall_dir="${DOTFILES_WALLPAPER_DIR:-$HOME/Pictures/Wallpapers}"
+# Wallpapers live in ~/Pictures/wallpapers (install-config.sh copies the shipped ones
+# there). Set DOTFILES_WALLPAPER_DIR to use another folder.
+wall_dir="${DOTFILES_WALLPAPER_DIR:-$HOME/Pictures/wallpapers}"
 state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles"
 state_file="$state_dir/wallpaper"
 # hyprlock includes this file (see hypr/hyprlock.conf `source = ...`).
@@ -25,11 +22,8 @@ is_image() {
 }
 
 list_images() {
-    local -a dirs=()
-    [[ -d "$wall_dir" ]] && dirs+=("$wall_dir")
-    [[ -d "$repo_wall_dir" ]] && dirs+=("$repo_wall_dir")
-    (( ${#dirs[@]} )) || return 0
-    find "${dirs[@]}" -maxdepth 2 -type f \
+    [[ -d "$wall_dir" ]] || return 0
+    find "$wall_dir" -maxdepth 2 -type f \
         \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' \) \
         | sort -u
 }

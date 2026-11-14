@@ -13,7 +13,7 @@ so the honest status is:
 | Checked (static, in the authoring environment) | NOT checked (needs your VM) |
 |---|---|
 | Shell scripts pass `bash -n` and shellcheck | Hyprland actually accepting the Lua config |
-| Installer: dry-run, backup, idempotent re-run, uninstall restore | Quickshell loading every QML file at runtime |
+| Installer: dry-run, idempotent re-run, uninstall of unedited copies | Quickshell loading every QML file at runtime |
 | Hyprland Lua: every `hl.*` call matches names found in Hyprland's source (strict mock) | `hypridle.conf` / `hyprlock.conf` syntax |
 | QML: all files parse; imports, IPC names, scripts and layer namespaces cross-checked | Package names in `packages.txt` (only some verified) |
 | Neovim Lua: syntax; colour module runs against a mock `vim` | Plugin loading, clangd/DAP behaviour, how the colours look |
@@ -34,13 +34,16 @@ Expect a few runtime errors on first launch. Fix them from the logs (see
 
 ```sh
 git clone <this repo> ~/dotfiles && cd ~/dotfiles
-./install.sh --dry-run      # shows everything, changes nothing
-./install.sh                # packages (official repos only) + copies your config into ~/.config etc.
+./install-packages.sh        # 1. only the programs (official repos, asks before sudo pacman)
+./install-config.sh          # 2. only your config, copied into ~/.config etc.
 ```
 
-Flags: `--dry-run`, `--yes`, `--no-packages`, `--no-distro-check`. Refuses to run as root.
-Existing files are moved to `~/.dotfiles-backup/<timestamp>/` first.
-`./uninstall.sh` removes only the links it made and restores backups.
+Both accept `--dry-run` (change nothing) and `--yes`; both refuse to run as root.
+`install-packages.sh` also accepts `--no-distro-check`. No backups are made: a file that differs from the repo's version is overwritten (you are
+asked first, unless `--yes`). Files that are not in the repo are never touched.
+`./uninstall.sh` removes only the copies it made (and only if you have not edited
+them). It cannot restore overwritten files. The package script has no uninstall: remove packages
+yourself with `pacman -Rns`.
 
 ## Layout
 
@@ -55,11 +58,10 @@ Existing files are moved to `~/.dotfiles-backup/<timestamp>/` first.
 | `starship/` | Cross-shell prompt configuration |
 | `lazygit/` | TUI Git interface styled with the Petrol Lagoon theme |
 | `tmux-sessionizer-config/` | Fuzzy project switcher configuration |
-| `scripts-local/` | User scripts (`tmux-sessionizer`) copied to `~/.local/scripts` |
 | `btop/` | System monitor configuration and Petrol Lagoon theme |
 | `mpv/` | GPU-accelerated video player config (ported from Omarchy) |
-| `wallpapers/` | Shipped desktop wallpapers (not recolored) |
-| `scripts/` | `screenshot.sh`, `wallpaper.sh`, `dark-theme.sh`, `restart-shell.sh` |
+| `wallpapers/` | Shipped wallpapers (not recolored), copied to `~/Pictures/wallpapers` |
+| `scripts/` | `screenshot.sh`, `wallpaper.sh`, `dark-theme.sh`, `restart-shell.sh`, `tmux-sessionizer`; copied to `~/.local/scripts` |
 | `packages/` | `packages.txt` (package list), `links.txt` (copy table) |
 | `docs/` | installation, keybindings, troubleshooting, security, theme |
 
@@ -84,7 +86,7 @@ Existing files are moved to `~/.dotfiles-backup/<timestamp>/` first.
   clipboard history (cliphist); Super+Shift+W the wallpaper picker (Enter sets the
   desktop image, Ctrl+Enter the lock screen). Super+Shift+E is the power menu, Super+N
   the notification center. The window overview (Super+Tab) was removed. Put extra
-  wallpapers in `~/Pictures/Wallpapers`; shipped ones are in `wallpapers/`.
+  wallpapers in `~/Pictures/wallpapers` (lowercase: Linux paths are case-sensitive).
 - **Screenshots**: Super+Shift+S (or Print) picks a window or an area; Shift+Print takes
   the whole screen. Saved to `~/Pictures/Screenshots` and copied. The window-picking
   logic was tested against sample data only, not a live Hyprland.
@@ -98,4 +100,4 @@ Existing files are moved to `~/.dotfiles-backup/<timestamp>/` first.
 ## Safety net
 
 If the shell breaks, press **Super+Shift+B** (restart shell) or open a TTY
-(Ctrl+Alt+F3) and run `./uninstall.sh`. Your old configs are in `~/.dotfiles-backup/`.
+(Ctrl+Alt+F3) and run `./uninstall.sh`. Files the installer overwrote are not restored (no backups are made).
