@@ -21,10 +21,17 @@ read changes before pulling them, and apply the same care to any third-party
 "shell" config you copy. This repo's QML uses `Process` only with fixed commands
 (grep for `command:` to audit).
 
-## Network status
-The bar only reads `nmcli device status` (read-only). It never changes a connection.
-Privileged actions (Wi-Fi passwords, DNS, power) are done by you in a terminal, so no
-Quickshell code handles secrets.
+## Clipboard history
+`cliphist` stores what you copy, including passwords, in your user's cache. Clear it
+(`cliphist wipe`) or do not use Super+C if that bothers you. Password managers that
+clear the clipboard do not necessarily remove it from history.
+
+## Network panel extras
+- **DNS switch**: runs `nmcli connection modify` / `device reapply` on the active
+  profile with a fixed argument list. Custom addresses are validated as IPv4/IPv6
+  before use. Changes the profile permanently until you pick DHCP again.
+- **Speed test**: one 25 MB download from Cloudflare, only when you press the button.
+  Ping goes to your router only.
 
 ## Not covered / unverified
 - Hyprland's own permission system for screencopy/keyboard grabs exists in recent

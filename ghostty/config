@@ -1,7 +1,7 @@
 # Ghostty config. Syntax: `key = value`, comments start with '#'.
 # Reference: https://ghostty.org/docs/config
 #
-# Configured to match Omarchy's Ghostty look and feel (Inventory §2, §10).
+# Configured to match Omarchy's Ghostty look and feel.
 
 # Font
 font-family = VictorMono Nerd Font

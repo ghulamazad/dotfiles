@@ -5,7 +5,7 @@
 --
 -- Design rule: everything essential to survive a crashed Quickshell works
 -- WITHOUT Quickshell: terminal, close, focus, workspaces, lock, screenshots,
--- restart-shell. Only the launcher depends on it.
+-- restart-shell. Only the launcher and the bar panels depend on it.
 --
 -- No two binds share the same key combination. When adding a bind, search
 -- this file for the combo first.
@@ -32,7 +32,7 @@ hl.bind(mainMod .. " + G",      hl.dsp.group.toggle())               -- toggle w
 hl.bind(mainMod .. " + ALT + G", hl.dsp.window.move({ out_of_group = true }))
 hl.bind(mainMod .. " + L",      hl.dsp.exec_cmd("loginctl lock-session"))
 
--- Applications (non-conflicting, non-AI developer binds from Omarchy Inventory §13)
+-- Applications (non-conflicting)
 hl.bind(mainMod .. " + SHIFT + N", hl.dsp.exec_cmd("ghostty -e nvim"))
 hl.bind(mainMod .. " + SHIFT + F", hl.dsp.exec_cmd("nautilus --new-window"))
 hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd("ghostty -e btop"))
@@ -50,9 +50,13 @@ hl.bind(mainMod .. " + SHIFT + Space", function()
 end)
 
 -------------------------------------------------------------------------------
--- App launcher (qs ipc call launcher toggle)
+-- Quickshell UI (qs ipc call <target> <function>)
 -------------------------------------------------------------------------------
 hl.bind(mainMod .. " + Space",       qs("launcher", "toggle"))
+hl.bind(mainMod .. " + N",           qs("notifications", "toggleCenter"))
+hl.bind(mainMod .. " + C",           qs("launcher", "openClipboard"))
+hl.bind(mainMod .. " + SHIFT + W", qs("launcher", "openWallpapers"))
+hl.bind(mainMod .. " + SHIFT + E",   qs("power", "toggle"))
 
 -------------------------------------------------------------------------------
 -- Focus / move windows

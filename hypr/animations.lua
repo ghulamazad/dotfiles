@@ -1,4 +1,4 @@
--- Animations matching Omarchy defaults (Inventory §3).
+-- Animations matching Omarchy defaults.
 -- Reference: https://wiki.hypr.land/Configuring/Animations/
 
 hl.curve("easeOutQuint",   { type = "bezier", points = { { 0.23, 1 },    { 0.32, 1 } } })

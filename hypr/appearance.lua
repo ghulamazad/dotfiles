@@ -1,4 +1,4 @@
--- Look and feel matching Omarchy compositor settings (Inventory §3).
+-- Look and feel matching Omarchy compositor settings.
 -- Reference: https://wiki.hypr.land/Configuring/Variables/
 
 hl.config({

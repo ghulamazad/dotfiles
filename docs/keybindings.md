@@ -9,7 +9,11 @@
 | Super+Shift+F | File manager (Nautilus) |
 | Super+Shift+T | Activity monitor (btop in Ghostty) |
 | Super+G / Super+Alt+G | Toggle window group / Move out of group |
-| Super+Space | App launcher (just type) |
+| Super+Space | Launcher (apps, calculator, recents, power actions; just type) |
+| Super+C | Clipboard history |
+| Super+Shift+W | Wallpaper picker (Enter: desktop, Ctrl+Enter: lock screen) |
+| Super+N | Notification center |
+| Super+Shift+E | Power menu |
 | Super+W | Close window |
 | Super+F | Fullscreen |
 | Super+V | Toggle floating |
@@ -30,11 +34,11 @@
 
 ## Inside the launcher
 Up/Down, Ctrl+N / Ctrl+J (next), Ctrl+P / Ctrl+K (previous), Enter (run),
-Esc (close).
+Esc (close). In the wallpaper picker Ctrl+Enter sets the lock screen image.
 
 ## Bar
-Display only. Tray icons still respond to clicks (left/right click, menus).
+Click the date/time for the calendar. Click Bluetooth, network, sound, display or
+battery for the matching panel. Esc or a click outside closes it.
 
-Removed on purpose: Super+C (clipboard history), Super+Shift+W (wallpaper picker),
-Super+N (notification center), Super+Tab (overview), Super+Shift+E (power menu),
-Super+D (dashboard, use `btop`), Super+A, Super+Q (now Super+W), the scratchpad binds.
+Removed on purpose: Super+Tab (window overview), Super+D (dashboard, use `btop`),
+Super+A (quick settings), Super+Q (now Super+W), the scratchpad binds.

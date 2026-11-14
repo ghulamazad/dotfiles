@@ -55,10 +55,10 @@ hl.window_rule({
 
 -- Layer rules for Quickshell surfaces. Every Quickshell window sets a
 -- WlrLayershell namespace starting with "qs-" so one rule covers all of them.
--- Omarchy uses flat, opaque surfaces with blur disabled (Inventory §3).
+-- Omarchy uses flat, opaque surfaces with blur disabled.
 hl.layer_rule({
     name  = "qs-surface",
-    match = { namespace = "^qs-(bar|launcher|notify)$" },
+    match = { namespace = "^qs-(bar|panel|launcher|notify|power)$" },
 
     blur = false,
 })

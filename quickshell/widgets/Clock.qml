@@ -1,14 +1,19 @@
-// Date and time, updated once a minute.
+// Date and time. Updates once a minute; click opens the calendar popup.
 import QtQuick
 import Quickshell
 import qs.components
+import qs.services
 
-Txt {
+BarButton {
     SystemClock {
         id: clock
         precision: SystemClock.Minutes
     }
 
-    text: Qt.formatDateTime(clock.date, "ddd d MMM   HH:mm")
-    font.bold: true
+    onClicked: UIState.toggle("calendar")
+
+    Txt {
+        text: Qt.formatDateTime(clock.date, "ddd d MMM   HH:mm")
+        font.bold: true
+    }
 }

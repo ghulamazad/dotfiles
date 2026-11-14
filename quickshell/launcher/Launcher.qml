@@ -1,5 +1,7 @@
-// Keyboard-first app launcher (SUPER+Space): live search over installed
-// applications, recent ones first.
+// Keyboard-first launcher (SUPER+Space). Three modes share one window:
+//   apps       live search over installed applications, recents, calculator, power actions
+//   clipboard  cliphist history (SUPER+C)
+//   wallpapers pick a wallpaper from ~/Pictures/Wallpapers (SUPER+W)
 //
 // Keys: type to filter, Up/Down to move, Enter to run, Escape to close.
 pragma ComponentBehavior: Bound
@@ -25,6 +27,7 @@ Variants {
 
         property string query: ""
         property int selected: 0
+        readonly property string mode: UIState.launcherMode
 
         onShown: input.forceActiveFocus()
 
@@ -34,9 +37,25 @@ Variants {
             selected = 0;
             input.text = "";
             input.forceActiveFocus();
+            if (mode === "clipboard") Clipboard.refresh();
+            if (mode === "wallpapers") Wallpapers.refresh();
         }
 
         // ------------------------------------------------------------ helpers
+        // Calculator. Only digits, + - * / % ^ ( ) . and spaces may reach eval(),
+        // so no identifier or function call can ever be evaluated.
+        function calculate(text) {
+            if (!/^[0-9+\-*\/%().\s^]+$/.test(text)) return null;
+            if (!/[0-9]/.test(text) || !/[+\-*\/%^]/.test(text.replace(/^\s*-/, ""))) return null;
+            try {
+                const value = eval(text.replace(/\^/g, "**"));
+                if (typeof value !== "number" || !isFinite(value)) return null;
+                return String(Math.round(value * 1e10) / 1e10);
+            } catch (e) {
+                return null;
+            }
+        }
+
         function launch(entry) {
             Recents.add(entry.id);
             UIState.closeAll();
@@ -49,6 +68,25 @@ Variants {
 
         function appResults(q) {
             const out = [];
+
+            const calc = calculate(q);
+            if (calc !== null) {
+                out.push({
+                    title: calc, subtitle: "Calculator, Enter copies the result", glyph: "=",
+                    run: () => { UIState.closeAll(); Quickshell.execDetached(["wl-copy", calc]); }
+                });
+            }
+
+            if (q.length >= 2) {
+                for (const action of PowerActions.actions) {
+                    if (action.name.toLowerCase().includes(q)) {
+                        out.push({
+                            title: action.name, subtitle: "Session", glyph: action.glyph,
+                            run: () => { UIState.closeAll(); PowerActions.run(action); }
+                        });
+                    }
+                }
+            }
 
             const scored = [];
             for (const entry of Array.from(DesktopEntries.applications.values)) {
@@ -84,14 +122,44 @@ Variants {
             return out;
         }
 
+        function clipboardResults(q) {
+            return Clipboard.entries
+                .filter(e => q === "" || e.preview.toLowerCase().includes(q))
+                .slice(0, 80)
+                .map(e => ({
+                    title: e.preview, subtitle: "Enter copies it back", glyph: Icons.clipboard,
+                    run: () => { UIState.closeAll(); Clipboard.copy(e.id); }
+                }));
+        }
+
+        function wallpaperResults(q) {
+            return Wallpapers.images
+                .filter(p => q === "" || p.toLowerCase().includes(q))
+                .slice(0, 200)
+                .map(p => ({
+                    title: p.split("/").pop(),
+                    subtitle: "Enter: desktop   Ctrl+Enter: lock screen" + (p === Wallpapers.current ? "   (current)" : ""),
+                    glyph: Icons.image,
+                    image: p,
+                    run: () => { UIState.closeAll(); Wallpapers.choose(p); },
+                    runAlt: () => { UIState.closeAll(); Wallpapers.chooseLock(p); }
+                }));
+        }
+
         readonly property var results: {
             const q = query.trim().toLowerCase();
+            if (mode === "clipboard") return clipboardResults(q);
+            if (mode === "wallpapers") return wallpaperResults(q);
             return appResults(q);
         }
 
-        function activate() {
+        // Ctrl+Enter runs the entry's alternative action, if it has one
+        // (wallpapers: set the lock screen image instead of the desktop one).
+        function activate(alt) {
             if (results.length === 0 || selected < 0 || selected >= results.length) return;
-            results[selected].run();
+            const entry = results[selected];
+            if (alt && entry.runAlt) entry.runAlt();
+            else entry.run();
         }
 
         // --------------------------------------------------------------- view
@@ -117,7 +185,7 @@ Variants {
 
                 Txt {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: Icons.search
+                    text: win.mode === "clipboard" ? Icons.clipboard : win.mode === "wallpapers" ? Icons.image : Icons.search
                     font.pixelSize: 17
                     color: Theme.accent
                 }
@@ -142,8 +210,8 @@ Variants {
                         }
                         Keys.onDownPressed: win.selected = Math.min(win.selected + 1, win.results.length - 1)
                         Keys.onUpPressed: win.selected = Math.max(win.selected - 1, 0)
-                        Keys.onReturnPressed: event => win.activate()
-                        Keys.onEnterPressed: event => win.activate()
+                        Keys.onReturnPressed: event => win.activate(event.modifiers & Qt.ControlModifier)
+                        Keys.onEnterPressed: event => win.activate(event.modifiers & Qt.ControlModifier)
                         // Vim/readline-style movement: Ctrl+N or Ctrl+J down, Ctrl+P or Ctrl+K up.
                         Keys.onPressed: event => {
                             if (!(event.modifiers & Qt.ControlModifier)) return;
@@ -160,7 +228,9 @@ Variants {
                     Txt {
                         anchors.fill: parent
                         visible: input.text === ""
-                        text: "Search apps"
+                        text: win.mode === "clipboard" ? "Search clipboard history"
+                            : win.mode === "wallpapers" ? "Search wallpapers"
+                            : "Search apps, calculate, or type a power action"
                         font.pixelSize: Config.fontSize + 3
                         color: Theme.subtext
                     }

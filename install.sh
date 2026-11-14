@@ -268,7 +268,7 @@ validate() {
     fi
 
     # Every command the keybindings and scripts rely on.
-    local -a need=(Hyprland qs ghostty nautilus btop jq nvim zsh grim slurp wl-copy hypridle hyprlock brightnessctl wpctl playerctl nmcli)
+    local -a need=(Hyprland qs ghostty nautilus btop jq nvim zsh grim slurp wl-copy wl-paste cliphist hypridle hyprlock brightnessctl wpctl playerctl nmcli bluetoothctl)
     local -a absent=()
     for c in "${need[@]}"; do command -v "$c" >/dev/null 2>&1 || absent+=("$c"); done
     if (( ${#absent[@]} )); then warn "Commands not found yet: ${absent[*]}"; else log "All required commands are present."; fi

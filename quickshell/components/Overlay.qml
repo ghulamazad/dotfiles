@@ -15,7 +15,7 @@ PanelWindow {
     id: root
 
     property bool open: false
-    property string layerNamespace: "qs-launcher"
+    property string layerNamespace: "qs-panel"
     default property alias content: holder.data
     property real progress: open ? 1 : 0
     signal closeRequested()

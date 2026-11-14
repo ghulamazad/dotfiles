@@ -26,8 +26,8 @@ below are from memory and change between versions, so read what your version sho
   Btrfs/Snapper or the bootloader.
 - **Bootloader:** whatever you prefer (your real machine uses Limine; the guided
   installer's choices vary by version).
-- **Network:** choose NetworkManager (the bar's network icon uses `nmcli`; manage Wi-Fi with `nmtui`).
-- **Audio:** PipeWire (the bar's sound icon uses PipeWire).
+- **Network:** choose NetworkManager (the Wi-Fi panel and status use `nmcli`).
+- **Audio:** PipeWire (the sound panel uses PipeWire).
 - **Additional packages:** add `git` and `sudo` (or `base-devel`) so you can clone
   this repo and install packages, and a user with sudo rights.
 
