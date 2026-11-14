@@ -63,7 +63,7 @@ networkmanager      # provides nmcli
 bluez
 bluez-utils         # provides bluetoothctl
 upower
-iputils             # ping, for the Wi-Fi panel stats (normally already in base)
+#iputils             # ping, for the Wi-Fi panel stats (normally already in base)
 curl                # Wi-Fi panel speed test (normally already in base)
 
 # --- Development (Neovim + systems programming) ---
@@ -75,10 +75,10 @@ lldb                # provides lldb-dap
 gdb
 cmake
 ninja
-bear                # compile_commands.json for Makefile projects
-tree-sitter-cli
+#bear                # compile_commands.json for Makefile projects
+#tree-sitter-cli
 ripgrep
-fd
+#fd
 bat                      # better cat; used by fzf previews and man pages
 eza                      # modern ls with icons and git status
 zoxide                   # smart cd (replaces cd in .zshrc)
@@ -91,17 +91,16 @@ lazygit                  # TUI git client
 openssh
 rsync
 xdg-utils
-htop
 git-delta           # core.pager in git/config
-difftastic
-glow                # markdown viewer
-dust                # du alternative
-entr
-hyperfine
-tokei
-xh                  # HTTP client
-yq
-zsh-completions
+#difftastic
+#glow                # markdown viewer
+#dust                # du alternative
+#entr
+#hyperfine
+#tokei
+#xh                  # HTTP client
+#yq
+#zsh-completions
 mise                # tool version manager
 docker
 docker-compose
@@ -109,17 +108,17 @@ gcc
 go
 gopls
 delve               # Go debugger (dlv)
-gofumpt
-golangci-lint
+#gofumpt
+#golangci-lint
 rust
 rust-analyzer
-nodejs
-npm
-prettier
-python
-python-pip
-python-black
-pyright
-ruff
-lua-language-server
-stylua
+#nodejs
+#npm
+#prettier
+#python
+#python-pip
+#python-black
+#pyright
+#ruff
+#lua-language-server
+#stylua
