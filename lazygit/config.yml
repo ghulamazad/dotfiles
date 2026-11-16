@@ -1,0 +1,27 @@
+# lazygit config
+# Reference: https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
+# Styled with the Petrol Lagoon theme (see docs/theme.md).
+
+gui:
+  theme:
+    activeBorderColor:
+      - '#35d0c0'
+      - bold
+    inactiveBorderColor:
+      - '#2a3f42'
+    optionsTextColor:
+      - '#35d0c0'
+    selectedLineBgColor:
+      - '#17393d'
+    selectedRangeBgColor:
+      - '#17393d'
+    cherryPickedCommitBgColor:
+      - '#17393d'
+    cherryPickedCommitFgColor:
+      - '#6cc48e'
+    unstagedChangesColor:
+      - '#e0736e'
+    defaultFgColor:
+      - '#c2d8d8'
+  nerdFontsVersion: "3"
+  border: single

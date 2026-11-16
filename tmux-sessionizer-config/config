@@ -1,0 +1,42 @@
+# ~/.config/tmux-sessionizer/config – configuration for tmux-sessionizer
+# Sourced by ~/.local/scripts/tmux-sessionizer
+
+# ── Root project directories (appear directly in the picker) ──────────────────
+TS_ROOT_PATHS=(
+    "$HOME/Alien/coding-lab"
+)
+
+# ── Search paths (scanned for project subdirectories) ─────────────────────────
+# Format: "$PATH" (uses TS_MAX_DEPTH) or "$PATH:depth" (custom depth)
+TS_SEARCH_PATHS=(
+    "$HOME/Projects:1"
+    "$HOME/Alien:1"
+    "$HOME/Alien/coding-lab:2"
+)
+
+# Default max depth for search paths without explicit depth suffix
+TS_MAX_DEPTH=1
+
+# ── Directories to prune/exclude from scanning (speeds up search) ─────────────
+TS_EXCLUDE=(
+    ".git"
+    "node_modules"
+    "target"
+    "dist"
+    "build"
+    ".cache"
+    ".venv"
+    "venv"
+    "__pycache__"
+    ".next"
+    ".turbo"
+    ".cargo"
+    ".rustup"
+)
+
+# ── Session hydration hooks ───────────────────────────────────────────────────
+# Searched in project root first, then $HOME. First match is sourced.
+TS_HOOK_NAMES=(
+    ".tmux-sessionizer"
+    ".sessionizer"
+)

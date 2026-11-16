@@ -1,0 +1,90 @@
+
+# ── Identity ────────────────────────────────────────────────────────────────
+[include]
+    path = ~/.config/git/local
+
+
+# ── Core ────────────────────────────────────────────────────────────────────
+[core]
+    editor       = nvim
+    pager        = delta
+    autocrlf     = input
+    whitespace   = trailing-space,space-before-tab
+    excludesFile = ~/.config/git/ignore
+
+
+# ── Defaults ───────────────────────────────────────────────────────────────
+[init]
+    defaultBranch = main
+
+[fetch]
+    prune = true
+
+[pull]
+    ff = only
+
+[push]
+    autoSetupRemote = true
+    followTags = true
+
+
+# ── History ────────────────────────────────────────────────────────────────
+[rebase]
+    autoSquash = true
+    autoStash  = true
+
+[merge]
+    conflictStyle = zdiff3
+
+[rerere]
+    enabled = true
+
+
+# ── Diff ───────────────────────────────────────────────────────────────────
+[diff]
+    algorithm    = histogram
+    colorMoved   = default
+    colorMovedWS = ignore-all-space
+
+
+# ── Sorting ────────────────────────────────────────────────────────────────
+[branch]
+    sort = -committerdate
+
+[tag]
+    sort = version:refname
+
+
+# ── Delta ──────────────────────────────────────────────────────────────────
+[delta]
+    navigate     = true
+    line-numbers = true
+    side-by-side = false
+    syntax-theme = gruvbox-dark
+
+
+# ── Aliases ────────────────────────────────────────────────────────────────
+[alias]
+    # Everyday
+    st = status -sb
+    br = branch
+    co = checkout
+    sw = switch
+
+    # History
+    lg = log --oneline --graph --decorate --all
+    last = log -1 HEAD --stat
+
+    # Commit workflow
+    amend = commit --amend --no-edit
+    undo = reset --soft HEAD~1
+
+    # Checkpoint
+    wip = !git add -A && git commit -m "wip: checkpoint [ci skip]"
+    unwip = reset HEAD~1
+
+    # Cleanup
+    gone = "!git fetch --prune && git branch -vv | awk '/: gone]/{print $1}' | xargs -r git branch -D"
+
+    # Configuration
+    aliases = !git config --get-regexp '^alias\\.' | sed 's/^alias\\.//'
