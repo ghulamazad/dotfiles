@@ -45,7 +45,7 @@ Row {
         active: root.expanded
         anchors.verticalCenter: parent.verticalCenter
         onClicked: root.expanded = !root.expanded
-        Txt { text: root.expanded ? Icons.chevronLeft : Icons.chevronUp; color: Theme.subtext }
+        Txt { text: root.expanded ? Icons.chevronRight : Icons.chevronLeft; color: Theme.subtext }
     }
 
     Row {
