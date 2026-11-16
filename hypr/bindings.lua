@@ -14,6 +14,7 @@ end
 hl.bind(mainMod .. " + Return",           hl.dsp.exec_cmd("ghostty"))
 hl.bind(mainMod .. " + SHIFT + Return",   hl.dsp.exec_cmd("ghostty -e " .. scripts .. "/tmux-sessionizer"))
 hl.bind(mainMod .. " + SHIFT + B",        hl.dsp.exec_cmd(browser))
+hl.bind(mainMod .. " + SHIFT + ALT + B",  hl.dsp.exec_cmd("brave --incognito"))
 hl.bind(mainMod .. " + SHIFT + F",        hl.dsp.exec_cmd("nautilus --new-window"))
 -- hl.bind(mainMod .. " + SHIFT + N",        hl.dsp.exec_cmd("ghostty -e nvim"))
 hl.bind(mainMod .. " + SHIFT + T",        hl.dsp.exec_cmd("ghostty -e btop"))
