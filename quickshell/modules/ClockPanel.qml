@@ -49,16 +49,43 @@ Variants {
         Column {
             width: parent.width
             spacing: 2
-            Txt { text: Qt.formatDateTime(clock.date, "HH:mm"); font.pixelSize: 34; font.bold: true }
+            Txt { text: Qt.formatDateTime(clock.date, "hh:mm AP"); font.pixelSize: 34; font.bold: true }
             Txt { text: Qt.formatDateTime(clock.date, "dddd, d MMMM yyyy"); color: Theme.subtext }
         }
 
         Divider {}
 
-        PanelHeader {
-            title: Qt.formatDate(new Date(win.viewYear, win.viewMonth, 1), "MMMM yyyy")
-            BarButton { onClicked: win.shift(-1); Txt { text: Icons.chevronLeft } }
-            BarButton { onClicked: win.shift(1); Txt { text: Icons.chevronRight } }
+       Item { 
+        width: parent.width
+        height: 32
+            // Left arrow
+            BarButton {
+                anchors.left: parent.left
+                anchors.verticalCenter: parent.verticalCenter
+                onClicked: win.shift(-1)
+
+                Txt { text: Icons.chevronLeft }
+            }
+
+            // Exactly centered title
+            Txt {
+                anchors.centerIn: parent
+                text: Qt.formatDate(
+                    new Date(win.viewYear, win.viewMonth, 1),
+                    "MMMM yyyy"
+                )
+                font.bold: true
+                font.pixelSize: 16
+            }
+
+            // Right arrow
+            BarButton {
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                onClicked: win.shift(1)
+
+                Txt { text: Icons.chevronRight }
+            }
         }
 
         Grid {
