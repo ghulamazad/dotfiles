@@ -1,0 +1,10 @@
+-- Copy to local.lua (git-ignored) for per-machine overrides.
+-- hyprland.lua loads it last, so anything here wins.
+
+-- Example: turn off blur and shadows in a VM with weak 3D acceleration.
+hl.config({
+    decoration = {
+        blur   = { enabled = false },
+        shadow = { enabled = false },
+    },
+})
