@@ -15,3 +15,4 @@ zsh/.zshrc                 ~/.zshrc
 zsh/.zsh                   ~/.zsh
 scripts                    ~/.local/scripts
 wallpapers                 ~/Pictures/wallpapers
+home-config                ~/

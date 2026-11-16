@@ -1,13 +1,7 @@
--- Keybindings. Full list: README.md.
--- Dispatcher shapes (hl.dsp.*) follow Hyprland's own Lua example config.
---
--- Everything essential works WITHOUT Quickshell (terminal, close, focus,
--- workspaces, lock, screenshots, restart-shell). Only the launcher and the bar
--- toggle depend on it. Before adding a bind, search this file for the key combo.
-
 local mainMod = "SUPER"
 local home    = os.getenv("HOME") or ""
 local scripts = home .. "/.local/scripts"
+local browser = "brave-origin"  
 
 -- Call a function on a Quickshell IPC target (see quickshell/shell.qml).
 local function qs(target, fn)
@@ -18,15 +12,17 @@ end
 -- Apps and shell
 -------------------------------------------------------------------------------
 hl.bind(mainMod .. " + Return",           hl.dsp.exec_cmd("ghostty"))
+hl.bind(mainMod .. " + SHIFT + Return",   hl.dsp.exec_cmd("ghostty -e " .. scripts .. "/tmux-sessionizer"))
+hl.bind(mainMod .. " + SHIFT + B",        hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + SHIFT + F",        hl.dsp.exec_cmd("nautilus --new-window"))
-hl.bind(mainMod .. " + SHIFT + N",        hl.dsp.exec_cmd("ghostty -e nvim"))
+-- hl.bind(mainMod .. " + SHIFT + N",        hl.dsp.exec_cmd("ghostty -e nvim"))
 hl.bind(mainMod .. " + SHIFT + T",        hl.dsp.exec_cmd("ghostty -e btop"))
 hl.bind(mainMod .. " + Space",            qs("launcher", "toggle"))
 hl.bind(mainMod .. " + Escape",           qs("launcher", "power"))
 hl.bind(mainMod .. " + SHIFT + Space",    qs("bar", "toggle"))
 hl.bind(mainMod .. " + CTRL + L",         hl.dsp.exec_cmd("loginctl lock-session"))
 hl.bind(mainMod .. " + SHIFT + R",        hl.dsp.reload_config())
-hl.bind(mainMod .. " + SHIFT + B",        hl.dsp.exec_cmd(scripts .. "/restart-shell.sh"))
+hl.bind(mainMod .. " + ALT + R",          hl.dsp.exec_cmd(scripts .. "/restart-shell.sh"))
 
 -------------------------------------------------------------------------------
 -- Windows
@@ -35,15 +31,25 @@ hl.bind(mainMod .. " + W", hl.dsp.window.close())
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
 hl.bind(mainMod .. " + T", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = "fullscreen" }))
-hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))
-hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
-hl.bind(mainMod .. " + G", hl.dsp.group.toggle())
-hl.bind(mainMod .. " + ALT + G", hl.dsp.window.move({ out_of_group = true }))
+hl.bind(mainMod .. " + code:51", hl.dsp.layout("togglesplit"))   -- SUPER + backslash
+-- hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
+-- hl.bind(mainMod .. " + G", hl.dsp.group.toggle())
+-- hl.bind(mainMod .. " + ALT + G", hl.dsp.window.move({ out_of_group = true }))
 
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "l" }))
 hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "r" }))
 hl.bind(mainMod .. " + up",    hl.dsp.focus({ direction = "u" }))
 hl.bind(mainMod .. " + down",  hl.dsp.focus({ direction = "d" }))
+
+-- Vim keys do the same as the arrows (SUPER + H J K L).
+hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "l" }))
+hl.bind(mainMod .. " + L", hl.dsp.focus({ direction = "r" }))
+hl.bind(mainMod .. " + K", hl.dsp.focus({ direction = "u" }))
+hl.bind(mainMod .. " + J", hl.dsp.focus({ direction = "d" }))
+hl.bind(mainMod .. " + SHIFT + H", hl.dsp.window.swap({ direction = "l" }))
+hl.bind(mainMod .. " + SHIFT + L", hl.dsp.window.swap({ direction = "r" }))
+hl.bind(mainMod .. " + SHIFT + K", hl.dsp.window.swap({ direction = "u" }))
+hl.bind(mainMod .. " + SHIFT + J", hl.dsp.window.swap({ direction = "d" }))
 
 hl.bind(mainMod .. " + SHIFT + left",  hl.dsp.window.swap({ direction = "l" }))
 hl.bind(mainMod .. " + SHIFT + right", hl.dsp.window.swap({ direction = "r" }))
@@ -76,8 +82,8 @@ hl.bind(mainMod .. " + mouse_down",  hl.dsp.focus({ workspace = "m+1" }))
 hl.bind(mainMod .. " + mouse_up",    hl.dsp.focus({ workspace = "m-1" }))
 
 -- Scratchpad.
-hl.bind(mainMod .. " + S",         hl.dsp.workspace.toggle_special("scratchpad"))
-hl.bind(mainMod .. " + ALT + S",   hl.dsp.window.move({ workspace = "special:scratchpad", follow = false }))
+-- hl.bind(mainMod .. " + S",         hl.dsp.workspace.toggle_special("scratchpad"))
+-- hl.bind(mainMod .. " + ALT + S",   hl.dsp.window.move({ workspace = "special:scratchpad", follow = false }))
 
 -- Mouse: SUPER + drag moves, SUPER + right-drag resizes.
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
@@ -86,6 +92,9 @@ hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 -------------------------------------------------------------------------------
 -- Screenshots (bin/screenshot.sh: grim + slurp + jq + wl-copy)
 -------------------------------------------------------------------------------
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd(scripts .. "/screenshot.sh select"))
+hl.bind(mainMod .. " + CTRL + S",  hl.dsp.exec_cmd(scripts .. "/screenshot.sh screen"))
+hl.bind(mainMod .. " + ALT + S",   hl.dsp.exec_cmd(scripts .. "/screenshot.sh window"))
 hl.bind("Print",         hl.dsp.exec_cmd(scripts .. "/screenshot.sh select"))
 hl.bind("SHIFT + Print", hl.dsp.exec_cmd(scripts .. "/screenshot.sh screen"))
 
@@ -99,6 +108,7 @@ hl.bind("XF86AudioMicMute",      hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_
 hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"),                  { locked = true, repeating = true })
 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"),                  { locked = true, repeating = true })
 hl.bind("XF86AudioNext",         hl.dsp.exec_cmd("playerctl next"),       { locked = true })
-hl.bind("XF86AudioPause",        hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
+hl.bind("XF86AudioPause",        hl.dsp.exec_cmd("playerctl -a pause"),   { locked = true })
+hl.bind("XF86AudioStop",         hl.dsp.exec_cmd("playerctl -a stop"),    { locked = true })
 hl.bind("XF86AudioPlay",         hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPrev",         hl.dsp.exec_cmd("playerctl previous"),   { locked = true })

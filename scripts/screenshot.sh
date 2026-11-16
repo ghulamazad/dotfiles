@@ -45,6 +45,13 @@ case "$mode" in
         [[ -n $geometry ]] || exit 0
         grim -g "$geometry" "$file"
         ;;
+    window)
+        need jq
+        need hyprctl
+        geometry="$(hyprctl activewindow -j | jq -r 'select(.mapped) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')"
+        [[ -n $geometry ]] || exit 0
+        grim -g "$geometry" "$file"
+        ;;
     screen)
         grim "$file"
         ;;
