@@ -1,0 +1,84 @@
+# azad: official-repository packages for a minimal Arch developer desktop.
+# One package per line; text after '#' is a comment. Read by scripts/install-packages.sh.
+# Only official repos here (no AUR). Tela icons are the one manual AUR step: see README.md.
+
+# --- Session ---
+hyprland
+hyprlock
+hypridle
+hyprpolkitagent
+polkit
+xdg-desktop-portal-hyprland
+xdg-desktop-portal-gtk
+qt6-wayland
+mesa
+sddm                      # login screen; skip it and start Hyprland from a TTY if you prefer
+
+# --- Shell (bar, launcher, notifications) and fonts ---
+quickshell
+ttf-victor-mono-nerd
+noto-fonts                # fallback glyphs
+noto-fonts-emoji
+
+# --- Apps ---
+ghostty
+firefox
+nautilus
+btop
+
+# --- Services and small tools the bar and keys use ---
+pipewire
+pipewire-pulse
+wireplumber               # provides wpctl
+networkmanager            # provides nmcli and nmtui
+bluez
+bluez-utils
+bluetui                   # Bluetooth TUI (bar icon)
+wiremix                   # audio TUI (bar icon)
+upower
+brightnessctl
+playerctl
+libnotify                 # notify-send
+wl-clipboard
+grim
+slurp
+jq
+curl
+dconf                     # lets gsettings (dark mode, icon theme) persist
+xdg-user-dirs
+xdg-utils
+
+# --- Developer environment ---
+neovim
+git
+git-delta
+base-devel
+gcc
+clang
+lldb
+gdb
+cmake
+ninja
+ripgrep
+fd
+bat
+eza
+zoxide
+fzf
+lazygit
+tmux
+zsh
+# zsh-autosuggestions
+# zsh-syntax-highlighting
+starship
+openssh
+rsync
+tree-sitter-cli
+mise
+docker
+docker-compose
+go
+gopls
+delve
+rust
+rust-analyzer
