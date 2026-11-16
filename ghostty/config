@@ -1,0 +1,49 @@
+# Font
+font-family = VictorMono Nerd Font
+font-size = 14
+
+# Window
+background-opacity = 1
+window-padding-x = 0
+window-padding-y = 0
+confirm-close-surface = false
+window-decoration = false
+resize-overlay = never
+gtk-toolbar-style = flat
+
+# Cursor styling
+cursor-style = block
+cursor-style-blink = false
+
+# Mouse & Performance
+mouse-scroll-multiplier = 0.95
+async-backend = epoll
+
+# Colours: Deep obsidian plum & sage jade palette (matching reference screenshot)
+background = 0c1618
+foreground = c2d8d8
+selection-background = 17393d
+selection-foreground = dfeeee
+cursor-color = 35d0c0
+cursor-text = 0c1618
+
+palette = 0=#152325
+palette = 1=#e0736e
+palette = 2=#6cc48e
+palette = 3=#d1b366
+palette = 4=#35d0c0
+palette = 5=#9d8ccc
+palette = 6=#3fc4b7
+palette = 7=#c2d8d8
+palette = 8=#4d6467
+palette = 9=#ec8f88
+palette = 10=#8adaa8
+palette = 11=#e2c985
+palette = 12=#7db8d8
+palette = 13=#b5a7dd
+palette = 14=#66d9cd
+palette = 15=#dfeeee
+
+# Copy/paste. Ctrl+Shift only, so nothing collides with Hyprland's Super binds.
+keybind = ctrl+shift+c=copy_to_clipboard
+keybind = ctrl+shift+v=paste_from_clipboard
