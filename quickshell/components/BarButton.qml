@@ -15,6 +15,16 @@ Item {
     implicitWidth: row.implicitWidth + 14
     implicitHeight: 22
 
+    // Underline while the panel this button opens is showing.
+    Rectangle {
+        visible: root.active
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 2
+        color: Theme.accent
+    }
+
     Row {
         id: row
         anchors.centerIn: parent

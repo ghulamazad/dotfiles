@@ -1,20 +1,18 @@
-// Weekday and time, centered in the bar. Click toggles the date.
+// Weekday and time, centered in the bar. Click opens the calendar panel.
 // Updates once a minute.
 import QtQuick
 import Quickshell
 import qs.components
+import qs.services
 
 BarButton {
-    property bool showDate: false
-
     SystemClock {
         id: clock
         precision: SystemClock.Minutes
     }
 
-    onClicked: showDate = !showDate
+    active: UIState.panel === "clock"
+    onClicked: UIState.togglePanel("clock")
 
-    Txt {
-        text: Qt.formatDateTime(clock.date, showDate ? "d MMMM yyyy" : "dddd HH:mm")
-    }
+    Txt { text: Qt.formatDateTime(clock.date, "dddd HH:mm") }
 }

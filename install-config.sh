@@ -155,9 +155,13 @@ validate() {
     local bad=0 f
     log "Validating configuration files..."
 
-    for f in "$REPO_DIR"/scripts/*; do
+    for f in "$REPO_DIR"/scripts/*.sh "$REPO_DIR"/scripts/tmux-sessionizer; do
         bash -n "$f" || { warn "shell syntax error: $f"; bad=1; }
     done
+    if command -v python3 >/dev/null 2>&1; then
+        python3 -c 'import ast, sys; ast.parse(open(sys.argv[1]).read())' "$REPO_DIR/scripts/bt-agent.py" \
+            || { warn "Python syntax error: scripts/bt-agent.py"; bad=1; }
+    fi
     if command -v shellcheck >/dev/null 2>&1; then
         shellcheck -x -e SC1090,SC2016 "$REPO_DIR"/scripts/*.sh "$REPO_DIR"/scripts/tmux-sessionizer || bad=1
     else

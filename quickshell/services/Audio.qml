@@ -13,6 +13,13 @@ Singleton {
     readonly property real volume: available ? sink.audio.volume : 0
     readonly property bool muted: available ? sink.audio.muted : false
 
+    readonly property var source: Pipewire.defaultAudioSource
+    readonly property bool micAvailable: source !== null && source.audio !== null
+    readonly property bool micMuted: micAvailable ? source.audio.muted : false
+    function toggleMic() {
+        if (micAvailable) source.audio.muted = !source.audio.muted;
+    }
+
     function setVolume(value) {
         if (available) sink.audio.volume = Math.max(0, Math.min(1.0, value));
     }
@@ -22,6 +29,6 @@ Singleton {
 
     // Audio properties are only valid while the node is tracked (Quickshell docs).
     PwObjectTracker {
-        objects: [root.sink]
+        objects: [root.sink, root.source]
     }
 }

@@ -166,54 +166,6 @@ Variants {
             onTriggered: { win.refreshRows(); win.checkPending(); }
         }
 
-        // Small text button, same as the DNS choices in WifiPanel.qml.
-        component Choice: Rectangle {
-            id: choice
-            property string label: ""
-            property bool active: false
-            signal clicked()
-            width: (parent.width - 3 * parent.spacing) / 4
-            height: 34
-            radius: Config.radius
-            color: (active || m.containsMouse) ? Theme.surface2 : "transparent"
-            border.color: Theme.border
-            border.width: 1
-            Txt { anchors.centerIn: parent; text: choice.label; color: choice.active ? Theme.accent : Theme.text }
-            MouseArea {
-                id: m
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-                onClicked: choice.clicked()
-            }
-        }
-
-        // On/off switch: a flat pill that fills with the accent colour when on.
-        component Toggle: Rectangle {
-            id: sw
-            property bool checked: false
-            signal toggled()
-            width: 38
-            height: 18
-            radius: Config.radius
-            color: checked ? Theme.accent : Theme.surface
-            border.color: checked ? Theme.accent : Theme.border
-            border.width: 1
-            Rectangle {
-                width: 12
-                height: 12
-                radius: Config.radius
-                anchors.verticalCenter: parent.verticalCenter
-                x: sw.checked ? parent.width - width - 3 : 3
-                color: sw.checked ? Theme.bg : Theme.muted
-            }
-            MouseArea {
-                anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                onClicked: sw.toggled()
-            }
-        }
-
         PanelFrame {
             progress: win.progress
             cardWidth: 440
@@ -323,41 +275,9 @@ Variants {
                 visible: win.adapter !== null
 
                 Txt { text: "TOGGLES"; color: Theme.subtext; font.pixelSize: Config.fontSize - 2 }
-                Item {
-                    width: parent.width
-                    height: 24
-                    Txt { anchors.left: parent.left; anchors.verticalCenter: parent.verticalCenter; text: "Bluetooth" }
-                    Toggle {
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        checked: win.on
-                        onToggled: win.adapter.enabled = !win.adapter.enabled
-                    }
-                }
-                Item {
-                    width: parent.width
-                    height: 24
-                    visible: win.on
-                    Txt { anchors.left: parent.left; anchors.verticalCenter: parent.verticalCenter; text: "Discoverable" }
-                    Toggle {
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        checked: win.adapter !== null && win.adapter.discoverable
-                        onToggled: win.adapter.discoverable = !win.adapter.discoverable
-                    }
-                }
-                Item {
-                    width: parent.width
-                    height: 24
-                    visible: win.on
-                    Txt { anchors.left: parent.left; anchors.verticalCenter: parent.verticalCenter; text: "Pairable" }
-                    Toggle {
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        checked: win.adapter !== null && win.adapter.pairable
-                        onToggled: win.adapter.pairable = !win.adapter.pairable
-                    }
-                }
+                ToggleRow { label: "Bluetooth"; checked: win.on; onToggled: win.adapter.enabled = !win.adapter.enabled }
+                ToggleRow { label: "Discoverable"; visible: win.on; checked: win.adapter !== null && win.adapter.discoverable; onToggled: win.adapter.discoverable = !win.adapter.discoverable }
+                ToggleRow { label: "Pairable"; visible: win.on; checked: win.adapter !== null && win.adapter.pairable; onToggled: win.adapter.pairable = !win.adapter.pairable }
             }
 
             Rectangle { width: parent.width; height: 1; color: Theme.border; visible: win.adapter !== null }

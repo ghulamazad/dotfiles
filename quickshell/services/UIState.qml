@@ -8,14 +8,22 @@ Singleton {
     property bool launcher: false
     property bool wifi: false
     property bool bluetooth: false
+    property string panel: ""              // sound, system, battery, clock or tray
     property string launcherMode: "apps"   // apps or power
     property bool barVisible: true
 
-    function closeAll() { launcher = false; wifi = false; bluetooth = false; }
+    function closeAll() { launcher = false; wifi = false; bluetooth = false; panel = ""; }
+
+    function togglePanel(name) {
+        const next = panel !== name;
+        closeAll();
+        if (next) panel = name;
+    }
 
     function openLauncher(mode) {
         wifi = false;
         bluetooth = false;
+        panel = "";
         launcherMode = mode;
         launcher = true;
     }

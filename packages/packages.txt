@@ -33,8 +33,9 @@ wireplumber               # provides wpctl
 networkmanager            # provides nmcli and nmtui
 bluez
 bluez-utils
-bluetui                   # Bluetooth TUI (bar icon)
-wiremix                   # audio TUI (bar icon)
+python-dbus               # Bluetooth pairing questions (bin/bt-agent.py)
+python-gobject            # same
+power-profiles-daemon     # power profile switch in the battery panel (laptops)
 upower
 brightnessctl
 playerctl
@@ -44,6 +45,7 @@ grim
 slurp
 jq
 curl
+iputils                 # ping (network panel)
 dconf                     # lets gsettings (dark mode, icon theme) persist
 xdg-user-dirs
 xdg-utils

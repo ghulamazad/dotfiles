@@ -32,8 +32,8 @@ hl.window_rule({
     idle_inhibit = "fullscreen",
 })
 
--- The small terminal tools opened from the bar (bluetui, nmtui, wiremix, btop)
--- float in the middle of the screen. The class comes from config/Config.qml.
+-- Any terminal started with --class=com.azad.float (a small tool you launch by
+-- hand) floats in the middle of the screen. The class comes from config/Config.qml.
 hl.window_rule({
     name  = "azad-floating-tools",
     match = { class = "^com\\.azad\\.float$" },

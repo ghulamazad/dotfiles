@@ -1,7 +1,8 @@
 // The only panel: a flat top bar, one per monitor.
 //   left:   Arch logo (opens the launcher), workspaces 1 to 5
 //   center: weekday and time (click for the date)
-//   right:  tray, Bluetooth, network, sound, CPU, battery
+//   right:  collapsed tray, Bluetooth, network, sound, CPU, battery
+// Every item on the right and the clock opens a dropdown panel in the same style.
 //
 // Exclusion mode stays Auto: with three anchors Quickshell reserves exactly the
 // bar's height, so Hyprland tiles below it. SUPER+SHIFT+SPACE hides the bar.
@@ -53,7 +54,7 @@ Variants {
             anchors.verticalCenter: parent.verticalCenter
             spacing: 4
 
-            Tray { anchors.verticalCenter: parent.verticalCenter }
+            Tray {}
             Indicators {}
         }
     }

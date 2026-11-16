@@ -1,10 +1,8 @@
 // Status icons at the right of the bar: Bluetooth, network, sound, CPU,
-// battery. Icons only. Network and Bluetooth open their dashboards (right-click:
-// the nmtui / bluetui terminal fallback). Sound and CPU open a small floating
-// terminal tool (wiremix, btop).
-// Sound: click opens wiremix, right-click mutes, scroll changes the volume.
+// battery. Icons only. Every one opens a dropdown panel with the same look
+// (modules/*Panel.qml); there are no terminal tools behind them.
+// Sound: click opens the panel, right-click mutes, scroll changes the volume.
 import QtQuick
-import Quickshell
 import Quickshell.Bluetooth
 import qs.components
 import qs.config
@@ -20,15 +18,10 @@ Row {
     readonly property bool btOn: adapter !== null && adapter.enabled
     readonly property bool btConnected: Array.from(Bluetooth.devices.values).some(d => d.connected)
 
-    // Fixed argument list, no shell involved.
-    function tui(program) {
-        Quickshell.execDetached([Config.terminal, "--class=" + Config.floatClass, "-e", program]);
-    }
-
     BarButton {
         visible: root.adapter !== null
+        active: UIState.bluetooth
         onClicked: UIState.toggleBluetooth()
-        onRightClicked: root.tui("bluetui")
         Txt {
             text: root.btConnected ? Icons.bluetoothConnected : (root.btOn ? Icons.bluetooth : Icons.bluetoothOff)
             color: root.btConnected ? Theme.accent : (root.btOn ? Theme.text : Theme.muted)
@@ -36,8 +29,8 @@ Row {
     }
 
     BarButton {
+        active: UIState.wifi
         onClicked: UIState.toggleWifi()
-        onRightClicked: root.tui("nmtui")
         Txt {
             text: !Network.connected ? Icons.wifiOff : (Network.kind === "ethernet" ? Icons.wired : Icons.wifi)
             color: Network.connected ? Theme.text : Theme.red
@@ -45,7 +38,8 @@ Row {
     }
 
     BarButton {
-        onClicked: root.tui("wiremix")
+        active: UIState.panel === "sound"
+        onClicked: UIState.togglePanel("sound")
         onRightClicked: Audio.toggleMute()
         onScrolled: delta => Audio.setVolume(Audio.volume + (delta > 0 ? 0.05 : -0.05))
         Txt {
@@ -55,12 +49,15 @@ Row {
     }
 
     BarButton {
-        onClicked: root.tui("btop")
+        active: UIState.panel === "system"
+        onClicked: UIState.togglePanel("system")
         Txt { text: Icons.cpu }
     }
 
     BarButton {
         visible: Battery.present
+        active: UIState.panel === "battery"
+        onClicked: UIState.togglePanel("battery")
         Txt {
             text: Battery.charging ? Icons.batteryCharging : (Battery.low ? Icons.batteryAlert : Icons.battery(Battery.fraction))
             color: Battery.low ? Theme.red : (Battery.charging ? Theme.green : Theme.text)

@@ -1,7 +1,7 @@
 //@ pragma UseQApplication
 //@ pragma IconTheme Tela-green-dark
-// Entry point of the Quickshell shell: wallpaper, top bar, launcher and
-// notification popups. Nothing else. Hyprland does all window management; if
+// Entry point of the Quickshell shell: wallpaper, top bar, the bar's dropdown
+// panels, launcher and notification popups. Nothing else. Hyprland does all window management; if
 // this process crashes, Hyprland keeps running and every non-UI keybinding
 // still works. Restart the shell with SUPER+SHIFT+B (bin/restart-shell.sh).
 //
@@ -22,6 +22,11 @@ ShellRoot {
     Launcher {}
     WifiPanel {}
     BluetoothPanel {}
+    SoundPanel {}
+    SystemPanel {}
+    BatteryPanel {}
+    ClockPanel {}
+    TrayPanel {}
     NotificationPopups {}
 
     // `qs ipc call <target> <function>` is how the Hyprland keybindings in

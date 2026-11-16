@@ -111,7 +111,7 @@ else
 fi
 cat <<'EOF'
   Services (this script enables none; run what you need, once):
-    sudo systemctl enable --now NetworkManager bluetooth upower
+    sudo systemctl enable --now NetworkManager bluetooth upower power-profiles-daemon
     sudo systemctl enable sddm          # only if you want a graphical login screen
   Icons:     Tela is AUR-only; see README.md (paru -S tela-icon-theme, after reading the PKGBUILD)
   Next:      scripts/install-config.sh --dry-run   then   scripts/install-config.sh

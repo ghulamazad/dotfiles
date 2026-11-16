@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
-
+# screenshot.sh <select|screen>
+#   select  click a window OR drag an area (Esc cancels)
+#   screen  the whole screen
+# Saves a PNG to ~/Pictures/Screenshots AND copies it to the clipboard.
+# Needs: grim, slurp, jq (select mode), wl-clipboard, hyprctl.
+# notify-send is optional and shows through the Quickshell notification server.
 set -euo pipefail
 
 mode="${1:-select}"

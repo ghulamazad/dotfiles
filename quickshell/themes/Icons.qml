@@ -3,42 +3,53 @@ pragma Singleton
 // They render only if a Nerd Font is active: packages.txt installs
 // ttf-victor-mono-nerd. Without it you will see empty boxes.
 //
-// The codepoints are above U+FFFF, so QML strings need surrogate pairs. They are
-// written as escapes so the file survives copy and paste. Codepoints come from
-// the Material Design Icons 7.4 stylesheet; the trailing name is the icon name
-// to search for in the Nerd Fonts cheat sheet.
+// Each icon below is the actual glyph character (a private-use character, so
+// it looks like an empty box in editors without a Nerd Font). The trailing name is
+// the icon to search for in the Nerd Fonts cheat sheet, to swap one for another.
 import QtQuick
 import Quickshell
 
 Singleton {
-    readonly property string arch:               "\uDB82\uDCC7"   // arch
-    readonly property string wifi:               "\uDB82\uDD28"   // wifi-strength-4
-    readonly property string wifiOff:            "\uDB82\uDD2D"   // wifi-strength-off
-    readonly property string wired:              "\uDB80\uDE00"   // ethernet
-    readonly property string bluetooth:          "\uDB80\uDCAF"   // bluetooth
-    readonly property string bluetoothConnected: "\uDB80\uDCB1"   // bluetooth-connect
-    readonly property string bluetoothOff:       "\uDB80\uDCB2"   // bluetooth-off
-    readonly property string volumeHigh:         "\uDB81\uDD7E"   // volume-high
-    readonly property string volumeMedium:       "\uDB81\uDD80"   // volume-medium
-    readonly property string volumeLow:          "\uDB81\uDD7F"   // volume-low
-    readonly property string volumeMuted:        "\uDB81\uDF5F"   // volume-mute
-    readonly property string batteryFull:        "\uDB80\uDC79"   // battery
-    readonly property string battery90:          "\uDB80\uDC82"   // battery-90
-    readonly property string battery70:          "\uDB80\uDC80"   // battery-70
-    readonly property string battery50:          "\uDB80\uDC7E"   // battery-50
-    readonly property string battery30:          "\uDB80\uDC7C"   // battery-30
-    readonly property string battery10:          "\uDB80\uDC7A"   // battery-10
-    readonly property string batteryCharging:    "\uDB80\uDC84"   // battery-charging
-    readonly property string batteryAlert:       "\uDB80\uDC83"   // battery-alert
-    readonly property string power:              "\uDB81\uDC25"   // power
-    readonly property string moon:               "\uDB82\uDD04"   // power-sleep
-    readonly property string lock:               "\uDB80\uDF3E"   // lock
-    readonly property string lockClosed:         "\uDB80\uDF3E"   // lock (secured networks)
-    readonly property string logout:             "\uDB80\uDF43"   // logout
-    readonly property string refresh:            "\uDB81\uDF09"   // restart
-    readonly property string cpu:                "\uDB81\uDE1A"   // chip
-    readonly property string search:             "\uDB80\uDF49"   // magnify
-    readonly property string close:              "\uDB80\uDD56"   // close
+    readonly property string chevronDown:        "󰅀"   // chevron-down
+    readonly property string chevronUp:          "󰅃"   // chevron-up
+    readonly property string chevronLeft:        "󰅁"   // chevron-left
+    readonly property string chevronRight:       "󰅂"   // chevron-right
+    readonly property string memory:             "󰍛"   // memory
+    readonly property string speaker:            "󰓃"   // speaker
+    readonly property string headphones:         "󰋋"   // headphones
+    readonly property string leaf:               "󰌪"   // leaf
+    readonly property string speedometer:        "󰓅"   // speedometer
+    readonly property string bolt:               "󱐋"   // lightning-bolt
+    readonly property string dots:               "󰇘"   // dots-horizontal
+    readonly property string check:              "󰄬"   // check
+    readonly property string arch:               "󰣇"   // arch
+    readonly property string wifi:               "󰤨"   // wifi-strength-4
+    readonly property string wifiOff:            "󰤭"   // wifi-strength-off
+    readonly property string wired:              "󰈀"   // ethernet
+    readonly property string bluetooth:          "󰂯"   // bluetooth
+    readonly property string bluetoothConnected: "󰂱"   // bluetooth-connect
+    readonly property string bluetoothOff:       "󰂲"   // bluetooth-off
+    readonly property string volumeHigh:         "󰕾"   // volume-high
+    readonly property string volumeMedium:       "󰖀"   // volume-medium
+    readonly property string volumeLow:          "󰕿"   // volume-low
+    readonly property string volumeMuted:        "󰝟"   // volume-mute
+    readonly property string batteryFull:        "󰁹"   // battery
+    readonly property string battery90:          "󰂂"   // battery-90
+    readonly property string battery70:          "󰂀"   // battery-70
+    readonly property string battery50:          "󰁾"   // battery-50
+    readonly property string battery30:          "󰁼"   // battery-30
+    readonly property string battery10:          "󰁺"   // battery-10
+    readonly property string batteryCharging:    "󰂄"   // battery-charging
+    readonly property string batteryAlert:       "󰂃"   // battery-alert
+    readonly property string power:              "󰐥"   // power
+    readonly property string moon:               "󰤄"   // power-sleep
+    readonly property string lock:               "󰌾"   // lock
+    readonly property string lockClosed:         "󰌾"   // lock (secured networks)
+    readonly property string logout:             "󰍃"   // logout
+    readonly property string refresh:            "󰜉"   // restart
+    readonly property string cpu:                "󰘚"   // chip
+    readonly property string search:             "󰍉"   // magnify
+    readonly property string close:              "󰅖"   // close
 
     function battery(fraction) {
         if (fraction > 0.95) return batteryFull;
