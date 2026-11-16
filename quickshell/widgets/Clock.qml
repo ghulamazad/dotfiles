@@ -14,5 +14,7 @@ BarButton {
     active: UIState.panel === "clock"
     onClicked: UIState.togglePanel("clock")
 
-    Txt { text: Qt.formatDateTime(clock.date, "dddd HH:mm") }
+    Txt {
+        text: Qt.formatDateTime(clock.date, "dddd, dd MMMM yyyy hh:mm AP")
+    }
 }
