@@ -43,7 +43,7 @@ Variants {
 
         Item {
             width: parent.width
-            height: 22
+            height: Config.px(22)
             SectionLabel { anchors.left: parent.left; anchors.verticalCenter: parent.verticalCenter; text: "LOAD" }
             Txt { anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter; text: SystemStats.load }
         }
@@ -52,8 +52,8 @@ Variants {
 
         Column {
             width: parent.width
-            spacing: 4
-            SectionLabel { text: "TOP PROCESSES"; height: 24 }
+            spacing: Config.px(4)
+            SectionLabel { text: "TOP PROCESSES"; height: Config.px(24) }
 
             Repeater {
                 model: SystemStats.top
@@ -61,7 +61,7 @@ Variants {
                 delegate: Item {
                     required property var modelData
                     width: parent.width
-                    height: 22
+                    height: Config.px(22)
                     Txt { anchors.left: parent.left; anchors.right: pc.left; anchors.rightMargin: 8; anchors.verticalCenter: parent.verticalCenter; text: modelData.name }
                     Txt { id: pc; anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter; text: modelData.cpu.toFixed(1) + "%"; color: Theme.subtext }
                 }

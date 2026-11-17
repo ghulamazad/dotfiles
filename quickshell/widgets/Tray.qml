@@ -62,12 +62,12 @@ Row {
                 required property var modelData
 
                 // Same visual size as the font icons next to it (font size + 2).
-                width: Config.fontSize + 8
-                height: Config.barHeight - 4
+                width: Config.px(20)
+                height: Config.barHeight - Config.px(4)
 
                 IconImage {
                     anchors.centerIn: parent
-                    implicitSize: Config.fontSize + 2
+                    implicitSize: Config.fontLarge
                     source: entry.modelData.icon
                 }
 

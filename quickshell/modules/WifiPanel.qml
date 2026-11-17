@@ -44,7 +44,7 @@ Variants {
             property bool active: false
             signal clicked()
             width: (parent.width - 3 * parent.spacing) / 4
-            height: 34
+            height: Config.px(34)
             radius: Config.radius
             color: (active || m.containsMouse) ? Theme.surface2 : "transparent"
             border.color: Theme.border
@@ -65,11 +65,11 @@ Variants {
             property string label: ""
             property string value: ""
             width: (parent.width - parent.columnSpacing) / 2
-            height: 20
+            height: Config.px(20)
             Txt { anchors.left: parent.left; text: stat.label; color: Theme.subtext }
             Txt {
                 anchors.right: parent.right
-                width: Math.min(implicitWidth, parent.width - 90)
+                width: Math.min(implicitWidth, parent.width - Config.px(90))
                 text: stat.value
                 horizontalAlignment: Text.AlignRight
             }
@@ -77,7 +77,7 @@ Variants {
 
         PanelFrame {
             progress: win.progress
-            cardWidth: 440
+            cardWidth: Config.px(440)
 
             PanelHeader {
                 title: Network.connected ? Network.name : "Wi-Fi"
@@ -104,7 +104,7 @@ Variants {
                 width: parent.width
                 text: Network.connected ? (Network.kind === "wifi" ? "CONNECTED (WI-FI)" : "CONNECTED (ETHERNET)") : "NOT CONNECTED"
                 color: Network.connected ? Theme.green : Theme.subtext
-                font.pixelSize: Config.fontSize - 2
+                font.pixelSize: Config.fontSmall
             }
 
             // Stats
@@ -112,7 +112,7 @@ Variants {
                 id: stats
                 width: parent.width
                 columns: 2
-                columnSpacing: 24
+                columnSpacing: Config.px(24)
                 rowSpacing: 4
                 visible: Network.connected
 
@@ -140,14 +140,14 @@ Variants {
             // DNS provider
             Column {
                 width: parent.width
-                spacing: 8
+                spacing: Config.px(8)
                 visible: Network.connected
 
-                Txt { text: "DNS PROVIDER"; color: Theme.subtext; font.pixelSize: Config.fontSize - 2 }
+                Txt { text: "DNS PROVIDER"; color: Theme.subtext; font.pixelSize: Config.fontSmall }
                 Row {
                     id: dnsRow
                     width: parent.width
-                    spacing: 6
+                    spacing: Config.px(6)
                     opacity: Network.dnsBusy ? 0.5 : 1
                     Choice { label: "DHCP"; active: Network.dnsMode === "dhcp"; onClicked: Network.setDns("dhcp", "") }
                     Choice { label: "Cloudflare"; active: Network.dnsMode === "cloudflare"; onClicked: Network.setDns("cloudflare", "") }
@@ -166,11 +166,11 @@ Variants {
                 }
                 Column {
                     width: parent.width
-                    spacing: 4
+                    spacing: Config.px(4)
                     visible: win.dnsCustomOpen
                     Rectangle {
                         width: parent.width
-                        height: 34
+                        height: Config.px(34)
                         radius: Config.radius
                         color: Theme.surface
                         border.color: Theme.accent
@@ -190,7 +190,7 @@ Variants {
                     Txt {
                         text: "Up to 4 IPv4/IPv6 addresses, separated by spaces. Enter to apply."
                         color: Theme.subtext
-                        font.pixelSize: Config.fontSize - 2
+                        font.pixelSize: Config.fontSmall
                     }
                 }
                 Txt {
@@ -222,10 +222,10 @@ Variants {
             ListView {
                 id: list
                 width: parent.width
-                height: Math.min(contentHeight, 240)
+                height: Math.min(contentHeight, Config.px(240))
                 visible: Network.wifiEnabled
                 clip: true
-                spacing: 2
+                spacing: Config.px(2)
                 model: Network.networks
 
                 section.property: "group"
@@ -233,10 +233,10 @@ Variants {
                 section.delegate: Txt {
                     required property string section
                     width: list.width
-                    height: 28
+                    height: Config.px(28)
                     text: section
                     color: Theme.subtext
-                    font.pixelSize: Config.fontSize - 2
+                    font.pixelSize: Config.fontSmall
                     verticalAlignment: Text.AlignBottom
                 }
 
@@ -276,7 +276,7 @@ Variants {
             // Inline password prompt.
             Column {
                 width: parent.width
-                spacing: 6
+                spacing: Config.px(6)
                 visible: win.asking !== null
 
                 Txt {
@@ -285,7 +285,7 @@ Variants {
                 }
                 Rectangle {
                     width: parent.width
-                    height: 34
+                    height: Config.px(34)
                     radius: Config.radius
                     color: Theme.surface
                     border.color: Theme.accent
@@ -313,7 +313,7 @@ Variants {
                 Txt {
                     text: "Enter to connect"
                     color: Theme.subtext
-                    font.pixelSize: Config.fontSize - 2
+                    font.pixelSize: Config.fontSmall
                 }
             }
 
@@ -335,7 +335,7 @@ Variants {
                 wrapMode: Text.WordWrap
                 text: "Enterprise and hidden networks: use nmtui."
                 color: Theme.subtext
-                font.pixelSize: Config.fontSize - 2
+                font.pixelSize: Config.fontSmall
             }
         }
     }

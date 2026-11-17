@@ -18,7 +18,7 @@ Variants {
         screen: modelData
         name: "clock"
         align: "center"
-        cardWidth: 320
+        cardWidth: Config.px(320)
 
         SystemClock { id: clock; precision: SystemClock.Minutes }
 
@@ -48,8 +48,8 @@ Variants {
 
         Column {
             width: parent.width
-            spacing: 2
-            Txt { text: Qt.formatDateTime(clock.date, "hh:mm AP"); font.pixelSize: 34; font.bold: true }
+            spacing: Config.px(2)
+            Txt { text: Qt.formatDateTime(clock.date, "hh:mm AP"); font.pixelSize: Config.px(34); font.bold: true }
             Txt { text: Qt.formatDateTime(clock.date, "dddd, d MMMM yyyy"); color: Theme.subtext }
         }
 
@@ -57,7 +57,7 @@ Variants {
 
        Item { 
         width: parent.width
-        height: 32
+        height: Config.px(32)
             // Left arrow
             BarButton {
                 anchors.left: parent.left
@@ -75,7 +75,7 @@ Variants {
                     "MMMM yyyy"
                 )
                 font.bold: true
-                font.pixelSize: 16
+                font.pixelSize: Config.px(16)
             }
 
             // Right arrow
@@ -97,11 +97,11 @@ Variants {
                 delegate: Txt {
                     required property string modelData
                     width: parent.width / 7
-                    height: 24
+                    height: Config.px(24)
                     horizontalAlignment: Text.AlignHCenter
                     text: modelData
                     color: Theme.subtext
-                    font.pixelSize: Config.fontSize - 2
+                    font.pixelSize: Config.fontSmall
                 }
             }
 
@@ -110,7 +110,7 @@ Variants {
                 delegate: Rectangle {
                     required property var modelData
                     width: parent.width / 7
-                    height: 30
+                    height: Config.px(30)
                     color: modelData.today ? Theme.accent : "transparent"
                     Txt {
                         anchors.fill: parent

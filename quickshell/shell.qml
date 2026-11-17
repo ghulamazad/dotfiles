@@ -26,7 +26,6 @@ ShellRoot {
     SystemPanel {}
     BatteryPanel {}
     ClockPanel {}
-    TrayPanel {}
     NotificationPopups {}
 
     // `qs ipc call <target> <function>` is how the Hyprland keybindings in

@@ -8,16 +8,16 @@ Rectangle {
     property bool checked: false
     signal toggled()
 
-    width: 38
-    height: 18
+    width: Config.px(38)
+    height: Config.px(18)
     radius: Config.radius
     color: checked ? Theme.accent : Theme.surface
     border.color: checked ? Theme.accent : Theme.border
     border.width: 1
 
     Rectangle {
-        width: 12
-        height: 12
+        width: Config.px(12)
+        height: Config.px(12)
         radius: Config.radius
         anchors.verticalCenter: parent.verticalCenter
         x: sw.checked ? parent.width - width - 3 : 3

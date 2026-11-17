@@ -32,7 +32,7 @@ Variants {
             width: parent.width
             visible: Battery.present
             text: Battery.percent + "%"
-            font.pixelSize: 34
+            font.pixelSize: Config.px(34)
             font.bold: true
             color: Battery.low ? Theme.red : Theme.text
         }
@@ -49,13 +49,13 @@ Variants {
 
         Column {
             width: parent.width
-            spacing: 8
+            spacing: Config.px(8)
             visible: Battery.present
 
             SectionLabel { text: "POWER PROFILE" }
             Row {
                 width: parent.width
-                spacing: 6
+                spacing: Config.px(6)
                 Choice {
                     count: PowerProfiles.hasPerformanceProfile ? 3 : 2
                     label: "Saver"

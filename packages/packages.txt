@@ -55,6 +55,7 @@ dconf                     # lets gsettings (dark mode, icon theme) persist
 xdg-user-dirs
 xdg-utils
 imagemagick
+power-profiles-daemon
 
 # --- Developer environment ---
 neovim

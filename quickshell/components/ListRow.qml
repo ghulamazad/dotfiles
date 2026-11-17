@@ -17,26 +17,26 @@ Rectangle {
     signal clicked()
     signal rightClicked()
 
-    width: parent ? parent.width : 300
-    height: 44
+    width: parent ? parent.width : Config.px(300)
+    height: Config.px(44)
     color: mouse.containsMouse ? Theme.select : (highlighted ? Theme.surface : "transparent")
 
     Txt {
         id: icon
-        x: 10
-        width: 24
+        x: Config.px(10)
+        width: Config.px(24)
         anchors.verticalCenter: parent.verticalCenter
         horizontalAlignment: Text.AlignHCenter
         visible: root.iconSource === ""
         text: root.glyph
         color: root.glyphColor
-        font.pixelSize: 16
+        font.pixelSize: Config.px(16)
     }
 
     IconImage {
-        x: 14
+        x: Config.px(14)
         anchors.verticalCenter: parent.verticalCenter
-        implicitSize: 18
+        implicitSize: Config.px(18)
         visible: root.iconSource !== ""
         source: root.iconSource
     }
@@ -54,7 +54,7 @@ Rectangle {
             visible: root.subtitle !== ""
             text: root.subtitle
             color: Theme.subtext
-            font.pixelSize: Config.fontSize - 2
+            font.pixelSize: Config.fontSmall
         }
     }
 

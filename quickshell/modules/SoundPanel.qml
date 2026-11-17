@@ -33,27 +33,27 @@ Variants {
 
         Row {
             width: parent.width
-            spacing: 10
+            spacing: Config.px(10)
             visible: Audio.available
 
             Txt {
                 id: volIcon
-                width: 24
-                height: 22
+                width: Config.px(24)
+                height: Config.px(22)
                 horizontalAlignment: Text.AlignHCenter
                 text: (Audio.muted || Audio.volume === 0) ? Icons.volumeMuted : Icons.volume(Audio.volume)
                 color: Audio.muted ? Theme.red : Theme.text
-                font.pixelSize: 16
+                font.pixelSize: Config.px(16)
             }
             Slider {
-                width: parent.width - volIcon.width - pct.width - 20
+                width: parent.width - volIcon.width - pct.width - Config.px(20)
                 value: Audio.volume
                 onMoved: v => Audio.setVolume(v)
             }
             Txt {
                 id: pct
-                width: 40
-                height: 22
+                width: Config.px(40)
+                height: Config.px(22)
                 horizontalAlignment: Text.AlignRight
                 text: Math.round(Audio.volume * 100) + "%"
             }
@@ -63,7 +63,7 @@ Variants {
 
         Column {
             width: parent.width
-            spacing: 8
+            spacing: Config.px(8)
             SectionLabel { text: "TOGGLES" }
             ToggleRow { label: "Mute"; checked: Audio.muted; onToggled: Audio.toggleMute() }
             ToggleRow { label: "Microphone muted"; visible: Audio.micAvailable; checked: Audio.micMuted; onToggled: Audio.toggleMic() }
@@ -73,8 +73,8 @@ Variants {
 
         Column {
             width: parent.width
-            spacing: 2
-            SectionLabel { text: "OUTPUT DEVICES"; height: 24 }
+            spacing: Config.px(2)
+            SectionLabel { text: "OUTPUT DEVICES"; height: Config.px(24) }
 
             Repeater {
                 model: win.sinks

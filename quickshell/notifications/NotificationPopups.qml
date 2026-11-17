@@ -32,7 +32,7 @@ Variants {
         visible: Notifs.popups.values.length > 0 && onFocusedMonitor
         color: "transparent"
         exclusionMode: ExclusionMode.Ignore
-        implicitWidth: 380
+        implicitWidth: Config.px(380)
         implicitHeight: stack.implicitHeight
 
         anchors {
@@ -40,8 +40,8 @@ Variants {
             right: true
         }
         margins {
-            top: Config.barHeight + 8
-            right: 10
+            top: Config.barHeight + Config.px(8)
+            right: Config.px(10)
         }
 
         WlrLayershell.layer: WlrLayer.Overlay
@@ -50,7 +50,7 @@ Variants {
         Column {
             id: stack
             width: parent.width
-            spacing: 8
+            spacing: Config.px(8)
 
             Repeater {
                 model: Notifs.popups
@@ -62,7 +62,7 @@ Variants {
                     readonly property bool critical: modelData.urgency === NotificationUrgency.Critical
 
                     width: stack.width
-                    height: body.implicitHeight + 24
+                    height: body.implicitHeight + Config.px(24)
                     border.color: critical ? Theme.red : Theme.border
 
                     // expireTimeout is in seconds; 0 or less means "server default".
@@ -80,13 +80,13 @@ Variants {
 
                     Row {
                         id: body
-                        x: 12
-                        y: 12
-                        spacing: 12
+                        x: Config.px(12)
+                        y: Config.px(12)
+                        spacing: Config.px(12)
 
                         IconImage {
                             visible: source !== ""
-                            implicitSize: 40
+                            implicitSize: Config.px(40)
                             source: popup.modelData.image !== "" ? popup.modelData.image
                                   : popup.modelData.appIcon === "" ? ""
                                   : popup.modelData.appIcon.startsWith("/") ? "file://" + popup.modelData.appIcon
@@ -94,13 +94,13 @@ Variants {
                         }
 
                         Column {
-                            width: popup.width - 24 - 12 - 40 - 28
-                            spacing: 3
+                            width: popup.width - Config.px(24 + 12 + 40 + 28)
+                            spacing: Config.px(3)
 
                             Txt {
                                 width: parent.width
                                 text: popup.modelData.appName
-                                font.pixelSize: Config.fontSize - 2
+                                font.pixelSize: Config.fontSmall
                                 color: Theme.subtext
                             }
                             Txt {
@@ -119,7 +119,7 @@ Variants {
                             }
 
                             Row {
-                                spacing: 6
+                                spacing: Config.px(6)
                                 visible: popup.modelData.actions.length > 0
 
                                 Repeater {
@@ -142,7 +142,7 @@ Variants {
                         anchors.right: parent.right
                         anchors.margins: 8
                         onClicked: popup.modelData.dismiss()
-                        Txt { text: Icons.close; font.pixelSize: 12; color: Theme.subtext }
+                        Txt { text: Icons.close; font.pixelSize: Config.px(12); color: Theme.subtext }
                     }
                 }
             }

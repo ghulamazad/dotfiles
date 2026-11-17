@@ -8,13 +8,13 @@ Card {
 
     property real progress: 1
     property string align: "right"     // right | center
-    property int cardWidth: 360
+    property int cardWidth: Config.px(360)
     default property alias content: col.data
 
-    x: align === "center" ? (parent.width - width) / 2 : parent.width - width - 10
-    y: Config.barHeight + 8
+    x: align === "center" ? (parent.width - width) / 2 : parent.width - width - Config.px(10)
+    y: Config.barHeight + Config.px(8)
     width: cardWidth
-    height: col.implicitHeight + 32
+    height: col.implicitHeight + Config.px(32)
     opacity: progress
     scale: 0.97 + 0.03 * progress
     transformOrigin: align === "center" ? Item.Top : Item.TopRight
@@ -24,9 +24,9 @@ Card {
 
     Column {
         id: col
-        x: 16
-        y: 16
-        width: parent.width - 32
-        spacing: 12
+        x: Config.px(16)
+        y: Config.px(16)
+        width: parent.width - Config.px(32)
+        spacing: Config.px(12)
     }
 }

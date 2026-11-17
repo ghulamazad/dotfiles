@@ -11,7 +11,7 @@ Rectangle {
     signal clicked()
 
     width: (parent.width - (count - 1) * parent.spacing) / count
-    height: 34
+    height: Config.px(34)
     radius: Config.radius
     color: (active || m.containsMouse) ? Theme.surface2 : "transparent"
     border.color: active ? Theme.accent : Theme.border

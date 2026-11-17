@@ -2,6 +2,7 @@
 // Wheel events are re-emitted so indicators can react to scrolling.
 import QtQuick
 import qs.themes
+import qs.config
 
 Item {
     id: root
@@ -12,8 +13,8 @@ Item {
     signal rightClicked()
     signal scrolled(int delta)
 
-    implicitWidth: row.implicitWidth + 14
-    implicitHeight: 22
+    implicitWidth: row.implicitWidth + Config.px(14)
+    implicitHeight: Config.px(22)
 
     // Underline while the panel this button opens is showing.
     Rectangle {
@@ -28,7 +29,7 @@ Item {
     Row {
         id: row
         anchors.centerIn: parent
-        spacing: 5
+        spacing: Config.px(5)
     }
 
     MouseArea {

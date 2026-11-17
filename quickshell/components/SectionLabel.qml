@@ -5,5 +5,5 @@ import qs.themes
 
 Txt {
     color: Theme.subtext
-    font.pixelSize: Config.fontSize - 2
+    font.pixelSize: Config.fontSmall
 }

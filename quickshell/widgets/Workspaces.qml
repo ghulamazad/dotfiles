@@ -9,10 +9,11 @@ import QtQuick
 import Quickshell.Hyprland
 import qs.components
 import qs.themes
+import qs.config
 
 Row {
     id: root
-    spacing: 2
+    spacing: Config.px(2)
 
     readonly property var existing: Array.from(Hyprland.workspaces.values).map(w => w.id)
     readonly property var ids: {
@@ -31,8 +32,8 @@ Row {
             readonly property bool focused: modelData === root.current
             readonly property bool inUse: root.existing.indexOf(modelData) >= 0
 
-            width: 22
-            height: 22
+            width: Config.px(22)
+            height: Config.px(22)
 
             Txt {
                 anchors.centerIn: parent
@@ -45,7 +46,7 @@ Row {
                 visible: ws.focused
                 anchors.bottom: parent.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: 12
+                width: Config.px(12)
                 height: 2
                 color: Theme.accent
             }

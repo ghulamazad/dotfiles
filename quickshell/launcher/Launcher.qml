@@ -101,28 +101,28 @@ Variants {
             id: card
             anchors.horizontalCenter: parent.horizontalCenter
             y: parent.height * 0.16
-            width: 560
-            height: 52 + Math.min(win.results.length, 8) * 40 + 20
+            width: Config.px(560)
+            height: Config.px(52) + Math.min(win.results.length, 8) * Config.px(40) + Config.px(20)
             opacity: win.progress
 
             MouseArea { anchors.fill: parent }
 
             Row {
                 id: header
-                x: 16
-                y: 12
-                height: 28
-                spacing: 12
+                x: Config.px(16)
+                y: Config.px(12)
+                height: Config.px(28)
+                spacing: Config.px(12)
 
                 Txt {
                     anchors.verticalCenter: parent.verticalCenter
                     text: win.mode === "power" ? Icons.power : Icons.search
-                    font.pixelSize: 16
+                    font.pixelSize: Config.px(16)
                     color: Theme.accent
                 }
 
                 Item {
-                    width: card.width - 76
+                    width: card.width - Config.px(76)
                     height: parent.height
 
                     TextInput {
@@ -132,7 +132,7 @@ Variants {
                         color: Theme.text
                         selectionColor: Theme.accent
                         font.family: Config.fontFamily
-                        font.pixelSize: Config.fontSize + 2
+                        font.pixelSize: Config.fontLarge
                         clip: true
 
                         onTextChanged: {
@@ -160,7 +160,7 @@ Variants {
                         anchors.fill: parent
                         visible: input.text === ""
                         text: win.mode === "power" ? "Session" : "Search applications"
-                        font.pixelSize: Config.fontSize + 2
+                        font.pixelSize: Config.fontLarge
                         color: Theme.muted
                     }
                 }
@@ -186,19 +186,19 @@ Variants {
                     required property int index
 
                     width: list.width
-                    height: 40
+                    height: Config.px(40)
                     color: index === win.selected ? Theme.select : "transparent"
 
                     Row {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.left: parent.left
                         anchors.leftMargin: 10
-                        spacing: 12
+                        spacing: Config.px(12)
 
                         IconImage {
                             visible: row.modelData.icon !== undefined
                             anchors.verticalCenter: parent.verticalCenter
-                            implicitSize: 24
+                            implicitSize: Config.px(24)
                             source: row.modelData.icon !== undefined
                                 ? Quickshell.iconPath(row.modelData.icon, "application-x-executable") : ""
                         }
@@ -206,24 +206,24 @@ Variants {
                         Txt {
                             visible: row.modelData.glyph !== undefined
                             anchors.verticalCenter: parent.verticalCenter
-                            width: 24
+                            width: Config.px(24)
                             horizontalAlignment: Text.AlignHCenter
                             text: row.modelData.glyph !== undefined ? row.modelData.glyph : ""
-                            font.pixelSize: 15
+                            font.pixelSize: Config.px(15)
                             color: Theme.accent
                         }
 
                         Txt {
                             anchors.verticalCenter: parent.verticalCenter
                             text: row.modelData.title
-                            width: 200
+                            width: Config.px(200)
                         }
                         Txt {
                             anchors.verticalCenter: parent.verticalCenter
                             text: row.modelData.subtitle
-                            font.pixelSize: Config.fontSize - 2
+                            font.pixelSize: Config.fontSmall
                             color: row.modelData.subtitle === "Press Enter again to confirm" ? Theme.yellow : Theme.subtext
-                            width: card.width - 20 - 10 - 24 - 24 - 200 - 24
+                            width: card.width - Config.px(20 + 10 + 24 + 24 + 200 + 24)
                         }
                     }
 

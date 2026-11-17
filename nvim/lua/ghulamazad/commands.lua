@@ -1,5 +1,10 @@
+-- User commands.
+
+-- :CMakeCompdb [build_dir]  configure CMake with Ninja, export
+-- compile_commands.json and link it into the project root for clangd.
 vim.api.nvim_create_user_command("CMakeCompdb", function(opts)
-    if vim.fn.executable("cmake") ~= 1 or vim.fn.executable("ninja") ~= 1 then
+    local has = require("ghulamazad.util").has
+    if not (has("cmake") and has("ninja")) then
         vim.notify("CMakeCompdb: cmake and ninja must be in PATH", vim.log.levels.ERROR)
         return
     end

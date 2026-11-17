@@ -37,11 +37,11 @@ Variants {
             anchors.left: parent.left
             anchors.leftMargin: 6
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 4
+            spacing: Config.px(4)
 
             BarButton {
                 onClicked: UIState.toggleLauncher("apps")
-                Txt { text: Icons.arch; font.pixelSize: Config.fontSize + 3; color: Theme.accent }
+                Txt { text: Icons.arch; font.pixelSize: Config.px(15); color: Theme.accent }
             }
             Workspaces {}
         }
@@ -52,7 +52,7 @@ Variants {
             anchors.right: parent.right
             anchors.rightMargin: 6
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 4
+            spacing: Config.px(4)
 
             Tray {}
             Indicators {}

@@ -10,15 +10,15 @@ Item {
     property real fraction: 0
     property color barColor: Theme.accent
 
-    width: parent ? parent.width : 300
-    height: 30
+    width: parent ? parent.width : Config.px(300)
+    height: Config.px(30)
 
-    Txt { anchors.left: parent.left; text: root.label; color: Theme.subtext; font.pixelSize: Config.fontSize - 2 }
+    Txt { anchors.left: parent.left; text: root.label; color: Theme.subtext; font.pixelSize: Config.fontSmall }
     Txt { anchors.right: parent.right; text: root.valueText }
     Rectangle {
         anchors.bottom: parent.bottom
         width: parent.width
-        height: 4
+        height: Config.px(4)
         color: Theme.surface
         border.color: Theme.border
         border.width: 1

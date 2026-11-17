@@ -8,7 +8,7 @@ Singleton {
     property bool launcher: false
     property bool wifi: false
     property bool bluetooth: false
-    property string panel: ""              // sound, system, battery, clock or tray
+    property string panel: ""              // sound, system, battery or clock
     property string launcherMode: "apps"   // apps or power
     property bool barVisible: true
 

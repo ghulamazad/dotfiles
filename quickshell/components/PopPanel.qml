@@ -6,13 +6,14 @@
 // Children go straight into the card's padded column.
 import QtQuick
 import qs.services
+import qs.config
 
 Overlay {
     id: win
 
     property string name: ""
     property string align: "right"
-    property int cardWidth: 380
+    property int cardWidth: Config.px(380)
     default property alias body: frame.content
 
     open: UIState.panel === name
