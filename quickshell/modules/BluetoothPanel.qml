@@ -623,7 +623,6 @@ Variants {
                 Repeater {
                     model: connectedModel
                     delegate: DeviceRow {
-                        required property string address
                         width: parent.width
                     }
                 }
@@ -654,7 +653,6 @@ Variants {
                 }
 
                 delegate: DeviceRow {
-                    required property string address
                     width: list.width
                 }
             }
