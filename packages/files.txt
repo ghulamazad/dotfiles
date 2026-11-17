@@ -16,3 +16,4 @@ zsh/.zsh                   ~/.zsh
 scripts                    ~/.local/scripts
 wallpapers                 ~/Pictures/wallpapers
 home-config                ~/
+wireplumber                ~/.config/wireplumber

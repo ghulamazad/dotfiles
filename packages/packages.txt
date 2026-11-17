@@ -25,6 +25,7 @@ ghostty
 firefox
 nautilus
 btop
+feh
 
 # --- Services and small tools the bar and keys use ---
 pipewire
@@ -49,6 +50,7 @@ iputils                 # ping (network panel)
 dconf                     # lets gsettings (dark mode, icon theme) persist
 xdg-user-dirs
 xdg-utils
+imagemagick
 
 # --- Developer environment ---
 neovim
