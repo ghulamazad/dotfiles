@@ -26,6 +26,10 @@ firefox
 nautilus
 btop
 feh
+ffmpeg 
+ffmpegthumbnailer 
+glib2 
+gvfs
 
 # --- Services and small tools the bar and keys use ---
 pipewire
